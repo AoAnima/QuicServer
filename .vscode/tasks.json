@@ -1,0 +1,35 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    // ${workspaceFolderBasename}/${relativeFileDirname}/${fileBasename}
+    // https://github.com/golang/vscode-go/wiki/debugging
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "go build",
+            "type": "shell",
+            "command": "cd ${fileDirname} ; go build -o ${fileDirname}/bin/main.exe ${file}; cd ${fileDirname}/bin ; .${pathSeparator}main.exe",
+            // "command": "go build -o ${fileDirname}/../bin/main.exe ${file}; ${fileDirname}/../bin/main.exe",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        // {
+        //     "label": "go: build (debug)",
+        //     "type": "shell",
+        //     "command": "go",
+        //     "args": [
+        //         "build",
+        //         "-gcflags=all=-N -l",
+        //         "-o",
+        //         "${fileDirname}/__debug_bin"
+        //     ],
+        //     "options": {
+        //         "cwd": "${fileDirname}"
+        //     },
+        //     ...
+        // }
+    ]
+}
