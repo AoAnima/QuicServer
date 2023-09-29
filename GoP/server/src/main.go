@@ -66,3 +66,15 @@ func Рендер(каналеРендера chan interface{}) {
 	}
 
 }
+
+
+// openssl x509 \
+//     -req \
+//     -days 365 \
+//     -sha256 \
+//     -in server.csr \
+//     -CA ca.crt \
+//     -CAkey ca.key \
+//     -CAcreateserial \
+//     -out server.crt \
+//     -extfile <(echo subjectAltName = DNS:localhost,IP:127.0.0.1)
