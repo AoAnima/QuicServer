@@ -1,0 +1,1 @@
+# aoanima.ru/loger => ../loger

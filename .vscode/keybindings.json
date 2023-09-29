@@ -1,0 +1,10 @@
+[
+    {
+        "key": "alt+s",
+        "command": "workbench.action.debug.run"
+    },
+    {
+        "key": "alt+s",
+        "command": "go.build.workspace"
+      }
+]
