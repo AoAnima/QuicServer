@@ -1,4 +1,8 @@
 {
+    "gopls": {
+
+        "build.expandWorkspaceToModule": true
+    },
     "code-runner.executorMap": {
         
         "javascript": "node",

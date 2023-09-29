@@ -8,7 +8,7 @@
         {
             "label": "go build",
             "type": "shell",
-            "command": "cd ${fileDirname} ; go build -o ${fileDirname}/bin/main.exe ${file}; cd ${fileDirname}/bin ; .${pathSeparator}main.exe",
+            "command": "cd ${fileDirname} ; go build -o ${fileDirname}/../bin/main.exe ${fileDirname}; cd ${fileDirname}/../bin ; .${pathSeparator}main.exe",
             // "command": "go build -o ${fileDirname}/../bin/main.exe ${file}; ${fileDirname}/../bin/main.exe",
             "group": {
                 "kind": "build",
