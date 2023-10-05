@@ -8,7 +8,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "cd ${fileDirname} ; go build -o ${fileDirname}/../bin/main.exe ${fileDirname}",
+            "command": "cd ${fileDirname} ; go mod tidy;  go build -o ${fileDirname}/../bin/main.exe ${fileDirname}",
             // "command": "go build -o ${fileDirname}/../bin/main.exe ${file}; ${fileDirname}/../bin/main.exe",
             "group": {
                 "kind": "build",
