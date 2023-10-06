@@ -1,0 +1,9 @@
+go 1.21.1
+
+use (
+	./logger
+	./server
+	./render
+	./synquest
+	./synquestHTTP
+)
