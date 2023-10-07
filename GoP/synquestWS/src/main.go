@@ -4,10 +4,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
-	"io"
 	"net/http"
-	"strconv"
-	"time"
 
 	"os"
 
@@ -82,7 +79,7 @@ func обработчикСоединений(w http.ResponseWriter, req *http.R
 			fastws.NetUpgrade(обработчикВебСокет)
 		default:
 			Инфо("  заголовок upgrade = %+v , есть или отличается о WebSocket \n", upgrade)
-			обработчикЗапроса(w, req)
+			// обработчикЗапроса(w, req)
 		}
 
 	}
@@ -90,151 +87,147 @@ func обработчикСоединений(w http.ResponseWriter, req *http.R
 
 func обработчикВебСокет(conn *fastws.Conn) {
 	Инфо(" обработчикВебСокет %+v \n", conn)
-
+	// канал - канал для обмена сообщением между фукнциями ПрочитатьСообщение и ОТправитьСообщение
+	// функция прочитать сообщние, читает сообщение из ws соединенияя, обрабатывает, и результат отправляет в канал, функция ОТправитьСообщение читает данные из канала, и отправляет сообщение в ws соединение
 	канал := make(chan ОтветКлиенту, 10)
 
 	go ПрочитатьСообщение(conn, канал)
 	ОтправитьСообщение(conn, канал)
-	// conn.WriteString("Hello")
-	// var msg []byte
-	// var err error
-	// b := 0
-	// // for {
-	// // 	b++
-	// Инфо("  %+v \n", " ждём сообщение от клиента")
-	// _, msg, err = conn.ReadMessage(msg)
-	// if err != nil {
-	// 	if err != fastws.EOF {
-	// 		Ошибка(" %+v \n", err)
-	// 	}
-	// 	// break
-	// }
-	// Инфо("msg %s \n", string(msg))
-	// time.Sleep(time.Second)
-
-	// _, err = conn.Write([]byte("ответ msg" + strconv.Itoa(b)))
-	// if err != nil {
-	// 	Ошибка(" %+v \n", err)
-	// 	// break
-	// }
-	// // }
-	// а := true
-	// for {
-	// 	if а {
-
-	// 	}
-	// }
+	Инфо(" %+v \n", "выход из обработчика ")
 }
 
 type ЗапросКлиента struct {
-	Запрос interface{}
-	Ид     string
+	Запрос    interface{}
+	ИдКлиента string
 }
 
 func ПрочитатьСообщение(conn *fastws.Conn, канал chan ОтветКлиенту) {
 	Инфо(" ПрочитатьСообщение \n %+v", conn)
 	var сообщ []byte
 	for {
-		_, сообщение, err := conn.ReadMessage(сообщ)
-		if сообщение != nil {
+		h := conn.ReadTimeout.Hours()
+		frame, err := conn.NextFrame()
+		// _, сообщение, err := conn.ReadMessage(сообщ[:0])
+		Инфо("frame: %s  %s %+v\n", сообщ, frame, h)
+		if err != nil {
+			Ошибка("  %+v \n", err)
 
-			Инфо("сообщение: %s  %s \n", сообщ, сообщение)
-
-			if err != nil {
-				Ошибка("  %+v \n", err)
+			if err == fastws.EOF {
+				Ошибка(" соединение закрыто походу  %+v \n", err)
+				return
 			}
-			var запрос ЗапросКлиента
 
-			err = json.Unmarshal(сообщение, &запрос)
+		}
+		defer fastws.ReleaseFrame(frame)
+
+		if frame != nil {
+			Инфо("Received: %s", frame.Status().String())
+			Инфо("Received: %s", string(frame.Payload()))
+			// if сообщение != nil {
+
+			var запрос ЗапросКлиента
+			err = json.Unmarshal(frame.Payload(), &запрос)
 			if err != nil {
 				Ошибка("  %+v \n", err)
 			}
 
 			Инфо("сообщение: %s \n", запрос)
 			канал <- ОтветКлиенту{
-				Ид:    запрос.Ид,
-				Ответ: запрос.Запрос,
+				ИдКлиента: запрос.ИдКлиента,
+				Ответ:     запрос.Запрос,
 			}
+			Инфо("данные отправлены в канал в функцию ОТправитьСОобщение \n")
 		}
-		time.Sleep(time.Second)
+		// Выведите полученное сообщение.
+
+		// }
+
+		// time.Sleep(time.Second)
 
 	}
 }
 
 type ОтветКлиенту struct {
-	Ответ interface{}
-	Ид    string
+	Ответ     interface{}
+	ИдКлиента string
 }
 
 func ОтправитьСообщение(conn *fastws.Conn, канал chan ОтветКлиенту) {
-	Инфо(" ОтправитьСообщение \n")
-	for {
-		ответ := <-канал
-		сообщение, err := json.Marshal(ответ)
-		if err != nil {
-			Ошибка("  %+v \n", err)
-		}
-		_, err = conn.WriteMessage(fastws.ModeBinary, сообщение)
-		if err != nil {
-			Ошибка("Write error: %+v", err)
+	Инфо(" ОтправитьСообщение читаем данные из канала, с результатом обработки зароса\n")
+	for ответ := range канал {
+		if ответ.Ответ != nil {
+			сообщение, err := json.Marshal(ответ)
+			if err != nil {
+				Ошибка("  %+v \n", err)
+			}
 
-		}
+			Инфо(" отправляем данные в w соединение %+v \n", сообщение)
+			_, _, errRead := conn.ReadMessage(nil)
+			if errRead != nil {
+				Ошибка("errRead : %+v", errRead)
+			}
+			_, err = conn.WriteMessage(fastws.ModeBinary, сообщение)
+			if err != nil {
+				Ошибка("Write error: %+v", err)
 
-	}
-}
-
-func обработчикЗапроса(w http.ResponseWriter, req *http.Request) {
-	// Инфо(" %s  %s \n", w, *req)
-	// АнализЗапроса(w, req)
-
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Cache-Control", "no-cache")
-	w.Header().Set("Connection", "keep-alive")
-	w.Header().Set("Content-Type", "text/event-stream")
-
-	// прочитать тело запроса
-	body, err := io.ReadAll(req.Body)
-	if err != nil {
-		http.Error(w, "Ошибка чтения тела запроса", http.StatusBadRequest)
-		return
-	}
-
-	Инфо("RemoteAddr %+v   body %+v  \n", req.RemoteAddr, body)
-	Инфо("req ContentLength %+v \n", req.ContentLength)
-
-	// defer req.Body.Close()
-	nx := 0
-
-	w.Write([]byte("первый Ответ на запрос"))
-
-	ctx := req.Context()
-
-	for {
-		select {
-		case <-ctx.Done():
-			Инфо("Запрос был отменен, останавливаем отправку данных %+v", "1")
-			// Запрос был отменен, останавливаем отправку данных
-
-			return
-		default:
-			nx++
-			if f, ok := w.(http.Flusher); ok {
-				Инфо(" %+v  отправляем %+v \n", req.RemoteAddr, nx)
-				w.Write([]byte("Ответ на запрос " + strconv.Itoa(nx) + "\n"))
-				f.Flush()
-				time.Sleep(2 * time.Second)
-				if nx == 5 {
-					break
-				}
-				// req.Body.Close()
-			} else {
-				// Соединение не установлено, обработка ошибки
-				Ошибка("Соединение не установлено %+v", http.StatusInternalServerError)
 			}
 		}
 
 	}
-
-	w.Write([]byte("Ответ на запрос в конце"))
-
 }
+
+// func обработчикЗапроса(w http.ResponseWriter, req *http.Request) {
+// 	// Инфо(" %s  %s \n", w, *req)
+// 	// АнализЗапроса(w, req)
+
+// 	w.Header().Set("Access-Control-Allow-Origin", "*")
+// 	w.Header().Set("Cache-Control", "no-cache")
+// 	w.Header().Set("Connection", "keep-alive")
+// 	w.Header().Set("Content-Type", "text/event-stream")
+
+// 	// прочитать тело запроса
+// 	body, err := io.ReadAll(req.Body)
+// 	if err != nil {
+// 		http.Error(w, "Ошибка чтения тела запроса", http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	Инфо("RemoteAddr %+v   body %+v  \n", req.RemoteAddr, body)
+// 	Инфо("req ContentLength %+v \n", req.ContentLength)
+
+// 	// defer req.Body.Close()
+// 	nx := 0
+
+// 	w.Write([]byte("первый Ответ на запрос"))
+
+// 	ctx := req.Context()
+
+// 	for {
+// 		select {
+// 		case <-ctx.Done():
+// 			Инфо("Запрос был отменен, останавливаем отправку данных %+v", "1")
+// 			// Запрос был отменен, останавливаем отправку данных
+
+// 			return
+// 		default:
+// 			nx++
+// 			if f, ok := w.(http.Flusher); ok {
+// 				Инфо(" %+v  отправляем %+v \n", req.RemoteAddr, nx)
+// 				w.Write([]byte("Ответ на запрос " + strconv.Itoa(nx) + "\n"))
+// 				f.Flush()
+// 				time.Sleep(2 * time.Second)
+// 				if nx == 5 {
+// 					break
+// 				}
+// 				// req.Body.Close()
+// 			} else {
+// 				// Соединение не установлено, обработка ошибки
+// 				Ошибка("Соединение не установлено %+v", http.StatusInternalServerError)
+// 			}
+// 		}
+
+// 	}
+
+// 	w.Write([]byte("Ответ на запрос в конце"))
+
+// }
