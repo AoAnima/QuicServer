@@ -65,7 +65,7 @@ func ОтправитьЗапросВОбработку(сервер *tls.Conn, 
 		клиенты[ЗапросОтКлиента.ИдКлиента] = ЗапросОтКлиента
 		мьютекс.Unlock()
 
-		буфер := new(bytes.Buffer)
+		// буфер := new(bytes.Buffer)
 		ЗапросВОбработку := ЗапросВОбработку{
 			ИдКлиента: []byte(ЗапросОтКлиента.ИдКлиента),
 			Запрос:    []byte(ЗапросОтКлиента.Запрос),
@@ -77,13 +77,13 @@ func ОтправитьЗапросВОбработку(сервер *tls.Conn, 
 		if err != nil {
 			Ошибка("  %+v \n", err)
 		}
-		Инфо(" БинарныйЗапрос %+v \n", ЗапросВОбработку)
-		err = binary.Write(буфер, binary.LittleEndian, БинарныйЗапрос)
-		if err != nil {
-			Ошибка("  %+v \n", err)
-		}
+		Инфо(" БинарныйЗапрос %+v \n", БинарныйЗапрос)
+		// err = binary.Write(буфер, binary.LittleEndian, БинарныйЗапрос)
+		// if err != nil {
+		// 	Ошибка("  %+v \n", err)
+		// }
 
-		сервер.Write(буфер.Bytes())
+		сервер.Write(БинарныйЗапрос)
 
 	}
 }
@@ -91,16 +91,21 @@ func ОтправитьЗапросВОбработку(сервер *tls.Conn, 
 func ОтправитьОтветКлиенту(сервер *tls.Conn, каналЗапросов chan Запрос) {
 
 	for {
-
-		длина := make([]byte, 8)
-		_, err := io.ReadFull(сервер, длина)
+		var ОтветКлиенту ОтветКлиенту
+		длина := make([]byte, 128)
+		n, err := io.ReadFull(сервер, длина)
+		Инфо("  %+v \n", n)
 		if err != nil {
 			Ошибка("  %+v \n", err)
 		}
 		lenData := binary.LittleEndian.Uint64(длина)
 
-		var ОтветКлиенту ОтветКлиенту
 		буфер := make([]byte, lenData)
+		i, err := io.ReadFull(сервер, буфер)
+		Инфо("  %+v \n", i)
+		if err != nil {
+			Ошибка("  %+v \n", err)
+		}
 		err = binary.Read(bytes.NewReader(буфер), binary.LittleEndian, &ОтветКлиенту)
 		if err != nil {
 			Ошибка("Ошибка при десериализации структуры: %+v ", err)
@@ -115,25 +120,33 @@ func (з ЗапросВОбработку) Кодировать() ([]byte, error
 	// Вычисляем размер буфера, который необходим для сериализации структуры
 	// размер := binary.Size(з)
 	размер := unsafe.Sizeof(з)
-	Инфо(" размер  %+v %+v %+v %+v \n", з, размер,  len(з.Запрос), len(з.ИдКлиента))
+	Инфо(" размер  %+v %+v %+v %+v \n", з, размер, len(з.Запрос), len(з.ИдКлиента))
 	// Создаем буфер нужного размера для сериализации
-	буфер := make([]byte, размер)
+	// буфер := make([]byte, размер)
+	буфер := new(bytes.Buffer)
 
 	// Сериализуем поля структуры в буфер
-	бинарныеДанные := bytes.NewBuffer(буфер)
-	err := binary.Write(бинарныеДанные, binary.LittleEndian, з.ИдКлиента)
-	if err != nil {
-		Ошибка("  %+v \n", err)
-		return nil, err
-	}
-	err = binary.Write(бинарныеДанные, binary.LittleEndian, з.Запрос)
-	if err != nil {
-		Ошибка("  %+v \n", err)
-		return nil, err
-	}
+	// бинарныеДанные := bytes.NewBuffer(буфер)
+	// err := binary.Write(бинарныеДанные, binary.LittleEndian, з)
+	// if err != nil {
+	// 	Ошибка("  %+v \n", err)
+	// 	return nil, err
+	// }
+	binary.Write(буфер, binary.LittleEndian, int32(len(з.Запрос)))
+	binary.Write(буфер, binary.LittleEndian, з.Запрос)
+
+	binary.Write(буфер, binary.LittleEndian, int32(len(з.ИдКлиента)))
+	binary.Write(буфер, binary.LittleEndian, з.ИдКлиента)
+	// err = binary.Write(бинарныеДанные, binary.LittleEndian, з.Запрос)
+	// if err != nil {
+	// 	Ошибка("  %+v \n", err)
+	// 	return nil, err
+	// }
+
+	Инфо("бинарныеДанные  %+v ;Bytes %+v \n", буфер, буфер.Bytes())
 
 	// Возвращаем сериализованные бинарные данные и ошибку (если есть)
-	return бинарныеДанные.Bytes(), nil
+	return буфер.Bytes(), nil
 }
 
 func ДеКодироватьОтветКлиенту(бинарныеДанные []byte) (*ОтветКлиенту, error) {

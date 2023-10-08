@@ -98,14 +98,12 @@ func ОбработчикОтветов(w http.ResponseWriter, каналОтв�
 }
 
 func ListenAndServe() {
-	err := http.ListenAndServe(":80", nil)
-	// err := http.ListenAndServe(":80", http.HandlerFunc(
-
-	// 	func(w http.ResponseWriter, req *http.Request) {
-	// 		Инфо(" %s  %s \n", w, req)
-	// 		// http.Redirect(w, req, "https://localhost:443"+req.RequestURI, http.StatusMovedPermanently)
-	// 	}))
-
+	err := http.ListenAndServe(":80", http.HandlerFunc(
+		func(w http.ResponseWriter, req *http.Request) {
+			// 	Инфо(" %s  %s \n", w, req)
+			http.Redirect(w, req, "https://localhost:443"+req.RequestURI, http.StatusMovedPermanently)
+		},
+	))
 	if err != nil {
 		Ошибка(" %s ", err)
 	}

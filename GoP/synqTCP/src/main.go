@@ -19,13 +19,13 @@ var (
 )
 
 type ОтветКлиенту struct {
-	Ответ     interface{}
-	ИдКлиента string
+	Ответ     []byte
+	ИдКлиента []byte
 }
 
 type ЗапросКлиента struct {
-	Запрос    interface{}
-	ИдКлиента string
+	Запрос    []byte
+	ИдКлиента []byte
 }
 
 func main() {
@@ -35,8 +35,6 @@ func main() {
 	Инфо(" %s", "запустили сервер")
 
 }
-
-func ServerWSS() {}
 
 func ЗапуститьСервер() {
 	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
@@ -82,13 +80,18 @@ func обработчикСоединения(клиент net.Conn) {
 	if err != nil {
 		Ошибка("  %+v \n", err)
 	}
+	Инфо(" длина %+v \n", длина)
+
 	lenData := binary.LittleEndian.Uint64(длина)
 
-	var ОтветКлиенту ОтветКлиенту
+	Инфо(" lenData  %+v \n", lenData)
+
+	var запросКлиента ЗапросКлиента
 	буфер := make([]byte, lenData)
-	err = binary.Read(bytes.NewReader(буфер), binary.LittleEndian, &ОтветКлиенту)
+
+	err = binary.Read(bytes.NewReader(буфер), binary.LittleEndian, &запросКлиента)
 	if err != nil {
 		Ошибка("Ошибка при десериализации структуры: %+v ", err)
 	}
-	Инфо("  %+v \n", ОтветКлиенту)
+	Инфо("  %+v \n", запросКлиента)
 }
