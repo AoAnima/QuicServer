@@ -6,4 +6,6 @@ use (
 	./render
 	./synquestWS
 	./synquestHTTP
+	./tcpserver
+	./synqTCP
 )

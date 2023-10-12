@@ -19,7 +19,7 @@
                 "echo": true,
                 "reveal": "always",
                 "focus": true,
-                "panel": "dedicated"
+                "panel": "shared"
               },
 
             "problemMatcher": {
@@ -40,14 +40,14 @@
                 "kind": "build",
                 "isDefault": false
             },
-            "dependsOrder": "parallel",
+            "dependsOrder": "sequence",
             "problemMatcher": ["$go"],
             "dependsOn":"build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
                 "focus": true,
-                "panel": "dedicated"
+                "panel": "shared"
               }
         }
       
