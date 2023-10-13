@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 
+	_ "net/http/pprof"
+
 	. "aoanima.ru/logger"
 	"github.com/google/uuid"
 )
@@ -28,7 +30,9 @@ func Уид() uuid.UUID {
 }
 
 func main() {
-
+	go func() {
+		http.ListenAndServe("localhost:6060", nil)
+	}()
 	каналЗапросов := make(chan Запрос, 10)
 
 	go ListenAndServeTLS(каналЗапросов)
