@@ -6,10 +6,11 @@ import (
 	"crypto/x509"
 	"encoding/binary"
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
-	"os"
+	jsoniter "github.com/json-iterator/go"
 
 	. "aoanima.ru/logger"
 	"github.com/google/uuid"
@@ -127,6 +128,26 @@ func ОтправитьЗапросВОбработку(сервер *tls.Conn, 
 }
 
 func (з ЗапросВОбработку) Кодировать() ([]byte, error) {
+
+	b, err := jsoniter.Marshal(&з)
+	if err != nil {
+		Ошибка("  %+v \n", err)
+		return nil, err
+	}
+	// Инфо(" b %+v \n", b)
+	// буферВОтправку := new(bytes.Buffer)
+	// binary.Write(буферВОтправку, binary.LittleEndian, int32(len(b)))
+	// binary.Write(буферВОтправку, binary.LittleEndian, b)
+	// binary.Write(буферВОтправку, binary.LittleEndian, b)
+
+	данные := make([]byte, len(b)+4)
+	binary.LittleEndian.PutUint32(данные, uint32(len(b)))	
+	copy(данные[4:], b)	
+	return данные, nil
+
+}
+
+func (з ЗапросВОбработку) КодироватьВБинарныйФормат() ([]byte, error) {
 	// ∴ ⊶ ⁝  ⁖
 	// ⁝ - конец сообщения.
 	// Сообщение должно начинатся с размера
@@ -159,8 +180,8 @@ func (з ЗапросВОбработку) Кодировать() ([]byte, error
 	binary.Write(буфер, binary.LittleEndian, int32(len(з.Запрос)))
 	binary.Write(буфер, binary.LittleEndian, з.Запрос)
 
-	binary.Write(буфер, binary.LittleEndian, int32(3))
-	binary.Write(буфер, binary.LittleEndian, [3]byte{226, 129, 157}) // ⁝ - записываем разделитель между сообщениями на всякий случай
+	// binary.Write(буфер, binary.LittleEndian, int32(3))
+	binary.Write(буфер, binary.LittleEndian, [4]byte{226, 129, 157, 0}) // ⁝ - записываем разделитель между сообщениями на всякий случай
 
 	Инфо("бинарныеДанные  %+s ;Bytes %+v \n", буфер, int32(буфер.Len()))
 
