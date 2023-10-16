@@ -10,10 +10,17 @@ import (
 )
 
 type Запрос struct {
+	Сервис      []byte
 	ИдКлиента   uuid.UUID
 	Req         http.Request
-	Запрос      string
+	Запрос      ЗапросОтКлиента
 	КаналОтвета chan ОтветКлиенту
+}
+
+type ЗапросОтКлиента struct {
+	Строка string
+	Форма  map[string][]string
+	Файл   string
 }
 
 type Ответ struct {
@@ -47,6 +54,7 @@ func main() {
 
 func ИнициализацияСервисов(каналЗапросов chan Запрос) {
 	go ПодключитсяКМенеджеруЗапросов(каналЗапросов)
+	
 }
 
 func ListenAndServeTLS(каналЗапросов chan<- Запрос) {
@@ -80,12 +88,29 @@ func обработчикЗапроса(w http.ResponseWriter, req *http.Request
 		}
 	}
 
+	// парсим пост put и прочие подобные запросы и запихуем данные в url с учётом данных get строки
+	Инфо(" req.Method %+v \n", req.Method)
+	запросОтКлиента := ЗапросОтКлиента{
+		Строка: req.URL.String(),
+	}
+	if req.Method == http.MethodPost {
+		contentType := req.Header.Get("Content-Type")
+		if contentType == "multipart/form-data" {
+			Инфо("нужно реализовать декодирование, я так понимаю тут передаются файлы через форму %+v \n", "multipart/form-data")
+		}
+
+		req.ParseForm()
+		запросОтКлиента.Форма = req.Form
+	}
+
 	каналЗапросов <- Запрос{
 		ИдКлиента:   ИД,
 		Req:         *req,
-		Запрос:      req.URL.String(),
+		Запрос:      запросОтКлиента,
 		КаналОтвета: каналОтвета,
+		Сервис:      []byte("КлиентСервер"),
 	}
+
 	for данныеДляОтвета := range каналОтвета {
 		if данныеДляОтвета.Ответ != "" {
 			Инфо(" данныеДляОтвета.Ответ %+v \n", данныеДляОтвета.Ответ)
