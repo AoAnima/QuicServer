@@ -90,6 +90,7 @@ func обработчикЗапроса(w http.ResponseWriter, req *http.Request
 
 	// парсим пост put и прочие подобные запросы и запихуем данные в url с учётом данных get строки
 	Инфо(" req.Method %+v \n", req.Method)
+	Инфо(" req %+v \n", req)
 	запросОтКлиента := ЗапросОтКлиента{
 		Строка: req.URL.String(),
 	}

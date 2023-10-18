@@ -3,7 +3,9 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"net/http"
 
+	_ "net/http/pprof"
 	"os"
 
 	. "aoanima.ru/logger"
@@ -35,7 +37,9 @@ type ЗапросОтКлиента struct {
 }
 
 func main() {
-
+	go func() {
+		http.ListenAndServe("localhost:6061", nil)
+	}()
 	// Вероятно нужно откуда то получить список Сервисов с которомы предстоит общаться
 	//  Или !!!! ОбработчикВходящихСообщений
 
