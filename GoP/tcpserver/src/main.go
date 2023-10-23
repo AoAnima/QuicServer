@@ -1,34 +1,41 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
 	_ "net/http/pprof"
 
 	. "aoanima.ru/logger"
+	"github.com/dgryski/go-metro"
 	"github.com/google/uuid"
 )
 
 type Запрос struct {
-	Сервис      []byte
-	ИдКлиента   uuid.UUID
-	Req         http.Request
-	Запрос      ЗапросОтКлиента
-	КаналОтвета chan ОтветКлиенту
+	УИДЗапроса   string // УИД запроса, будет складывать из временной метки, УИД клиента и хэш фукнцией от запроса
+	Сервис       []byte
+	ИдКлиента    uuid.UUID
+	ТокенКлиента []byte // JWT сериализованный
+	Req          http.Request
+	УрлПуть      []byte
+	Запрос       ЗапросОтКлиента
+	КаналОтвета  chan ОтветКлиенту
 }
 
 type ЗапросОтКлиента struct {
-	Строка string
-	Форма  map[string][]string
-	Файл   string
+	СтрокаЗапроса string
+	Форма         map[string][]string
+	Файл          string
 }
 
 type Ответ struct {
 	Сообщение interface{}
 }
 type ОтветКлиенту struct {
-	ИдКлиента uuid.UUID
-	Ответ     string
+	УИДЗапроса string
+	ИдКлиента  uuid.UUID
+	Ответ      string
 }
 
 func Уид() uuid.UUID {
@@ -37,9 +44,7 @@ func Уид() uuid.UUID {
 }
 
 func main() {
-	go func() {
-		http.ListenAndServe("localhost:6060", nil)
-	}()
+
 	каналЗапросов := make(chan Запрос, 10)
 
 	go ListenAndServeTLS(каналЗапросов)
@@ -54,7 +59,7 @@ func main() {
 
 func ИнициализацияСервисов(каналЗапросов chan Запрос) {
 	go ПодключитсяКМенеджеруЗапросов(каналЗапросов)
-	
+
 }
 
 func ListenAndServeTLS(каналЗапросов chan<- Запрос) {
@@ -75,7 +80,7 @@ func обработчикЗапроса(w http.ResponseWriter, req *http.Request
 
 	Инфо(" %s \n", *req)
 
-	каналОтвета := make(chan ОтветКлиенту)
+	каналОтвета := make(chan ОтветКлиенту, 10)
 	var ИД uuid.UUID
 
 	if cookieUuid, err := req.Cookie("uuid"); err != nil {
@@ -92,26 +97,37 @@ func обработчикЗапроса(w http.ResponseWriter, req *http.Request
 	Инфо(" req.Method %+v \n", req.Method)
 	Инфо(" req %+v \n", req)
 	запросОтКлиента := ЗапросОтКлиента{
-		Строка: req.URL.String(),
+		СтрокаЗапроса: req.URL.String(),
 	}
+	типДанных := req.Header.Get("Content-Type")
 	if req.Method == http.MethodPost {
-		contentType := req.Header.Get("Content-Type")
-		if contentType == "multipart/form-data" {
+		if типДанных == "multipart/form-data" {
 			Инфо("нужно реализовать декодирование, я так понимаю тут передаются файлы через форму %+v \n", "multipart/form-data")
 		}
-
 		req.ParseForm()
 		запросОтКлиента.Форма = req.Form
 	}
 
+	if req.Method == "AJAX" || req.Method == "AJAXPost" {
+		if типДанных == "application/json" {
+
+		}
+	}
+	//каналЗапросов читается в функции ОтправитьЗапросВОбработку, которая отправляет данные в synqTCP поэтому если нужно обраьботкть запро сперед отправкой, то его можно либо обрабатывать тут, перед отправкой в каналЗапросов, лобо внутри фкнции ОтправитьЗапросВОбработку перед записью данный в соединение с synqTCp
+	хэшЗапроса := metro.Hash64([]byte(запросОтКлиента.СтрокаЗапроса), 0)
+	timestamp := time.Now().Unix()
+	УИДЗапроса := fmt.Sprintf("%+s.%+s.%+s", timestamp, ИД, хэшЗапроса)
 	каналЗапросов <- Запрос{
+		УИДЗапроса:  УИДЗапроса,
 		ИдКлиента:   ИД,
 		Req:         *req,
 		Запрос:      запросОтКлиента,
+		УрлПуть:     []byte(req.URL.Path),
 		КаналОтвета: каналОтвета,
 		Сервис:      []byte("КлиентСервер"),
 	}
-
+	//WARNING: БЛОКИРОВКА? читаем данные для ответа в отдельном потоке чтобы не
+	// go func() {
 	for данныеДляОтвета := range каналОтвета {
 		if данныеДляОтвета.Ответ != "" {
 			Инфо(" данныеДляОтвета.Ответ %+v \n", данныеДляОтвета.Ответ)
@@ -127,6 +143,7 @@ func обработчикЗапроса(w http.ResponseWriter, req *http.Request
 			}
 		}
 	}
+	// }()
 
 }
 
@@ -146,7 +163,11 @@ func ListenAndServe() {
 			http.Redirect(w, req, "https://localhost:443"+req.RequestURI, http.StatusMovedPermanently)
 		},
 	))
+	// err := http.ListenAndServe(":6060", nil)
 	if err != nil {
 		Ошибка(" %s ", err)
 	}
+	go func() {
+		http.ListenAndServe("localhost:6060", nil)
+	}()
 }

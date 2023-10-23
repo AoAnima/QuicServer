@@ -9,4 +9,6 @@ use (
 	./tcpserver
 	./synqTCP
 	./bench
+	./connector
+	./catalog
 )
