@@ -1,10 +1,13 @@
 module aoanima.ru/mainServer
 
-go 1.21.1
+go 1.21.3
 
 replace aoanima.ru/logger => ../logger
 
+replace aoanima.ru/connector => ../connector
+
 require (
+	aoanima.ru/connector v0.0.0-00010101000000-000000000000
 	aoanima.ru/logger v0.0.0-00010101000000-000000000000
 	github.com/dgryski/go-metro v0.0.0-20211217172704-adc40b04c140
 	github.com/google/uuid v1.3.1
