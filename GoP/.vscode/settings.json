@@ -1,7 +1,7 @@
 {
     "gopls": {
         "ui.semanticTokens": true ,     
-        "build.expandWorkspaceToModule": true
+        // "build.expandWorkspaceToModule": true
     },
     "editor.semanticHighlighting.enabled": true,
     "semanticHighlighting": true,
