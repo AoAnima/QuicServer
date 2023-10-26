@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	connector "aoanima.ru/connector/src"
+	connector "aoanima.ru/connector"
 	. "aoanima.ru/logger"
 
 	jsoniter "github.com/json-iterator/go"
