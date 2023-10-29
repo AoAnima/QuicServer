@@ -16,7 +16,7 @@ type Запрос struct {
 	Req         http.Request
 	КаналОтвета chan ОтветКлиенту
 	ИдКлиента   uuid.UUID
-	УИДЗапроса  connector.УидЗапроса
+	УИДЗапроса  connector.Уид
 }
 
 type ОтветКлиенту struct {

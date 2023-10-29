@@ -5,7 +5,7 @@ import (
 
 	_ "net/http/pprof"
 
-	connector "aoanima.ru/connector/src"
+	connector "aoanima.ru/connector"
 	. "aoanima.ru/logger"
 )
 
