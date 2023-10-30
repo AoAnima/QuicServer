@@ -10,7 +10,8 @@ use (
 	./synqTCP
 	./bench
 	./connector
-	./connectorQUIC
+	./ConnQuic
 	./catalog
+	./SynQuic
 	./mainServer
 )
