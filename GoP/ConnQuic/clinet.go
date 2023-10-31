@@ -11,21 +11,25 @@ import (
 	quic "github.com/quic-go/quic-go"
 )
 
-type ПулПотоков struct {
-}
-
-func Клиент() (quic.Connection, error) {
+func Клиент(Адрес string, обработчикСообщений func(поток quic.Stream, сообщение Сообщение)) (quic.Connection, error) {
 	конфигТлс, err := клиентскийТлсКонфиг("root.crt")
 	if err != nil {
 		Ошибка("  %+v \n", err)
 	}
+	Адрес = "localhost:4242"
 	сессия, err := quic.DialAddr(context.Background(), "localhost:4242", конфигТлс, &quic.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// реализцем механизм : создание пул потоков для сессии, ротацию потоков для отправки сообщений
+	for {
+		поток, err := сессия.AcceptStream(context.Background())
+		if err != nil {
+			Ошибка("  %+v \n", err)
+		}
+		go ЧитатьСообщения(&сессия, поток, обработчикСообщений)
 
+	}
 }
 func клиентскийТлсКонфиг(caCertFile string) (*tls.Config, error) {
 	caCert, err := os.ReadFile(caCertFile)

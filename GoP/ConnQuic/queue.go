@@ -7,17 +7,17 @@ import (
 )
 
 type ОчередьПотоков struct {
-	потоки chan quic.Stream
+	Потоки chan quic.Stream
 }
 
 func НоваяОчередьПотоков(размер int) *ОчередьПотоков {
 	return &ОчередьПотоков{
-		потоки: make(chan quic.Stream, размер),
+		Потоки: make(chan quic.Stream, размер),
 	}
 }
 func (о *ОчередьПотоков) Взять(поток quic.Stream) (quic.Stream, error) {
 	select {
-	case поток := <-о.потоки:
+	case поток := <-о.Потоки:
 		return поток, nil
 	default:
 		return nil, errors.New("Нет свободных потоков")
@@ -27,7 +27,7 @@ func (о *ОчередьПотоков) Взять(поток quic.Stream) (quic
 
 func (о *ОчередьПотоков) Вернуть(поток quic.Stream) {
 	select {
-	case о.потоки <- поток:
+	case о.Потоки <- поток:
 	default:
 		// Если канал полон, просто закрываем поток
 		поток.Close()

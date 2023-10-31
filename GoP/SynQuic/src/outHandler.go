@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"net"
 
+	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/logger"
 	jsoniter "github.com/json-iterator/go"
 )
