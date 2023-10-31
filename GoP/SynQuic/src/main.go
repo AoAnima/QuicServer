@@ -1,12 +1,9 @@
 package main
 
 import (
-	"crypto/tls"
-	"crypto/x509"
 	"net/http"
 
 	_ "net/http/pprof"
-	"os"
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/logger"
@@ -47,83 +44,81 @@ func main() {
 	go ЗапуститьСервер(":88", обработчикВходящихСообщений)
 
 	Инфо(" %s", "запустили сервер")
-	ЗапуститьСерверИсходящихСообщений()
+	// ЗапуститьСерверИсходящихСообщений()
 }
-
-
 
 // Сервер для обработки взодящих запросов, принимает только входящие сообщения, не отвечает на запросы
-func ЗапуститьСерверВходящихСообщений() {
+// func ЗапуститьСерверВходящихСообщений() {
 
-	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
-	if err != nil {
-		Ошибка(" %s", err)
+// 	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
+// 	if err != nil {
+// 		Ошибка(" %s", err)
 
-	}
-	caCert, err := os.ReadFile("cert/ca.crt")
-	if err != nil {
-		Ошибка(" %s", err)
-	}
-	caCertPool := x509.NewCertPool()
-	ok := caCertPool.AppendCertsFromPEM(caCert)
-	Инфо("Корневой сертфикат создан?  %v ", ok)
+// 	}
+// 	caCert, err := os.ReadFile("cert/ca.crt")
+// 	if err != nil {
+// 		Ошибка(" %s", err)
+// 	}
+// 	caCertPool := x509.NewCertPool()
+// 	ok := caCertPool.AppendCertsFromPEM(caCert)
+// 	Инфо("Корневой сертфикат создан?  %v ", ok)
 
-	конфиг := &tls.Config{
-		ClientAuth:   tls.RequireAndVerifyClientCert,
-		ClientCAs:    caCertPool,
-		Certificates: []tls.Certificate{cert},
-	}
-	сервер, err := tls.Listen("tcp", ВходящийПорт, конфиг)
-	if err != nil {
-		Ошибка("  %+v \n", err)
-	}
+// 	конфиг := &tls.Config{
+// 		ClientAuth:   tls.RequireAndVerifyClientCert,
+// 		ClientCAs:    caCertPool,
+// 		Certificates: []tls.Certificate{cert},
+// 	}
+// 	сервер, err := tls.Listen("tcp", ВходящийПорт, конфиг)
+// 	if err != nil {
+// 		Ошибка("  %+v \n", err)
+// 	}
 
-	defer сервер.Close()
-	for {
-		клиент, err := сервер.Accept()
-		if err != nil {
-			Ошибка("  %+v \n", err)
-			defer клиент.Close()
-		}
-		// Инфо(" %+v %+v \n", "клиент подключен ко входящему серверу ", клиент)
-		go обработчикВходящихСообщений(клиент)
-		// go ТестВХодящихСообщенийСнизкойСкоростью(клиент)
-	}
-}
+// 	defer сервер.Close()
+// 	for {
+// 		клиент, err := сервер.Accept()
+// 		if err != nil {
+// 			Ошибка("  %+v \n", err)
+// 			defer клиент.Close()
+// 		}
+// 		// Инфо(" %+v %+v \n", "клиент подключен ко входящему серверу ", клиент)
+// 		go обработчикВходящихСообщений(клиент)
+// 		// go ТестВХодящихСообщенийСнизкойСкоростью(клиент)
+// 	}
+// }
 
 // Сервер через который отправляются запросы в сервисы или ответы клиенту.
-func ЗапуститьСерверИсходящихСообщений() {
-	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
-	if err != nil {
-		Ошибка(" %s", err)
+// func ЗапуститьСерверИсходящихСообщений() {
+// 	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
+// 	if err != nil {
+// 		Ошибка(" %s", err)
 
-	}
-	caCert, err := os.ReadFile("cert/ca.crt")
-	if err != nil {
-		Ошибка(" %s", err)
-	}
-	caCertPool := x509.NewCertPool()
-	ok := caCertPool.AppendCertsFromPEM(caCert)
-	Инфо("Корневой сертфикат создан?  %v ", ok)
+// 	}
+// 	caCert, err := os.ReadFile("cert/ca.crt")
+// 	if err != nil {
+// 		Ошибка(" %s", err)
+// 	}
+// 	caCertPool := x509.NewCertPool()
+// 	ok := caCertPool.AppendCertsFromPEM(caCert)
+// 	Инфо("Корневой сертфикат создан?  %v ", ok)
 
-	конфиг := &tls.Config{
-		ClientAuth:   tls.RequireAndVerifyClientCert,
-		ClientCAs:    caCertPool,
-		Certificates: []tls.Certificate{cert},
-	}
-	сервер, err := tls.Listen("tcp", ИсходящийПорт, конфиг)
-	if err != nil {
-		Ошибка("  %+v \n", err)
-	}
+// 	конфиг := &tls.Config{
+// 		ClientAuth:   tls.RequireAndVerifyClientCert,
+// 		ClientCAs:    caCertPool,
+// 		Certificates: []tls.Certificate{cert},
+// 	}
+// 	сервер, err := tls.Listen("tcp", ИсходящийПорт, конфиг)
+// 	if err != nil {
+// 		Ошибка("  %+v \n", err)
+// 	}
 
-	defer сервер.Close()
-	for {
-		клиент, err := сервер.Accept()
-		if err != nil {
-			Ошибка("  %+v \n", err)
-		}
-		defer клиент.Close()
-		Инфо(" %+v \n", "клиент подключен к сиходящему серверу")
-		go обработчикИсходящихСоединений(клиент)
-	}
-}
+// 	defer сервер.Close()
+// 	for {
+// 		клиент, err := сервер.Accept()
+// 		if err != nil {
+// 			Ошибка("  %+v \n", err)
+// 		}
+// 		defer клиент.Close()
+// 		Инфо(" %+v \n", "клиент подключен к сиходящему серверу")
+// 		go обработчикИсходящихСоединений(клиент)
+// 	}
+// }

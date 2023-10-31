@@ -1,11 +1,11 @@
 package main
 
 import (
-	"encoding/binary"
 	"net"
 	"sync"
 
-	connector "aoanima.ru/connector"
+	. "aoanima.ru/ConnQuic"
+
 	. "aoanima.ru/logger"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -56,20 +56,20 @@ func РегистрацияСервиса(отпечатокСервиса *От
 	Инфо(" Маршрутизатор %+v \n", Маршрутизатор)
 }
 
-func Кодировать(данныеДляКодирования interface{}) ([]byte, error) {
+// func Кодировать(данныеДляКодирования interface{}) ([]byte, error) {
 
-	b, err := jsoniter.Marshal(&данныеДляКодирования)
-	if err != nil {
-		Ошибка("  %+v \n", err)
-		return nil, err
-	}
-	данные := make([]byte, len(b)+4)
-	binary.LittleEndian.PutUint32(данные, uint32(len(b)))
-	copy(данные[4:], b)
-	return данные, nil
+// 	b, err := jsoniter.Marshal(&данныеДляКодирования)
+// 	if err != nil {
+// 		Ошибка("  %+v \n", err)
+// 		return nil, err
+// 	}
+// 	данные := make([]byte, len(b)+4)
+// 	binary.LittleEndian.PutUint32(данные, uint32(len(b)))
+// 	copy(данные[4:], b)
+// 	return данные, nil
 
-}
-func ДекодироватьПакет(пакет []byte) {
+// }
+func ДекодироватьПакет(пакет []byte) Сообщение {
 	Инфо(" ДекодироватьПакет пакет %+s \n", пакет)
 
 	// var запросОтКлиента = ЗапросКлиента{
@@ -77,7 +77,7 @@ func ДекодироватьПакет(пакет []byte) {
 	// 	Запрос:    &ЗапросОтКлиента{},
 	// 	ИдКлиента: uuid.UUID{},
 	// }
-	var Сообщение connector.Сообщение
+	var Сообщение Сообщение
 
 	// TODO тут лишний парсинг, нужно получить только URL patch чтобы определить сервис, которому принадлежит запрос, потому nxj дальше весь запрос опять сериализуйется
 
@@ -87,10 +87,7 @@ func ДекодироватьПакет(пакет []byte) {
 	}
 	Инфо(" Сообщение входящее %+s \n", Сообщение)
 
-	go СохранитьСообщение(&Сообщение)
-
-	АнализСообщения(&Сообщение)
-
+	return Сообщение
 }
 
 // func ТестВХодящихСообщенийСнизкойСкоростью(клиент net.Conn) {

@@ -12,7 +12,6 @@ import (
 )
 
 type ПулПотоков struct {
-	
 }
 
 func Клиент() (quic.Connection, error) {
@@ -20,12 +19,11 @@ func Клиент() (quic.Connection, error) {
 	if err != nil {
 		Ошибка("  %+v \n", err)
 	}
-	сессия, err := quic.DialAddr(context.Background(), "localhost:4242", конфигТлс,  &quic.Config{} )
+	сессия, err := quic.DialAddr(context.Background(), "localhost:4242", конфигТлс, &quic.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	
 	// реализцем механизм : создание пул потоков для сессии, ротацию потоков для отправки сообщений
 
 }

@@ -2,12 +2,6 @@ package ConnQuic
 
 import (
 	"crypto/tls"
-	"crypto/x509"
-	"encoding/binary"
-	"os"
-	"time"
-
-	jsoniter "github.com/json-iterator/go"
 
 	. "aoanima.ru/logger"
 	"github.com/google/uuid"
@@ -139,83 +133,10 @@ func Рукопожатие(сервер *tls.Conn, ОтпечатокСерви
 
 // }
 
-func ПодключитьсяКСерверуДляОтправкиСообщений(каналОтправкиОтветов chan []byte, адрес string, порт string) {
-	caCert, err := os.ReadFile("cert/ca.crt")
-
-	if err != nil {
-		Ошибка(" %s ", err)
-	}
-
-	caCertPool := x509.NewCertPool()
-	ok := caCertPool.AppendCertsFromPEM(caCert)
-	Инфо("Корневой сертфикат создан?  %v ", ok)
-
-	cert, err := tls.LoadX509KeyPair("cert/client.crt", "cert/client.key")
-	if err != nil {
-		Ошибка(" %s", err)
-	}
-
-	tlsConfig := &tls.Config{
-		RootCAs:      caCertPool,
-		Certificates: []tls.Certificate{cert},
-	}
-
-	// Подключение к TCP-серверу с TLS на localhost:8080
-	количествоПопыток := 500
-	задержка := 1 * time.Second
-	var сервер *tls.Conn
-	var errDial error
-	for попытка := 1; попытка <= количествоПопыток; попытка++ {
-		сервер, errDial = tls.Dial("tcp", адрес+":"+порт, tlsConfig)
-		if errDial != nil {
-			Ошибка("  %+v \n", err)
-			time.Sleep(задержка)
-		} else {
-			break
-		}
-	}
-
-	ОтправитьОтветНаЗапрос(сервер, каналОтправкиОтветов)
-}
-
 type ЗапросВОбработку struct {
 	Сервис    []byte
 	ИдКлиента uuid.UUID
 	Запрос    Запрос
 }
 
-func ОтправитьОтветНаЗапрос(сервер *tls.Conn, каналОтправкиОтветов chan []byte) {
-	for ОтветКлиенту := range каналОтправкиОтветов {
-		// Отправка сообщений серверу
-		Инфо(" ОтветКлиенту %+v \n", ОтветКлиенту)
-
-		// БинарныйОтветКлиенту, err := Кодировать(ОтветКлиенту)
-
-		// if err != nil {
-		// 	Ошибка("  %+v \n", err)
-		// }
-		// Инфо(" БинарныйЗапрос %+s \n", БинарныйОтветКлиенту)
-
-		// int, err := сервер.Write(БинарныйОтветКлиенту)
-		int, err := сервер.Write(ОтветКлиенту)
-		if err != nil {
-			Ошибка("  %+v %+v \n", int, err)
-		}
-		Инфо(" отправленно  %+v \n", int)
-	}
-}
-
 // func (з ЗапросВОбработку) Кодировать(T any) ([]byte, error) {
-func Кодировать(данныеДляКодирования interface{}) ([]byte, error) {
-
-	b, err := jsoniter.Marshal(&данныеДляКодирования)
-	if err != nil {
-		Ошибка("  %+v \n", err)
-		return nil, err
-	}
-	данные := make([]byte, len(b)+4)
-	binary.LittleEndian.PutUint32(данные, uint32(len(b)))
-	copy(данные[4:], b)
-	return данные, nil
-
-}
