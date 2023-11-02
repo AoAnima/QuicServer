@@ -14,4 +14,5 @@ use (
 	./catalog
 	./SynQuic
 	./mainServer
+	./HTPPserver_quic
 )

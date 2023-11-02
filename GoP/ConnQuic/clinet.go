@@ -11,13 +11,18 @@ import (
 	quic "github.com/quic-go/quic-go"
 )
 
-func Клиент(Адрес string, обработчикСообщений func(поток quic.Stream, сообщение Сообщение)) (quic.Connection, error) {
-	конфигТлс, err := клиентскийТлсКонфиг("root.crt")
+// Подключение к Сервре quic
+/*
+
+ */
+// Адрес = "localhost:4242"
+func ПокдлючитьсяКСерверу(Адрес string, обработчикСообщений func(поток *quic.Stream, сообщение Сообщение)) (quic.Connection, error) {
+	конфигТлс, err := КлиентскийТлсКонфиг("root.crt")
 	if err != nil {
 		Ошибка("  %+v \n", err)
 	}
-	Адрес = "localhost:4242"
-	сессия, err := quic.DialAddr(context.Background(), "localhost:4242", конфигТлс, &quic.Config{})
+	// Адрес = "localhost:4242"
+	сессия, err := quic.DialAddr(context.Background(), Адрес, конфигТлс, &quic.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,10 +36,12 @@ func Клиент(Адрес string, обработчикСообщений func
 
 	}
 }
-func клиентскийТлсКонфиг(caCertFile string) (*tls.Config, error) {
+
+
+func КлиентскийТлсКонфиг(caCertFile string) (*tls.Config, error) {
 	caCert, err := os.ReadFile(caCertFile)
 	if err != nil {
-		return nil, err
+		Ошибка("  %+v \n", err)
 	}
 
 	caCertPool := x509.NewCertPool()
@@ -45,3 +52,6 @@ func клиентскийТлсКонфиг(caCertFile string) (*tls.Config, err
 		NextProtos: []string{"http/1.1", "h2", "h3", "quic", "websocket"},
 	}, nil
 }
+
+
+
