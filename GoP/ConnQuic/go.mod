@@ -1,4 +1,4 @@
-module aoanima.ru/connectorQUIC
+module aoanima.ru/ConnQuic
 
 replace aoanima.ru/logger => ../logger
 

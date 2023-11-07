@@ -13,5 +13,5 @@ use (
 	./ConnQuic
 	./catalog
 	./SynQuic
-	./mainServer
+	./mainServer_quic 
 )

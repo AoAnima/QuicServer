@@ -6,8 +6,6 @@ replace aoanima.ru/logger => ../logger
 
 replace aoanima.ru/ConnQuic => ../ConnQuic
 
-replace aoanima.ru/connector => ../connector
-
 require (
 	aoanima.ru/ConnQuic v0.0.0-00010101000000-000000000000
 	aoanima.ru/connector v0.0.0-00010101000000-000000000000

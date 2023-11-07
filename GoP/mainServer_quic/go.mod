@@ -1,10 +1,10 @@
-module aoanima.ru/mainServer
+module aoanima.ru/mainServer_quic
 
 go 1.21.3
 
 replace aoanima.ru/logger => ../logger
 
-replace aoanima.ru/connector => ../connector
+replace aoanima.ru/ConnQuic => ../ConnQuic
 
 require (
 	aoanima.ru/connector v0.0.0-00010101000000-000000000000
