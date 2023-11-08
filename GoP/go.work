@@ -13,10 +13,5 @@ use (
 	./ConnQuic
 	./catalog
 	./SynQuic
-<<<<<<< HEAD
 	./mainServer_quic 
-=======
-	./mainServer
-	./HTPPserver_quic
->>>>>>> 749006ec09c54c1e21404de823aefea1a35f2753
 )

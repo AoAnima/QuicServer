@@ -1,12 +1,34 @@
 package main
 
 import (
+	"strconv"
 	"sync"
 	"testing"
 
 	. "aoanima.ru/ConnQuic"
 	quic "github.com/quic-go/quic-go"
 )
+
+type MyStruct struct {
+	Field int
+}
+
+func BenchmarkStruct(b *testing.B) {
+	m := make(map[string]MyStruct)
+	for i := 0; i < b.N; i++ {
+		m["key"+strconv.Itoa(i)] = MyStruct{i}
+	}
+}
+
+func BenchmarkPointer(b *testing.B) {
+	m := make(map[string]*MyStruct)
+	for i := 0; i < b.N; i++ {
+		m["key"+strconv.Itoa(i)] = &MyStruct{}
+		m["key"+strconv.Itoa(i)].Field = i
+
+		// m["key"] = &MyStruct{i}
+	}
+}
 
 func BenchmarkОчередьПотоковКанал_Взять_Вернуть(b *testing.B) {
 	очередь := НоваяОчередьПотоковКанал(1)
