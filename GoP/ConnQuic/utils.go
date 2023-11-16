@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"net/url"
+	"strconv"
 	"time"
 
 	. "aoanima.ru/logger"
@@ -112,5 +113,5 @@ var (
 )
 
 func УИДЗапроса(ИдКлиента *uuid.UUID, UrlPath []byte) Уид {
-	return Уид(fmt.Sprintf("%+s.%+s.%+s", time.Now().Unix(), ИдКлиента, metro.Hash64(UrlPath, 0)))
+	return Уид(fmt.Sprintf("%+s.%+s.%+s", strconv.FormatInt(time.Now().Unix(), 10), ИдКлиента, metro.Hash64(UrlPath, 0)))
 }
