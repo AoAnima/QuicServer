@@ -2,9 +2,9 @@ module aoanima.ru/SynQiuc
 
 go 1.21.3
 
-replace aoanima.ru/logger => ../logger
+// replace aoanima.ru/logger => ../logger
 
-replace aoanima.ru/ConnQuic => ../ConnQuic
+// replace aoanima.ru/ConnQuic => ../ConnQuic
 
 require (
 	aoanima.ru/ConnQuic v0.0.0-00010101000000-000000000000

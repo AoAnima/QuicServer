@@ -2,7 +2,7 @@ module aoanima.ru/synqTCP
 
 go 1.21.3
 
-replace aoanima.ru/logger => ../logger
+
 
 replace aoanima.ru/connector => ../connector
 
