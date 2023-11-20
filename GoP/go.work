@@ -1,6 +1,6 @@
 go 1.21.3
-replace aoanima.ru/logger v1 => ../logger
-replace aoanima.ru/ConnQuic v1 => ../ConnQuic
+replace aoanima.ru/logger v1 => /logger
+replace aoanima.ru/ConnQuic v1 => /ConnQuic
 use (
 	./logger
 	./server

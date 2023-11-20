@@ -1,6 +1,6 @@
 module aoanima.ru/ConnQuic/v1
 
-// replace aoanima.ru/logger => ../logger
+replace aoanima.ru/logger => ../logger
 
 go 1.21.3
 

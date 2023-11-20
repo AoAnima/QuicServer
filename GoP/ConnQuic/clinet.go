@@ -248,10 +248,17 @@ func КлиентскийТлсКонфиг(caCertFile string) (*tls.Config, err
 	}
 
 	caCertPool := x509.NewCertPool()
-	caCertPool.AppendCertsFromPEM(caCert)
+	ok := caCertPool.AppendCertsFromPEM(caCert)
+	Инфо("Корневой сертфикат создан?  %v ", ok)
+
+	cert, err := tls.LoadX509KeyPair("cert/root.crt", "cert/root.key")
+	if err != nil {
+		Ошибка(" %s", err)
+	}
 
 	return &tls.Config{
-		RootCAs:    caCertPool,
-		NextProtos: []string{"http/1.1", "h2", "h3", "quic", "websocket"},
+		RootCAs:      caCertPool,
+		Certificates: []tls.Certificate{cert},
+		NextProtos:   []string{"http/1.1", "h2", "h3", "quic", "websocket"},
 	}, nil
 }

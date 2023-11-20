@@ -83,12 +83,30 @@ type СтруктураМаршрута struct {
 }
 type ИмяСервиса string
 type Маршрут string // часть url.Path после домена, например example.ru/catalog/item?list=1 catalog это маршрут который сответсвует обработчику какого тое сервиса
+
+type ДанныеAjaxHTML struct {
+	Цель  string
+	HTML  string
+	Метод string
+}
+
+const (
+	Удалить         = "delete"
+	ВставитьВКонец  = "append"
+	ВставитьВНачало = "prepend"
+	ВставитьПеред   = "before"
+	ВставитьПосле   = "after"
+	Заменить        = "replaceWith"
+	Обновить        = "replaceWith"
+)
+
 type ОтветСервиса struct {
-	Сервис          ИмяСервиса  // Имя сервиса который отправляет ответ
-	УИДЗапроса      string      // Копируется из запроса
-	СырыеДанные     []byte      // Ответ в бинарном формате
-	Данные          interface{} // данные в виде структуры какойто
-	ЗапросОбработан bool        // Признак того что запросы был получен и обработан соответсвуюбщим сервисом, в не зависимоти есть ли данные в ответе или нет, если данных нет, знаичт они не нужны... Выставляем в true в сеорвисе перед отправкой ответа
+	Сервис          ИмяСервиса                // Имя сервиса который отправляет ответ
+	УИДЗапроса      string                    // Копируется из запроса
+	HTML            string                    // Ответ в бинарном формате
+	AjaxHTML        map[string]ДанныеAjaxHTML // Типа map[id селектор для вставки в HTML]<html для вставки>
+	Данные          interface{}               // данные в виде структуры какойто
+	ЗапросОбработан bool                      // Признак того что запросы был получен и обработан соответсвуюбщим сервисом, в не зависимоти есть ли данные в ответе или нет, если данных нет, знаичт они не нужны... Выставляем в true в сеорвисе перед отправкой ответа
 }
 
 type Ответ map[ИмяСервиса]ОтветСервиса
@@ -153,7 +171,7 @@ func генерироватьТлсКонфиг() *tls.Config {
 }
 
 func СоздатьКорневойСертификат() {
-	_, err := os.Stat("root.crt")
+	_, err := os.Stat("cert/root.crt")
 	if !os.IsNotExist(err) { // если файл существует выходим
 		return
 	}
@@ -183,7 +201,7 @@ func СоздатьКорневойСертификат() {
 	}
 
 	// Сохранение сертификата в файл
-	certFile, err := os.Create("root.crt")
+	certFile, err := os.Create("cert/root.crt")
 	if err != nil {
 		panic(err)
 	}
@@ -191,7 +209,7 @@ func СоздатьКорневойСертификат() {
 	certFile.Close()
 
 	// Сохранение приватного ключа в файл
-	keyFile, err := os.Create("root.key")
+	keyFile, err := os.Create("cert/root.key")
 	if err != nil {
 		panic(err)
 	}
@@ -202,16 +220,22 @@ func СоздатьКорневойСертификат() {
 
 func серверныйТлсКонфиг() (*tls.Config, error) {
 	СоздатьКорневойСертификат()
-	caCert, err := os.ReadFile("root.crt")
+	// caCert, err := os.ReadFile("root.crt")
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// caCertPool := x509.NewCertPool()
+	// caCertPool.AppendCertsFromPEM(caCert)
+
+	cert, err := tls.LoadX509KeyPair("cert/root.crt", "cert/root.key")
 	if err != nil {
-		return nil, err
+		Ошибка("  %+v \n", err)
 	}
 
-	caCertPool := x509.NewCertPool()
-	caCertPool.AppendCertsFromPEM(caCert)
-
 	return &tls.Config{
-		RootCAs:    caCertPool,
+		Certificates: []tls.Certificate{cert},
+		// RootCAs:    caCertPool,
 		NextProtos: []string{"http/1.1", "h2", "h3", "quic", "websocket"},
 	}, nil
 }
