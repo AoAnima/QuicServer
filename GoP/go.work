@@ -1,19 +1,10 @@
 go 1.21.3
-replace aoanima.ru/logger v1 => /logger
-replace aoanima.ru/ConnQuic v1 => /ConnQuic
+
 use (
-	./logger
-	./server
-	./render
-	./synquestWS
-	./synquestHTTP
-	./tcpserver
-	./synqTCP
+	./logger	
 	./bench
-	./connector
-	./ConnQuic
-	./catalog
+	./catalog 
+	./ConnQuic	
 	./SynQuic
-	./mainServer_quic 
-	./HTPPserver_quic 
+	./mainServer_quic 	
 )

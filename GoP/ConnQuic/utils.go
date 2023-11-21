@@ -234,7 +234,8 @@ func серверныйТлсКонфиг() (*tls.Config, error) {
 	}
 
 	return &tls.Config{
-		Certificates: []tls.Certificate{cert},
+		InsecureSkipVerify: true,
+		Certificates:       []tls.Certificate{cert},
 		// RootCAs:    caCertPool,
 		NextProtos: []string{"http/1.1", "h2", "h3", "quic", "websocket"},
 	}, nil

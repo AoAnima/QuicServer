@@ -257,8 +257,9 @@ func КлиентскийТлсКонфиг(caCertFile string) (*tls.Config, err
 	}
 
 	return &tls.Config{
-		RootCAs:      caCertPool,
-		Certificates: []tls.Certificate{cert},
-		NextProtos:   []string{"http/1.1", "h2", "h3", "quic", "websocket"},
+		InsecureSkipVerify: true,
+		RootCAs:            caCertPool,
+		Certificates:       []tls.Certificate{cert},
+		NextProtos:         []string{"http/1.1", "h2", "h3", "quic", "websocket"},
 	}, nil
 }

@@ -1,4 +1,4 @@
-module aoanima.ru/SynQiuc
+module aoanima.ru/SynQuic
 
 go 1.21.3
 
@@ -10,6 +10,7 @@ require (
 	aoanima.ru/ConnQuic v0.0.0-00010101000000-000000000000
 	aoanima.ru/logger v0.0.0-00010101000000-000000000000
 	github.com/quic-go/quic-go v0.39.3
+
 )
 
 require (
@@ -21,7 +22,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/onsi/ginkgo/v2 v2.9.5 // indirect
-	github.com/quic-go/qtls-go1-20 v0.3.4 // indirect
+	github.com/quic-go/qtls-go1-20 v0.4.1 // indirect
 	go.uber.org/mock v0.3.0 // indirect
 	golang.org/x/crypto v0.4.0 // indirect
 	golang.org/x/exp v0.0.0-20221205204356-47842c84f3db // indirect
