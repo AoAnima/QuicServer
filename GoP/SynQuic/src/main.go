@@ -35,7 +35,7 @@ var (
 // 	Файл          string
 // }
 
-func main() {
+func main() {             
 	go func() {
 		http.ListenAndServe("localhost:6061", nil)
 	}()

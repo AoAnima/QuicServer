@@ -5,8 +5,10 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/binary"
+	"net"
 	"os"
 	"sync"
+	"time"
 
 	. "aoanima.ru/logger"
 	quic "github.com/quic-go/quic-go"
@@ -45,7 +47,7 @@ type СхемаСервера struct {
 }
 
 type ДанныеСессии struct {
-	*sync.RWMutex
+	Блок           *sync.RWMutex
 	Сессия         quic.Connection
 	Потоки         []quic.Stream // массив потому что клиенту не нужна очередь, тут просто хранятся все принятые потоки от SynQuic
 	СистемныйПоток quic.Stream   // сохраним первый поток как сервисный, ля отправки каких то уведомлений... проверки загруженности или ещё что то
@@ -62,7 +64,7 @@ func (клиент Клиент) Соединиться(
 	ОбработчикОтветаРегистрации func(сообщение Сообщение),
 	ОбработчикЗапросовСервера func(поток quic.Stream, сообщение Сообщение)) {
 
-	конфигТлс, err := КлиентскийТлсКонфиг("root.crt")
+	конфигТлс, err := КлиентскийТлсКонфиг()
 	if err != nil {
 		Ошибка("  %+v \n", err)
 	}
@@ -76,7 +78,12 @@ func (клиент Клиент) Соединиться(
 		клиент["SynQuic"] = append(клиент["SynQuic"], сервер)
 	}
 
-	сессия, err := quic.DialAddr(context.Background(), сервер.Адрес, конфигТлс, &quic.Config{})
+	Конифгурация := &quic.Config{
+		KeepAlivePeriod: 30 * time.Second,
+		MaxIdleTimeout:  360 * time.Second,
+	}
+
+	сессия, err := quic.DialAddr(context.Background(), сервер.Адрес, конфигТлс, Конифгурация)
 	if err != nil {
 		Ошибка(" не удаётся покдлючиться к серверу  %+v \n", err)
 		return
@@ -88,7 +95,8 @@ func (клиент Клиент) Соединиться(
 
 	// этот поток не добавляем в очередь потоков, в него мы писать ничгео не будем в адльнейшем, отпраавляем сейчас только регистрационное сообщение с маршрутами котоые обрабатывает сервис
 	системныйПоток, err := сессия.OpenStream()
-	if err != nil {
+	// системныйПоток, err := сессия.OpenStreamSync(context.Background())
+	if nerr, ok := err.(net.Error); ok && nerr.Timeout() {
 		Ошибка(" не удаётся открыть системный поток %+v \n", err)
 		return
 	}
@@ -241,25 +249,27 @@ func статусРегистрации(сообщение Сообщение) {
 	}
 
 }
-func КлиентскийТлсКонфиг(caCertFile string) (*tls.Config, error) {
-	caCert, err := os.ReadFile(caCertFile)
+func КлиентскийТлсКонфиг() (*tls.Config, error) {
+	caCert, err := os.ReadFile("cert/ca.crt")
 	if err != nil {
 		return nil, err
 	}
 
 	caCertPool := x509.NewCertPool()
-	ok := caCertPool.AppendCertsFromPEM(caCert)
-	Инфо("Корневой сертфикат создан?  %v ", ok)
+	caCertPool.AppendCertsFromPEM(caCert)
+	// Инфо("Корневой сертфикат создан?  %v ", ok)
 
-	cert, err := tls.LoadX509KeyPair("cert/root.crt", "cert/root.key")
+	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
 	if err != nil {
 		Ошибка(" %s", err)
 	}
 
 	return &tls.Config{
-		InsecureSkipVerify: true,
-		RootCAs:            caCertPool,
-		Certificates:       []tls.Certificate{cert},
-		NextProtos:         []string{"http/1.1", "h2", "h3", "quic", "websocket"},
+		// InsecureSkipVerify: true,
+		RootCAs: caCertPool,
+
+		Certificates: []tls.Certificate{cert},
+		// NextProtos:   []string{"h3", "quic", "websocket"},
+		NextProtos: []string{"h3", "quic", "websocket"},
 	}, nil
 }

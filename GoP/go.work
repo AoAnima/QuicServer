@@ -3,6 +3,7 @@ go 1.21.3
 use (
 	./logger	
 	./bench
+	./client
 	./catalog 
 	./ConnQuic	
 	./SynQuic

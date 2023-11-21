@@ -114,6 +114,7 @@ type Ответ map[ИмяСервиса]ОтветСервиса
 type Сообщение struct {
 	Сервис      ИмяСервиса // Имя Сервиса который шлёт Сообщение, каждый сервис пишет своё имя в не зависимости что это ответ или запрос
 	Регистрация bool
+	Пинг        bool
 	// Маршруты     map[Маршрут]*СтруктураМаршрута
 	Маршруты     []Маршрут
 	Запрос       Запрос
@@ -219,24 +220,25 @@ func СоздатьКорневойСертификат() {
 }
 
 func серверныйТлсКонфиг() (*tls.Config, error) {
-	СоздатьКорневойСертификат()
-	// caCert, err := os.ReadFile("root.crt")
-	// if err != nil {
-	// 	return nil, err
-	// }
+	// СоздатьКорневойСертификат()
+	caCert, err := os.ReadFile("cert/ca.crt")
+	if err != nil {
+		return nil, err
+	}
 
-	// caCertPool := x509.NewCertPool()
-	// caCertPool.AppendCertsFromPEM(caCert)
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
 
-	cert, err := tls.LoadX509KeyPair("cert/root.crt", "cert/root.key")
+	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
 	if err != nil {
 		Ошибка("  %+v \n", err)
 	}
 
 	return &tls.Config{
-		InsecureSkipVerify: true,
-		Certificates:       []tls.Certificate{cert},
-		// RootCAs:    caCertPool,
-		NextProtos: []string{"http/1.1", "h2", "h3", "quic", "websocket"},
+		// InsecureSkipVerify: true,
+		Certificates: []tls.Certificate{cert},
+		RootCAs:      caCertPool,
+		NextProtos:   []string{"h3", "quic", "websocket"},
+		// NextProtos: []string{"http/1.1", "h2", "h3", "quic", "websocket"},
 	}, nil
 }
