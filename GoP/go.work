@@ -1,11 +1,12 @@
 go 1.21.3
 
 use (
-	./logger	
-	./bench
-	./client
-	./catalog 
-	./ConnQuic	
+	./AuthService
+	./Catalog
+	./ConnQuic
+	./HTTPServerQuic
+	./Logger
+	./RenderService
 	./SynQuic
-	./mainServer_quic 	
+	./bench
 )

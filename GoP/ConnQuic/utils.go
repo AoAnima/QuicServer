@@ -1,6 +1,7 @@
 package ConnQuic
 
 import (
+	"bufio"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/tls"
@@ -9,13 +10,14 @@ import (
 	"encoding/binary"
 	"encoding/pem"
 	"fmt"
+	"io"
 	"math/big"
 	"net/url"
 	"os"
 	"strconv"
 	"time"
 
-	. "aoanima.ru/logger"
+	. "aoanima.ru/Logger"
 	"github.com/dgryski/go-metro"
 	"github.com/google/uuid"
 	jsoniter "github.com/json-iterator/go"
@@ -38,7 +40,7 @@ func ДекодироватьПакет(пакет []byte) (Сообщение, 
 		Ошибка("  %+v \n", err)
 		return Сообщение, err
 	}
-	Инфо(" Сообщение входящее %+s \n", Сообщение)
+	// Инфо(" Сообщение входящее %+s \n", Сообщение)
 
 	return Сообщение, err
 }
@@ -115,6 +117,7 @@ type Сообщение struct {
 	Сервис      ИмяСервиса // Имя Сервиса который шлёт Сообщение, каждый сервис пишет своё имя в не зависимости что это ответ или запрос
 	Регистрация bool
 	Пинг        bool
+	Понг        bool
 	// Маршруты     map[Маршрут]*СтруктураМаршрута
 	Маршруты     []Маршрут
 	Запрос       Запрос
@@ -148,7 +151,13 @@ var (
 )
 
 func УИДЗапроса(ИдКлиента *uuid.UUID, UrlPath []byte) Уид {
-	return Уид(fmt.Sprintf("%+s.%+s.%+s", strconv.FormatInt(time.Now().Unix(), 10), ИдКлиента, metro.Hash64(UrlPath, 0)))
+	времяГенерации := time.Now().Unix()
+	return Уид(fmt.Sprintf("%+s.%+s.%d", strconv.FormatInt(времяГенерации, 10), ИдКлиента, metro.Hash64(UrlPath, uint64(времяГенерации))))
+}
+
+func УИДСистемногоЗапроса(Сервис string) Уид {
+	времяГенерации := time.Now().Unix()
+	return Уид(fmt.Sprintf("%+s.%+s.%d", strconv.FormatInt(времяГенерации, 10), Сервис, metro.Hash64([]byte(Сервис), uint64(времяГенерации))))
 }
 
 func генерироватьТлсКонфиг() *tls.Config {
@@ -241,4 +250,24 @@ func серверныйТлсКонфиг() (*tls.Config, error) {
 		NextProtos:   []string{"h3", "quic", "websocket"},
 		// NextProtos: []string{"http/1.1", "h2", "h3", "quic", "websocket"},
 	}, nil
+}
+
+type bufferedWriteCloser struct {
+	*bufio.Writer
+	io.Closer
+}
+
+// NewBufferedWriteCloser creates an io.WriteCloser from a bufio.Writer and an io.Closer
+func NewBufferedWriteCloser(writer *bufio.Writer, closer io.Closer) io.WriteCloser {
+	return &bufferedWriteCloser{
+		Writer: writer,
+		Closer: closer,
+	}
+}
+
+func (h bufferedWriteCloser) Close() error {
+	if err := h.Writer.Flush(); err != nil {
+		return err
+	}
+	return h.Closer.Close()
 }

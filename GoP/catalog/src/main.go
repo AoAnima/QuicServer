@@ -6,7 +6,7 @@ import (
 	_ "net/http/pprof"
 
 	. "aoanima.ru/ConnQuic"
-	. "aoanima.ru/logger"
+	. "aoanima.ru/Logger"
 	"github.com/quic-go/quic-go"
 )
 

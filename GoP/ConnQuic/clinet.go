@@ -1,17 +1,21 @@
 package ConnQuic
 
 import (
+	"bufio"
 	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/binary"
+	"fmt"
 	"net"
 	"os"
 	"sync"
 	"time"
 
-	. "aoanima.ru/logger"
+	. "aoanima.ru/Logger"
 	quic "github.com/quic-go/quic-go"
+	"github.com/quic-go/quic-go/logging"
+	"github.com/quic-go/quic-go/qlog"
 )
 
 // type КартаСессий struct {
@@ -39,9 +43,9 @@ import (
 */
 
 // где string это адрес или имя сервиса.. лучше наверное адрес
-type ИмяСервер string
+type ИмяСервера string
 type СхемаСервера struct {
-	Имя   ИмяСервер
+	Имя   ИмяСервера
 	Адрес string
 	ДанныеСессии
 }
@@ -54,7 +58,7 @@ type ДанныеСессии struct {
 }
 
 // Массив подключений, вдруг понадобится открыть несоклько подключений к одному серверу
-type Клиент map[ИмяСервер][]*СхемаСервера
+type Клиент map[ИмяСервера][]*СхемаСервера
 
 // func (к Клиент) Соединиться(сервер СхемаСервера, обработчикСообщений func(поток quic.Stream, сообщение Сообщение)) {
 // Содеинится, это для сервисов, которые сами не инициируют потоки, а принимают входящие потоки от SynQuic
@@ -82,6 +86,16 @@ func (клиент Клиент) Соединиться(
 		KeepAlivePeriod: 30 * time.Second,
 		MaxIdleTimeout:  360 * time.Second,
 	}
+	Tracer := func(ctx context.Context, p logging.Perspective, connID quic.ConnectionID) *logging.ConnectionTracer {
+		filename := fmt.Sprintf("server_%s.qlog", connID)
+		f, err := os.Create(filename)
+		if err != nil {
+			Ошибка(" %+v \n", err)
+		}
+		Инфо("Creating qlog file %s.\n", filename)
+		return qlog.NewConnectionTracer(NewBufferedWriteCloser(bufio.NewWriter(f), f), p, connID)
+	}
+	Конифгурация.Tracer = Tracer
 
 	сессия, err := quic.DialAddr(context.Background(), сервер.Адрес, конфигТлс, Конифгурация)
 	if err != nil {

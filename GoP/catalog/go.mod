@@ -1,12 +1,12 @@
-module aoanima.ru/catalog
+module aoanima.ru/Catalog
 
-replace aoanima.ru/logger => ../logger
+replace aoanima.ru/Logger => ../Logger
 
 
 go 1.21.3
 
 require (
-	aoanima.ru/logger v0.0.0-00010101000000-000000000000
+	aoanima.ru/Logger v0.0.0-00010101000000-000000000000
 	github.com/json-iterator/go v1.1.12
 )
 

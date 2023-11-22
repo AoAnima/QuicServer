@@ -4,7 +4,28 @@
     // ${workspaceFolderBasename}/${relativeFileDirname}/${fileBasename}
     // https://github.com/golang/vscode-go/wiki/debugging
     "version": "2.0.0",
+    "inputs": [
+        {
+          "id": "moduleName",
+          "type": "promptString",
+          "description": "Имя нового модуля",
+          "default": "test"
+        }
+      ],
     "tasks": [
+        {
+            "label": "Новый модуль",
+            "type": "shell",
+            "command": "echo \"Создаю модуль ${input:moduleName}\" ; ${workspaceFolder}/CreateService.ps1 ${input:moduleName}",
+            "problemMatcher": {
+                "base": "$go",
+                "background": {
+                  "activeOnStart": true,
+                  "beginsPattern": ".*",
+                  "endsPattern": "[.*]",                                  
+                }
+            }
+        },
         {
             "label": "test",
             "type": "shell",
@@ -34,7 +55,7 @@
         }, {
             "label": "build",
             "type": "shell",
-            "command": "cd ${fileDirname} ; go mod tidy;  go build -o ${fileDirname}/../bin/main.exe ${fileDirname}",
+            "command": "cd ${fileDirname}/..; go mod tidy;  go build -o ${fileDirname}/../bin/${fileBasenameNoExtension}.exe ${fileDirname}",
             // "command": "go build -o ${fileDirname}/../bin/main.exe ${file}; ${fileDirname}/../bin/main.exe",
             "group": {
                 "kind": "build",
@@ -61,7 +82,7 @@
         {
             "label": "run",
             "type": "shell",
-            "command": "cd ${fileDirname}/../bin ; .${pathSeparator}main.exe",         
+            "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}.exe",         
             "group": {
                 "kind": "build",
                 "isDefault": false

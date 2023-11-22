@@ -1,11 +1,11 @@
 module aoanima.ru/ConnQuic/v1
 
-replace aoanima.ru/logger => ../logger
+replace aoanima.ru/Logger => ../Logger
 
 go 1.21.3
 
 require (
-	aoanima.ru/logger v0.0.0-00010101000000-000000000000
+	aoanima.ru/Logger v0.0.0-00010101000000-000000000000
 	github.com/dgryski/go-metro v0.0.0-20211217172704-adc40b04c140
 	github.com/google/uuid v1.3.1
 	github.com/json-iterator/go v1.1.12
@@ -13,9 +13,10 @@ require (
 )
 
 require (
+	github.com/francoispqt/gojay v1.2.13 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/onsi/ginkgo/v2 v2.9.5 // indirect
 	github.com/quic-go/qtls-go1-20 v0.3.4 // indirect
