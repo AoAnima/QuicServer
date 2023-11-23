@@ -10,6 +10,7 @@ require (
 	aoanima.ru/ConnQuic v0.0.0-00010101000000-000000000000
 	aoanima.ru/Logger v0.0.0-00010101000000-000000000000
 	github.com/google/uuid v1.3.1
+	github.com/json-iterator/go v1.1.12
 	github.com/quic-go/quic-go v0.40.0
 )
 
@@ -17,7 +18,6 @@ require (
 	github.com/dgryski/go-metro v0.0.0-20211217172704-adc40b04c140 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38 // indirect
-	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/onsi/ginkgo/v2 v2.9.5 // indirect
