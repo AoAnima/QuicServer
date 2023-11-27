@@ -107,83 +107,6 @@ func ЗапуститьСерверТЛС() {
 	}
 }
 
-type ТипФайла struct {
-	ТипКонтента string
-	Каталог     string
-}
-
-var ТипыСтатическихФайлов = map[string]ТипФайла{
-	".css": {
-		ТипКонтента: "text/css",
-		Каталог:     "./css/",
-	},
-	".js": {
-		ТипКонтента: "text/javascript",
-		Каталог:     "./js/",
-	},
-	".jpeg": {
-		ТипКонтента: "image/jpeg",
-		Каталог:     "./images/",
-	},
-	".jpg": {
-		ТипКонтента: "image/jpeg",
-		Каталог:     "./images/",
-	},
-	".png": {
-		ТипКонтента: "image/png",
-		Каталог:     "./images/",
-	},
-	".svg": {
-		ТипКонтента: "image/svg+xml",
-		Каталог:     "./images/",
-	},
-	".gif": {
-		ТипКонтента: "image/gif",
-		Каталог:     "./images/",
-	},
-	".ico": {
-		ТипКонтента: "image/x-icon",
-		Каталог:     "./images/",
-	},
-	// ".zip":    {
-	// 	ТипКонтента:"application/zip",
-	// 	Каталог:     "./images/",
-	// },
-	// ".pdf":   "application/pdf",
-	// ".doc":   "application/msword",
-	// ".xls":   "application/vnd.ms-excel",
-	// ".ppt":   "application/vnd.ms-powerpoint",
-	// ".mp3":   "audio/mpeg",
-	// ".mp4":   "video/mp4",
-	// ".wav":   "audio/wav",
-	// ".ogg":   "audio/ogg",
-	// ".webm":  "video/webm",
-	".ttf": {
-		ТипКонтента: "font/ttf",
-		Каталог:     "./fonts/",
-	},
-	".woff": {
-		ТипКонтента: "font/woff",
-		Каталог:     "./fonts/",
-	},
-	".woff2": {
-		ТипКонтента: "font/woff2",
-		Каталог:     "./fonts/",
-	},
-	".eot": {
-		ТипКонтента: "font/eot",
-		Каталог:     "./fonts/",
-	},
-	".otf": {
-		ТипКонтента: "font/otf",
-		Каталог:     "./fonts/",
-	},
-	".ttc": {
-		ТипКонтента: "font/ttc",
-		Каталог:     "./fonts/",
-	},
-}
-
 func обработчикЗапроса(w http.ResponseWriter, req *http.Request) {
 
 	Инфо(" %s \n", *req)
@@ -208,15 +131,9 @@ func обработчикЗапроса(w http.ResponseWriter, req *http.Request
 
 func ОтправитьСообщениеКлиенту(сообщение Сообщение, w http.ResponseWriter) {
 	ответ := КодироватьСообщениеОтвет(сообщение)
+	УстанвоитьЗаголовкиОтвета(&сообщение, w)
 
 	if f, ok := w.(http.Flusher); ok {
-
-		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-
-		// Нужно проанализировать сообщение.ТипОтвета и установить Content-Type
-		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		Инфо("  %+v \n", string(ответ))
 		i, err := w.Write(ответ)
 		Инфо("  %+v \n", i)
@@ -225,6 +142,29 @@ func ОтправитьСообщениеКлиенту(сообщение Со�
 		}
 		f.Flush()
 	}
+}
+
+func УстанвоитьЗаголовкиОтвета(сообщение *Сообщение, w http.ResponseWriter) {
+
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	// Нужно проанализировать сообщение.ТипОтвета и установить Content-Type
+
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	switch сообщение.Запрос.ТипОтвета {
+	case AjaxHTML:
+		w.Header().Set("Content-Type", "text/html;charset=utf-8")
+	case HTML:
+		w.Header().Set("Content-Type", "text/html;charset=utf-8")
+	case AjaxJSON:
+		w.Header().Set("Content-Type", "application/json")
+
+	}
+	// UID идентификатор пользователя
+	// UAT уникальный токен авторизации JWT
+	w.Header().Set("X-UID", сообщение.ИдКлиента.String())
+	w.Header().Set("X-UAT", сообщение.ИдКлиента.String())
+
 }
 
 func ЗапуститьWebСервер() {
