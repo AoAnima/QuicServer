@@ -4,7 +4,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"path"
 	"sync"
 	"time"
@@ -13,7 +12,6 @@ import (
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
-	jsoniter "github.com/json-iterator/go"
 	quic "github.com/quic-go/quic-go"
 )
 
@@ -49,30 +47,13 @@ type СхемаСервераHTTP struct {
 }
 
 // var каталогСтатичныхФайлов string
+var Конфиг = &Конфигурация{}
 
 func init() {
 	Инфо(" проверяем какие аргументы переданы при запуске, если пусто то читаем конфиг, если конфига нет то устанавливаем значения по умолчанию %+v \n")
 
 	// каталогСтатичныхФайлов = "../../HTML/static/"
-	ЧитатьКонфиг()
-}
-
-type конфигурация struct {
-	КаталогСтатичныхФайлов string
-}
-
-var Конфиг = &конфигурация{}
-
-func ЧитатьКонфиг() {
-	конфиг, err := os.ReadFile("config.json")
-	if err != nil {
-		Ошибка("  %+v \n", err)
-	}
-
-	err = jsoniter.Unmarshal(конфиг, Конфиг)
-	if err != nil {
-		Ошибка("  %+v \n", err)
-	}
+	ЧитатьКонфиг(Конфиг)
 }
 
 func main() {

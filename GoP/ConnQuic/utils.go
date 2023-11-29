@@ -1,7 +1,6 @@
 package ConnQuic
 
 import (
-	"bufio"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/tls"
@@ -10,7 +9,6 @@ import (
 	"encoding/binary"
 	"encoding/pem"
 	"fmt"
-	"io"
 	"math/big"
 	"net/url"
 	"os"
@@ -100,43 +98,6 @@ var ТипыСтатическихФайлов = map[string]ТипФайла{
 	},
 }
 
-func ДекодироватьПакет(пакет []byte) (Сообщение, error) {
-	// Инфо(" ДекодироватьПакет пакет %+s \n", пакет)
-
-	// var запросОтКлиента = ЗапросКлиента{
-	// 	Сервис:    []byte{},
-	// 	Запрос:    &ЗапросОтКлиента{},
-	// 	ИдКлиента: uuid.UUID{},
-	// }
-	var сообщение Сообщение
-
-	// TODO тут лишний парсинг, нужно получить только URL patch чтобы определить сервис, которому принадлежит запрос, потому nxj дальше весь запрос опять сериализуйется
-
-	err := jsoniter.Unmarshal(пакет, &сообщение)
-	if err != nil {
-		Ошибка("  %+v  %+v \n", err, сообщение)
-		return сообщение, err
-	}
-	// Инфо(" Сообщение входящее %+s \n", Сообщение)
-
-	return сообщение, err
-}
-func Кодировать(данныеДляКодирования interface{}) ([]byte, error) {
-
-	b, err := jsoniter.Marshal(&данныеДляКодирования)
-	if err != nil {
-		Ошибка("  %+v \n", err)
-		return nil, err
-	}
-	данные := make([]byte, len(b)+4)
-	binary.LittleEndian.PutUint32(данные, uint32(len(b)))
-	copy(данные[4:], b)
-	// log.Print(данные, string(данные))
-	// Инфо(" Кодировать %+s %+s \n", данные, string(данные))
-	return данные, nil
-
-}
-
 type ТипОтвета int
 
 const (
@@ -155,14 +116,15 @@ const (
 	AJAXPost
 )
 
-type Отпечаток struct {
-	Сервис   string
-	Маршруты map[string]*СтруктураМаршрута
-}
-type СтруктураМаршрута struct {
-	Запрос map[string]interface{} // описывает  данные которые нужны для обработки маршрута
-	Ответ  map[string]interface{} // описывает формат в котором вернёт данные
-}
+//	type Отпечаток struct {
+//		Сервис   string
+//		Маршруты map[string]*СтруктураМаршрута
+//	}
+//
+//	type СтруктураМаршрута struct {
+//		Запрос map[string]interface{} // описывает  данные которые нужны для обработки маршрута
+//		Ответ  map[string]interface{} // описывает формат в котором вернёт данные
+//	}
 type ИмяСервиса string
 type Маршрут string // часть url.Path после домена, например example.ru/catalog/item?list=1 catalog это маршрут который сответсвует обработчику какого тое сервиса
 
@@ -182,18 +144,6 @@ const (
 	Обновить        = "replaceWith"
 )
 
-type ОтветСервиса struct {
-	Сервис          ИмяСервиса                // Имя сервиса который отправляет ответ
-	УИДЗапроса      string                    // Копируется из запроса
-	HTML            string                    // Ответ в бинарном формате
-	AjaxHTML        map[string]ДанныеAjaxHTML // Типа map[id селектор для вставки в HTML]<html для вставки>
-	Данные          interface{}               // данные в виде структуры какойто
-	ТипОтвета       ТипОтвета
-	ЗапросОбработан bool // Признак того что запросы был получен и обработан соответсвуюбщим сервисом, в не зависимоти есть ли данные в ответе или нет, если данных нет, знаичт они не нужны... Выставляем в true в сеорвисе перед отправкой ответа
-}
-
-type Ответ map[ИмяСервиса]ОтветСервиса
-
 type Сообщение struct {
 	Сервис      ИмяСервиса // Имя Сервиса который шлёт Сообщение, каждый сервис пишет своё имя в не зависимости что это ответ или запрос
 	Регистрация bool
@@ -209,17 +159,6 @@ type Сообщение struct {
 	JWT          string
 }
 
-type ТокенКлинета struct {
-	ИдКлиента uuid.UUID `json:"UID"`
-	Роль      []string  `json:"role"`
-	Токен     string    `json:"token"`
-	Права     []string  `json:"access"`
-	Истекает  int64     `json:"expires"`
-	Создан    int64     `json:"created"`
-}
-
-type Уид string
-
 type Запрос struct {
 	ТипОтвета      ТипОтвета
 	ТипЗапроса     ТипЗапроса
@@ -230,6 +169,28 @@ type Запрос struct {
 	УИДЗапроса     Уид
 }
 
+type Ответ map[ИмяСервиса]ОтветСервиса
+
+type ОтветСервиса struct {
+	Сервис          ИмяСервиса                // Имя сервиса который отправляет ответ
+	УИДЗапроса      string                    // Копируется из запроса
+	HTML            string                    // Ответ в бинарном формате
+	AjaxHTML        map[string]ДанныеAjaxHTML // Типа map[id селектор для вставки в HTML]<html для вставки>
+	Данные          interface{}               // данные в виде структуры какойто
+	ТипОтвета       ТипОтвета
+	ЗапросОбработан bool // Признак того что запросы был получен и обработан соответсвуюбщим сервисом, в не зависимоти есть ли данные в ответе или нет, если данных нет, знаичт они не нужны... Выставляем в true в сеорвисе перед отправкой ответа
+}
+
+type ТокенКлинета struct {
+	ИдКлиента uuid.UUID `json:"UID"`
+	Роль      []string  `json:"role"`
+	Токен     string    `json:"token"`
+	Права     []string  `json:"access"`
+	Истекает  int64     `json:"expires"`
+	Создан    int64     `json:"created"`
+}
+
+type Уид string
 type СистемноеСообщение struct {
 	Сервис       ИмяСервиса
 	Запрос       interface{}
@@ -344,22 +305,56 @@ func СерверныйТлсКонфиг() (*tls.Config, error) {
 	}, nil
 }
 
-type bufferedWriteCloser struct {
-	*bufio.Writer
-	io.Closer
+type Конфигурация struct {
+	КаталогСтатичныхФайлов string
+	КаталогШаблонов        string
 }
 
-// NewBufferedWriteCloser creates an io.WriteCloser from a bufio.Writer and an io.Closer
-func NewBufferedWriteCloser(writer *bufio.Writer, closer io.Closer) io.WriteCloser {
-	return &bufferedWriteCloser{
-		Writer: writer,
-		Closer: closer,
+func ЧитатьКонфиг(Конфиг *Конфигурация) {
+	конфиг, err := os.ReadFile("config.json")
+	if err != nil {
+		Ошибка("  %+v \n", err)
+	}
+
+	err = jsoniter.Unmarshal(конфиг, Конфиг)
+	if err != nil {
+		Ошибка("  %+v \n", err)
 	}
 }
 
-func (h bufferedWriteCloser) Close() error {
-	if err := h.Writer.Flush(); err != nil {
-		return err
+func ДекодироватьПакет(пакет []byte) (Сообщение, error) {
+	// Инфо(" ДекодироватьПакет пакет %+s \n", пакет)
+
+	// var запросОтКлиента = ЗапросКлиента{
+	// 	Сервис:    []byte{},
+	// 	Запрос:    &ЗапросОтКлиента{},
+	// 	ИдКлиента: uuid.UUID{},
+	// }
+	var сообщение Сообщение
+
+	// TODO тут лишний парсинг, нужно получить только URL patch чтобы определить сервис, которому принадлежит запрос, потому nxj дальше весь запрос опять сериализуйется
+
+	err := jsoniter.Unmarshal(пакет, &сообщение)
+	if err != nil {
+		Ошибка("  %+v  %+v \n", err, сообщение)
+		return сообщение, err
 	}
-	return h.Closer.Close()
+	// Инфо(" Сообщение входящее %+s \n", Сообщение)
+
+	return сообщение, err
+}
+func Кодировать(данныеДляКодирования interface{}) ([]byte, error) {
+
+	b, err := jsoniter.Marshal(&данныеДляКодирования)
+	if err != nil {
+		Ошибка("  %+v \n", err)
+		return nil, err
+	}
+	данные := make([]byte, len(b)+4)
+	binary.LittleEndian.PutUint32(данные, uint32(len(b)))
+	copy(данные[4:], b)
+	// log.Print(данные, string(данные))
+	// Инфо(" Кодировать %+s %+s \n", данные, string(данные))
+	return данные, nil
+
 }
