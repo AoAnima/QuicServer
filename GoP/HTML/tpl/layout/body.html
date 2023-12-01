@@ -1,8 +1,8 @@
 {{define "body"}}
 
-    {{template "topbar"}}
-    {{template "sidebar"}}
-    {{template "content"}}
-    {{template "footer"}}
+    {{template "topbar" .}}
+    {{template "sidebar" .}}
+    {{template "content" .content}}
+    {{template "footer" .}}
 
 {{end}}
