@@ -9,7 +9,6 @@ replace aoanima.ru/ConnQuic => ../ConnQuic
 require (
 	aoanima.ru/ConnQuic v0.0.0-00010101000000-000000000000
 	aoanima.ru/Logger v0.0.0-00010101000000-000000000000
-	github.com/golang-jwt/jwt/v5 v5.1.0
 	github.com/quic-go/quic-go v0.39.3
 
 )
