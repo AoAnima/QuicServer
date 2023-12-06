@@ -260,6 +260,7 @@ func СтатусРегистрации(сообщение Сообщение) {
 
 }
 func КлиентскийТлсКонфиг() (*tls.Config, error) {
+
 	caCert, err := os.ReadFile("cert/ca.crt")
 	if err != nil {
 		return nil, err

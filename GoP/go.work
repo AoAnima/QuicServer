@@ -6,8 +6,11 @@ use (
 	./Catalog
 	./ConnQuic
 	./HTTPServerQuic
+	./LocalAI
 	./Logger
 	./RenderService
 	./SynQuic
 	./bench
+	./ollama/ollama
+
 )

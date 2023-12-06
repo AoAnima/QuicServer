@@ -45,6 +45,10 @@ type СхемаСервераHTTP struct {
 	ОчередьПотоков *ОчередьПотоков
 	НомерСессии    НомерСессии
 }
+type Конфигурация struct {
+	КаталогСтатичныхФайлов string
+	КаталогШаблонов        string
+}
 
 // var каталогСтатичныхФайлов string
 var Конфиг = &Конфигурация{}
@@ -134,11 +138,13 @@ func УстановитьЗаголовкиОтвета(сообщение *Со
 
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	switch сообщение.Запрос.ТипОтвета {
-	case AjaxHTML:
-		w.Header().Set("Content-Type", "text/html;charset=utf-8")
 	case HTML:
 		w.Header().Set("Content-Type", "text/html;charset=utf-8")
+	case Error:
+		w.Header().Set("Content-Type", "text/html;charset=utf-8")
 	case AjaxJSON:
+		w.Header().Set("Content-Type", "application/json")
+	case AjaxHTML:
 		w.Header().Set("Content-Type", "application/json")
 
 	}
@@ -182,7 +188,7 @@ func ОбработчикСтатичныхФайлов(w http.ResponseWriter, r
 		// 	return
 		// }
 
-		f, err := http.Dir(Конфиг.КаталогСтатичныхФайлов + каталог.Каталог).Open(req.URL.Path)
+		f, err := http.Dir(ДирректорияЗапуска + "/" + Конфиг.КаталогСтатичныхФайлов + каталог.Каталог).Open(req.URL.Path)
 
 		if err == nil {
 			content := io.ReadSeeker(f)

@@ -12,6 +12,7 @@ import (
 	"math/big"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -164,6 +165,7 @@ type ОтветКлиенту struct {
 	ТипОтвета ТипОтвета
 	HTML      []byte                    // Ответ в бинарном формате
 	AjaxHTML  map[string]ДанныеAjaxHTML // Типа map[id селектор для вставки в HTML]<html для вставки>
+	JSON      interface{}
 }
 
 // КартаДанныхШаблона, скорей всего буду в БД хранить какому шаблоны, из каокго сервиса нужно получить данные, и пперед отправкой в сервис рендер, или перед рендером буду их складывать в эту стрктуру
@@ -220,7 +222,21 @@ var (
 	ПортДляОтправкиСообщений  = "81"
 	ПортДляПолученияСообщений = "82"
 )
+var ДирректорияЗапуска string
 
+func ОпределитьДирректориюЗапуска() {
+	if ДирректорияЗапуска != "" {
+		Инфо("Директория из которой запущен текущий файл уже определена: %+v \n", ДирректорияЗапуска)
+		return
+	}
+	exePath, err := os.Executable()
+	if err != nil {
+		Ошибка("Ошибка при получении пути к исполняемому файлу:", err)
+
+	}
+	ДирректорияЗапуска = filepath.Dir(exePath)
+	Инфо("Директория, из которой запущен текущий файл: %+v \n", ДирректорияЗапуска)
+}
 func УИДЗапроса(ИдКлиента *uuid.UUID, UrlPath []byte) Уид {
 	времяГенерации := time.Now().Unix()
 	return Уид(fmt.Sprintf("%+s.%+s.%d", strconv.FormatInt(времяГенерации, 10), ИдКлиента, metro.Hash64(UrlPath, uint64(времяГенерации))))
@@ -252,7 +268,8 @@ func генерироватьТлсКонфиг() *tls.Config {
 }
 
 func СоздатьКорневойСертификат() {
-	_, err := os.Stat("cert/root.crt")
+
+	_, err := os.Stat(ДирректорияЗапуска + "/cert/root.crt")
 	if !os.IsNotExist(err) { // если файл существует выходим
 		return
 	}
@@ -282,7 +299,7 @@ func СоздатьКорневойСертификат() {
 	}
 
 	// Сохранение сертификата в файл
-	certFile, err := os.Create("cert/root.crt")
+	certFile, err := os.Create(ДирректорияЗапуска + "/cert/root.crt")
 	if err != nil {
 		panic(err)
 	}
@@ -290,7 +307,7 @@ func СоздатьКорневойСертификат() {
 	certFile.Close()
 
 	// Сохранение приватного ключа в файл
-	keyFile, err := os.Create("cert/root.key")
+	keyFile, err := os.Create(ДирректорияЗапуска + "/cert/root.key")
 	if err != nil {
 		panic(err)
 	}
@@ -300,8 +317,17 @@ func СоздатьКорневойСертификат() {
 }
 
 func СерверныйТлсКонфиг() (*tls.Config, error) {
+
 	// СоздатьКорневойСертификат()
-	caCert, err := os.ReadFile("cert/ca.crt")
+	// dir, err := os.Getwd()
+	// if err != nil {
+	// 	Ошибка("Ошибка при получении текущей директории:", err)
+
+	// }
+
+	// Инфо(" dir %+v \n", dir)
+
+	caCert, err := os.ReadFile(ДирректорияЗапуска + "/cert/ca.crt")
 	if err != nil {
 		return nil, err
 	}
@@ -309,7 +335,7 @@ func СерверныйТлсКонфиг() (*tls.Config, error) {
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
 
-	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
+	cert, err := tls.LoadX509KeyPair(ДирректорияЗапуска+"/cert/server.crt", ДирректорияЗапуска+"/cert/server.key")
 	if err != nil {
 		Ошибка("  %+v \n", err)
 	}
@@ -323,13 +349,11 @@ func СерверныйТлсКонфиг() (*tls.Config, error) {
 	}, nil
 }
 
-type Конфигурация struct {
-	КаталогСтатичныхФайлов string
-	КаталогШаблонов        string
-}
+// type Конфигурация interface{}
 
-func ЧитатьКонфиг(Конфиг *Конфигурация) {
-	конфиг, err := os.ReadFile("config.json")
+func ЧитатьКонфиг(Конфиг interface{}) {
+	ОпределитьДирректориюЗапуска()
+	конфиг, err := os.ReadFile(ДирректорияЗапуска + "/config.json")
 	if err != nil {
 		Ошибка("  %+v \n", err)
 	}

@@ -9,6 +9,7 @@ import (
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
+	"github.com/fsnotify/fsnotify"
 )
 
 var СырыеШаблоны *template.Template
@@ -149,8 +150,10 @@ func Рендер(имяШаблона string, КартаДанных map[Имя
 func ПарсингШаблонов() {
 	// "pattern": "../www/tpl/*/*.html",
 	var errParseGlob error
-	Инфо(" Конфиг.КаталогШаблонов  %+v \n", Конфиг.КаталогШаблонов+"*/*.html")
+	Инфо(" ДирректорияЗапуска %+v \n", ДирректорияЗапуска)
+	ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов + "*/*.html"
 
+	Инфо(" Конфиг.КаталогШаблонов  %+v \n", ПатернПарсингаШаблонов)
 	// filenames, err := filepath.Glob(Конфиг.КаталогШаблонов + "*/*.html")
 	// if err != nil {
 	// 	Ошибка(" Ошибка парсинга каталога с шаблонами HTML %+v\n", err)
@@ -164,7 +167,7 @@ func ПарсингШаблонов() {
 	// 	Инфо("  %+s \n", b)
 	// }
 	// Инфо(" filenames %+v \n", filenames)
-	СырыеШаблоны, errParseGlob = template.New("").ParseGlob(Конфиг.КаталогШаблонов + "*/*.html")
+	СырыеШаблоны, errParseGlob = template.New("").ParseGlob(ПатернПарсингаШаблонов)
 	// СырыеШаблоны = template.Must(template.New("index").Funcs(РендерФункции()).ParseGlob(Конфиг.КаталогШаблонов + "*/*.html"))
 	if errParseGlob != nil {
 		Ошибка("  %+v \n", errParseGlob)
@@ -179,4 +182,37 @@ func readFileOS(file string) (name string, b []byte, err error) {
 	name = filepath.Base(file)
 	b, err = os.ReadFile(file)
 	return
+}
+
+func СледитьЗаИзменениямиШаблонов() {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer watcher.Close()
+
+	// Add the directory to watch
+	ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов
+	err = watcher.Add(directory)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Start an infinite loop to process events
+	for {
+		select {
+		case event, ok := <-watcher.Events:
+			if !ok {
+				return
+			}
+			if event.Op&fsnotify.Write == fsnotify.Write {
+				log.Println("Modified file:", event.Name)
+			}
+		case err, ok := <-watcher.Errors:
+			if !ok {
+				return
+			}
+			log.Println("Error:", err)
+		}
+	}
 }
