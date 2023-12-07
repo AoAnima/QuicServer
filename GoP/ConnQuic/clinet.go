@@ -261,7 +261,7 @@ func СтатусРегистрации(сообщение Сообщение) {
 }
 func КлиентскийТлсКонфиг() (*tls.Config, error) {
 
-	caCert, err := os.ReadFile("cert/ca.crt")
+	caCert, err := os.ReadFile(ДирректорияЗапуска + "/cert/ca.crt")
 	if err != nil {
 		return nil, err
 	}
@@ -270,7 +270,7 @@ func КлиентскийТлсКонфиг() (*tls.Config, error) {
 	caCertPool.AppendCertsFromPEM(caCert)
 	// Инфо("Корневой сертфикат создан?  %v ", ok)
 
-	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
+	cert, err := tls.LoadX509KeyPair(ДирректорияЗапуска+"/cert/server.crt", ДирректорияЗапуска+"/cert/server.key")
 	if err != nil {
 		Ошибка(" %s", err)
 	}
