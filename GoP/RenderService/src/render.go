@@ -193,7 +193,7 @@ func СледитьЗаИзменениямиШаблонов() {
 
 	// Add the directory to watch
 	ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов
-	err = watcher.Add(directory)
+	err = watcher.Add(ПатернПарсингаШаблонов)
 	if err != nil {
 		log.Fatal(err)
 	}
