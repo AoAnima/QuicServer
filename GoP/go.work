@@ -3,6 +3,7 @@ go 1.21.3
 use (
 	./Auth
 	./AuthService
+	./AiService
 	./Catalog
 	./ConnQuic
 	./HTTPServerQuic
@@ -11,6 +12,4 @@ use (
 	./RenderService
 	./SynQuic
 	./bench
-	./ollama/ollama
-
-)
+	)
