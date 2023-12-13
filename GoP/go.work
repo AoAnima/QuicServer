@@ -1,6 +1,7 @@
 go 1.21.3
 
 use (
+	./langchaingo
 	./Auth
 	./AuthService
 	./AiService
@@ -12,4 +13,5 @@ use (
 	./RenderService
 	./SynQuic
 	./bench
+	./ollama
 	)
