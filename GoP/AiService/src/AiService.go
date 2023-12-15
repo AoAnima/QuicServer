@@ -85,8 +85,8 @@ func main() {
 
 	ctx := context.Background()
 	completion, err := llm.Call(ctx, []schema.ChatMessage{
-		// schema.SystemChatMessage{Content: "Give a precise answer to the question based on the context. Don't be verbose."},
-		schema.HumanChatMessage{Content: "привет"},
+		schema.SystemChatMessage{Content: "Give a precise answer to the question based on the context. Don't be verbose."},
+		schema.HumanChatMessage{Content: "What would be a good company name a company that makes colorful socks? Give me 3 examples."},
 	}, llms.WithStreamingFunc(func(ctx context.Context, chunk []byte) error {
 		Инфо(" %+s ", string(chunk))
 		return nil
