@@ -43,12 +43,12 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 	RequestCtx.Request.Host = r.Host
 	RequestCtx.Request.URL = r.URL
 	RequestCtx.Request.Method = r.Method
-	RequestCtx.Request.RequestURI = r.RequestURI  //сожержит строку после домена, пример /auth?action=actionName
+	RequestCtx.Request.RequestURI = r.RequestURI //сожержит строку после домена, пример /auth?action=actionName
 	ParseQuery, _ := url.ParseQuery(r.URL.RawQuery)
 	RequestCtx.Request.Get = ParseQuery
-		log.Printf("%+v\n", r)
-		log.Printf("%+v\n",r.RequestURI)
-		log.Printf("%+v\n", ParseQuery.Get("jsonql"))
+	log.Printf("%+v\n", r)
+	log.Printf("%+v\n", r.RequestURI)
+	log.Printf("%+v\n", ParseQuery.Get("jsonql"))
 	if ParseQuery["jsonql"] != nil {
 
 		var JsonQl map[string]interface{}
@@ -75,28 +75,27 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 		RequestCtx.HttpStatus = 200
 	}
 
-
 	// Устанавливаем cookie с токеном авторизации
 	if RequestCtx.Request.Post.Action == "auth" && RequestCtx.UserSession.Token != "" {
 		//h :=(24 - time.Now().Hour())
 
-		h := time.Duration(23 - time.Now().Hour()) * time.Hour
-		m := time.Duration(59 - time.Now().Minute()) * time.Minute
-		s := time.Duration(60 - time.Now().Second()) * time.Second
-		expiration := time.Now().Add(h+m+s)
+		h := time.Duration(23-time.Now().Hour()) * time.Hour
+		m := time.Duration(59-time.Now().Minute()) * time.Minute
+		s := time.Duration(60-time.Now().Second()) * time.Second
+		expiration := time.Now().Add(h + m + s)
 		loc, _ := time.LoadLocation("Europe/Moscow")
 		cookieToken := http.Cookie{
-			Name:    "token",
-			Value:   RequestCtx.UserSession.Token,
-			Expires: expiration.In(loc),
+			Name:       "token",
+			Value:      RequestCtx.UserSession.Token,
+			Expires:    expiration.In(loc),
 			RawExpires: expiration.Format(time.UnixDate),
 		}
 		log.Printf("%+v\n", Log(cookieToken))
 		http.SetCookie(w, &cookieToken)
 		cookieUid := http.Cookie{
-			Name:    "uid",
-			Value:   RequestCtx.UserSession.Uid,
-			Expires: expiration.In(loc),
+			Name:       "uid",
+			Value:      RequestCtx.UserSession.Uid,
+			Expires:    expiration.In(loc),
 			RawExpires: expiration.Format(time.UnixDate),
 		}
 		http.SetCookie(w, &cookieUid)
@@ -115,8 +114,7 @@ Action =
 	logout - выход пользователя с портала
 */
 
-
-func checkPostAction(RequestCtx RWContext, r *http.Request) RWContext{
+func checkPostAction(RequestCtx RWContext, r *http.Request) RWContext {
 	if r.Method == http.MethodPost {
 		//Если пришёл POST запрос парсим форму
 		r.ParseMultipartForm(1024)
@@ -124,13 +122,12 @@ func checkPostAction(RequestCtx RWContext, r *http.Request) RWContext{
 		//RequestCtx.Request.Post.Action = strings.Trim(r.RequestURI, "/")
 		RequestCtx.Request.Post.Action = r.Form["action"][0]
 
-
 		/*
 			doc: auth единственное действие которое выполняется до отправки запроса в локальную БД т.к. обращаеться к внешнему LDAP серверу
 		*/
 		if RequestCtx.Request.Post.Action == "auth" {
 			authData := auth.AuthDate{
-				RequestCtx.Request.Post.PostedData.Get("uid")+"@r26",
+				RequestCtx.Request.Post.PostedData.Get("uid") + "@r26",
 				RequestCtx.Request.Post.PostedData.Get("password"),
 			}
 			RequestCtx.UserSession.LdapUser = auth.Auth(authData)
@@ -139,34 +136,35 @@ func checkPostAction(RequestCtx RWContext, r *http.Request) RWContext{
 			if RequestCtx.UserSession.LdapUser.Error != "" {
 				log.Printf("Ошибка авторизации ldap  %+v\n", RequestCtx.UserSession.LdapUser.Error)
 			}
-		} else if RequestCtx.Request.Post.Action == "logout"{
+		} else if RequestCtx.Request.Post.Action == "logout" {
 
 		}
 	}
 	return RequestCtx
 }
 
-//func СтруктурированиеДанных (RequestCtx RWContext) (RWContext) {
-//	for blockKey, block := range RequestCtx.BlocksData {
-//		//log.Printf("%+v\n", Log(RequestCtx.BlocksData[block]))
-//		log.Printf("%+v\n", Log(blockKey))
-//		log.Printf("%+v\n", Log(block))
-//		//if block["inner_blocks"]!=nil {
-//		//	for _, blockName := range block["inner_blocks"].([]interface{}){
-//		//		block[blockName.(string)]=RequestCtx.BlocksData[blockName.(string)]
-//		//	}
-//		//}
-//		if block.Struct!=nil {
-//			for _, blockName := range block.Struct{
-//				block.Content[blockName]=RequestCtx.BlocksData[blockName]
+//	func СтруктурированиеДанных (RequestCtx RWContext) (RWContext) {
+//		for blockKey, block := range RequestCtx.BlocksData {
+//			//log.Printf("%+v\n", Log(RequestCtx.BlocksData[block]))
+//			log.Printf("%+v\n", Log(blockKey))
+//			log.Printf("%+v\n", Log(block))
+//			//if block["inner_blocks"]!=nil {
+//			//	for _, blockName := range block["inner_blocks"].([]interface{}){
+//			//		block[blockName.(string)]=RequestCtx.BlocksData[blockName.(string)]
+//			//	}
+//			//}
+//			if block.Struct!=nil {
+//				for _, blockName := range block.Struct{
+//					block.Content[blockName]=RequestCtx.BlocksData[blockName]
+//				}
+//				log.Printf("block %+v\n", Log(block))
 //			}
-//			log.Printf("block %+v\n", Log(block))
-//		}
 //
-//	}
-//	log.Printf("%+v\n", Log(RequestCtx))
-//return RequestCtx
-//}
+//		}
+//		log.Printf("%+v\n", Log(RequestCtx))
+//
+// return RequestCtx
+// }
 func ГенерируемОтвет(RequestCtx RWContext) RWContext {
 	/**
 	Нужно сделать так что если в запросе флоормат json то не генерировать html иначе генерировать
@@ -185,9 +183,9 @@ func ГенерируемОтвет(RequestCtx RWContext) RWContext {
 				HashTags    []string `json:"HashTags"`
 			}
 			JsFunc []struct {
-				Func   string `json:"Func"`
+				Func     string   `json:"Func"`
 				Required []string `json:"Required"`
-				Params struct {
+				Params   struct {
 					Target string                   `json:"target"`
 					Data   []map[string]interface{} `json:"data"`
 					Blocks []string                 `json:"blocks"`
@@ -195,7 +193,7 @@ func ГенерируемОтвет(RequestCtx RWContext) RWContext {
 			} `json:"JsFunc"`
 			BlocksOrder []string          `json:"BlocksOrder"` // Порядок следования блоков на странице соответсвует struct полю в таблицах
 			BlocksHtml  map[string]string `json:"BlocksHtml"`
-			Messages    []MessagesType `json:"Messages"`
+			Messages    []MessagesType    `json:"Messages"`
 			Error       bool
 		}
 		// если AJAX запрос с параметром только HTML
@@ -236,8 +234,6 @@ func ГенерируемОтвет(RequestCtx RWContext) RWContext {
 	return RequestCtx
 }
 
-
-
 func ОбменДаннымиСБД(RequestCtx RWContext) RWContext {
 
 	//log.Printf("%+v\n", RequestCtx)
@@ -256,7 +252,7 @@ func ОбменДаннымиСБД(RequestCtx RWContext) RWContext {
 		RequestCtx = RequestCtx.SetDeffault(RequestCtx)
 		log.Printf("RequestCtx %+v\n", Log(RequestCtx))
 
-		RequestCtx = RequestCtx.SetError(RequestCtx, map[string]interface{}{"Message":"Отсутствует подклюбчение к базе данных", "page":"error"})
+		RequestCtx = RequestCtx.SetError(RequestCtx, map[string]interface{}{"Message": "Отсутствует подклюбчение к базе данных", "page": "error"})
 		return RequestCtx
 	}
 	RequestCtxJson, errStringify := json.Marshal(RequestCtx)
@@ -293,11 +289,9 @@ func ОбменДаннымиСБД(RequestCtx RWContext) RWContext {
 		log.Printf("%+v %+v %+v\n", "Ошибка запроса ", errDB, rows)
 	}
 
-
-
 	if RequestCtx.Error == true {
 		log.Printf("%+v\n", Log(RequestCtx.ErrorMessages))
-		for _, dbError := range RequestCtx.ErrorMessages{
+		for _, dbError := range RequestCtx.ErrorMessages {
 			if dbError.Code == 401 {
 
 			}
@@ -309,8 +303,6 @@ func ОбменДаннымиСБД(RequestCtx RWContext) RWContext {
 	//errror := json.Unmarshal(result, &test)
 	//log.Printf("%+v\n", errror)
 	//log.Printf("%+v\n", test)
-
-
 
 	return RequestCtx
 }
@@ -385,8 +377,6 @@ func checkUserAuthCookies(RequestCtx RWContext) RWContext {
 		//log.Printf("%+v\n", RequestCtx.Request.Host)
 		RequestCtx.UserSession.HostAuth = RequestCtx.Request.Host
 	}
-
-
 
 	return RequestCtx
 }

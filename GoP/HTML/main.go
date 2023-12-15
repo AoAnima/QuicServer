@@ -3,8 +3,6 @@ package main
 import (
 	"context"
 	_ "fmt"
-	_ "github.com/lib/pq"
-	_ "github.com/mysql"
 	_ "io"
 	_ "io/ioutil"
 	"log"
@@ -17,18 +15,18 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+
+	_ "github.com/lib/pq"
+	_ "github.com/mysql"
 )
 
-
 var SessionMap = make(map[string]ctx.UserSession)
-
 
 /*
 doc: Config - конфигурация основгого потока.
 note: необходимо реалицовать чтение JSON файла и парсинг в эту структуру. Если файл не найден то необходимо сделать чтобы на старте выавлись вопросы с заполнением всех полей и сохранение в конфиг файл.
 Пока данные сохраним в коде.
 */
-
 
 func init() {
 	log.SetFlags(log.Lshortfile)
@@ -97,8 +95,6 @@ func main() {
 
 }
 
-
-
 //
 //
 //func Dbconnect() *sql.DB {
@@ -144,7 +140,6 @@ func main() {
 //	return db
 //}
 
-
 func Contains(slice []string, item string) bool {
 	set := make(map[string]struct{}, len(slice))
 	for _, s := range slice {
@@ -173,4 +168,3 @@ func FileType(contentType []string) string {
 	}
 	return fileType
 }
-

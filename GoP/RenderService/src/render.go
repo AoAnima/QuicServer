@@ -14,7 +14,7 @@ import (
 
 var СырыеШаблоны *template.Template
 
-func ПостроитьДеревоШаблонов(сообщение *Сообщение) {
+func ПолучитьОтветКлиенту(сообщение *Сообщение) {
 
 	// content := template.New("content")
 	// catalog := СырыеШаблоны.Lookup("catalog")
@@ -43,7 +43,7 @@ func ПостроитьДеревоШаблонов(сообщение *Сооб
 	// Рендер("index", сообщение.Ответ[ИмяСервиса(сообщение.Запрос.ИмяШаблона)])
 	// }
 	var err error
-	var Html []byte
+	// var Html []byte
 	switch сообщение.Запрос.ТипЗапроса {
 	case GET:
 		err = ПолныйРендер(сообщение)
@@ -54,6 +54,8 @@ func ПостроитьДеревоШаблонов(сообщение *Сооб
 	case AJAXPost:
 		err = РендерБлоков(сообщение)
 	}
+
+	// получается что ничего не возвращаем, сразу пишем изменения в исходное сообщение в раздел сообщение.ОтветКлиенту
 
 	// Html := new(bytes.Buffer)
 	// Кнопка := map[string]map[string]string{
@@ -76,22 +78,37 @@ func ПостроитьДеревоШаблонов(сообщение *Сооб
 	// 	Ошибка("%+v\n", errs)
 
 	// }
-	Инфо("  %+s \n", Html)
+	// Инфо("  %+s \n", Html)
 
 }
 
 func ПолныйРендер(сообщение *Сообщение) error {
+	Инфо("  %+v \n", "ПолныйРендер")
+	БуферHtml := new(bytes.Buffer)
 
-	htmlByte, err := Рендер("index", сообщение.Запрос.Шаблонизатор)
+	ШаблонДляРендера, err := СырыеШаблоны.Clone()
 	if err != nil {
-		Ошибка("  %+v \n", err)
+		Ошибка(" Ошибка клоинрования сырых шаблонов %+v \n", err)
 		return err
 	}
 
-	ответКлиенту := ОтветКлиенту{
-		HTML: htmlByte,
+	// Так как это полный рендер страницы, а в index.html шаблон для основного контэнта помечен как content которого физически не существует, то необходимо создать новый шаблон с именем content и добавить в него дерефо нужного шаблона, каталог или товар или личный кабинет и т.д.в зависимости от запрошенной страницы
+	имяШаблона := сообщение.Запрос.ИмяБазовогоШаблона
+	Инфо("  %+v Tree %+v \n", имяШаблона, ШаблонДляРендера.Lookup(string(имяШаблона)).Tree)
+	ШаблонДляРендера.AddParseTree("content", ШаблонДляРендера.Lookup(string(имяШаблона)).Tree)
+
+	// Инфо(" content %+v \n ", ШаблонДляРендера.Lookup("content").Tree)
+
+	КартаДанных := сообщение.Запрос.Шаблонизатор
+	// Всегда рендерим шаблон "index" , данные для конетнта будут добавленны из ИмяБазовогоШаблона
+	if errs := ШаблонДляРендера.ExecuteTemplate(БуферHtml, "index", КартаДанных[имяШаблона].Данные); errs != nil {
+		Ошибка("%+v\n", errs)
+		log.Print(errs)
+		return errs
 	}
-	сообщение.ОтветКлиенту = ответКлиенту
+	сообщение.ОтветКлиенту = ОтветКлиенту{
+		HTML: БуферHtml.Bytes(),
+	}
 	return nil
 }
 
@@ -131,16 +148,16 @@ func Рендер(имяШаблона string, КартаДанных map[Имя
 		Ошибка(" Ошибка клоинровании сырых шаблонов %+v \n", err)
 		return nil, err
 	}
-
-	if имяШаблона == "index" {
-		ШаблонДляРендера.AddParseTree("content", ШаблонДляРендера.Lookup("main").Tree)
-	}
+	// content - виртуальный шаблон, который вставляеться в body.html , его содержимое меняется в зависимости от загружаемой страницы, при условии что требуется полная загрузка HTML , тоесть был обычный запрос GET или POST не ajax
+	// если имяШаблона передано как
+	// if имяШаблона == "index" {
+	// 	ШаблонДляРендера.AddParseTree("content", ШаблонДляРендера.Lookup("main").Tree)
+	// }
 
 	Инфо(" ШаблонДляРендера  %+v имяШаблона  %+v   КартаДанных %+v \n", ШаблонДляРендера, имяШаблона, КартаДанных)
-	log.Print(ШаблонДляРендера)
+
 	if errs := ШаблонДляРендера.ExecuteTemplate(Html, имяШаблона, КартаДанных[ИмяШаблона(имяШаблона)].Данные); errs != nil {
 		Ошибка("%+v\n", errs)
-		log.Print(errs)
 		return nil, errs
 	}
 
@@ -172,33 +189,76 @@ func ПарсингШаблонов() {
 	if errParseGlob != nil {
 		Ошибка("  %+v \n", errParseGlob)
 	}
-	log.Printf("СырыеШаблоны %+v \n", СырыеШаблоны.Tree)
+	// Инфо("СырыеШаблоны %+v \n", СырыеШаблоны.Lookup("index"))
+	// log.Print(СырыеШаблоны.Lookup("index"))
+	// log.Print(*СырыеШаблоны)
 	if errParseGlob != nil {
 		Ошибка("Ошибка парсинга каталога с шаблонами HTML %+v\n", errParseGlob)
 	}
 
 }
-func readFileOS(file string) (name string, b []byte, err error) {
-	name = filepath.Base(file)
-	b, err = os.ReadFile(file)
-	return
-}
 
-func СледитьЗаИзменениямиШаблонов() {
+// func readFileOS(file string) (name string, b []byte, err error) {
+// 	name = filepath.Base(file)
+// 	b, err = os.ReadFile(file)
+// 	return
+// }
+
+// func получитьВложенныеДиректории(directory string) ([]string, error) {
+// 	var подкаталоги []string
+
+// 	err := filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
+// 		if err != nil {
+// 			return err
+// 		}
+// 		if info.IsDir() && path != directory {
+// 			подкаталоги = append(подкаталоги, path)
+// 		}
+// 		return nil
+// 	})
+
+// 	return подкаталоги, err
+// }
+
+// Наблюдает за изменениями HTMl шаблонов и перечитывает их
+func наблюдатьЗаИзменениямиШаблонов() {
+	каталогНаблюдения := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов
+	Инфо("наблюдатьЗаИмзенениями   %+v \n", каталогНаблюдения)
+	// Создаем новый Watcher
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer watcher.Close()
 
-	// Add the directory to watch
-	ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов
-	err = watcher.Add(ПатернПарсингаШаблонов)
+	// Устанавливаем новый лимит наблюдаемых директорий
+
+	// Добавляем директорию для наблюдения
+	err = watcher.Add(каталогНаблюдения)
 	if err != nil {
-		log.Fatal(err)
+		Ошибка("  %+v \n", err)
 	}
 
-	// Start an infinite loop to process events
+	// Инфо("watcher  %+v \n", watcher.WatchList())
+
+	err = filepath.Walk(каталогНаблюдения, func(директория string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() && директория != каталогНаблюдения {
+			err = watcher.Add(директория)
+			if err != nil {
+				Ошибка("  %+v \n", err)
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		Ошибка("  %+v \n", err)
+	}
+	// Инфо("  %+v \n", подкаталоги)
+
+	// Бесконечный цикл для обработки событий
 	for {
 		select {
 		case event, ok := <-watcher.Events:
@@ -206,13 +266,68 @@ func СледитьЗаИзменениямиШаблонов() {
 				return
 			}
 			if event.Op&fsnotify.Write == fsnotify.Write {
-				log.Println("Modified file:", event.Name)
+				Инфо("Изменен файл:", event.Name)
+				hub.broadcast <- []byte("reload")
+				ПарсингШаблонов()
+				// Делайте необходимые действия при изменении файла
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {
 				return
 			}
-			log.Println("Error:", err)
+			Ошибка("  %+v \n", err)
 		}
 	}
+}
+
+func наблюдатьЗаИзменениямиСтатичныхФайлов() {
+	каталогНаблюдения := ДирректорияЗапуска + "/" + Конфиг.КаталогСтатичныхФайлов
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer watcher.Close()
+	// Добавляем директорию для наблюдения
+	err = watcher.Add(каталогНаблюдения)
+	if err != nil {
+		Ошибка("  %+v \n", err)
+	}
+
+	err = filepath.Walk(каталогНаблюдения, func(директория string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() && директория != каталогНаблюдения {
+			err := watcher.Add(директория)
+			if err != nil {
+				Ошибка("  %+v \n", err)
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		Ошибка("  %+v \n", err)
+	}
+
+	// Инфо("watcher  %+v \n", watcher.WatchList())
+	// Бесконечный цикл для обработки событий
+	for {
+		select {
+		case event, ok := <-watcher.Events:
+			if !ok {
+				return
+			}
+			if event.Op&fsnotify.Write == fsnotify.Write {
+				Инфо("Изменен файл отправить сообщение в браузер:", event.Name)
+				hub.broadcast <- []byte("reload")
+				// Делайте необходимые действия при изменении файла
+			}
+		case err, ok := <-watcher.Errors:
+			if !ok {
+				return
+			}
+			Ошибка("  %+v \n", err)
+		}
+	}
+
 }

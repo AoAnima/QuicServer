@@ -1,17 +1,13 @@
 go 1.21.3
 
 use (
-	./langchaingo
 	./Auth
-	./AuthService
-	./AiService
+	./AuthService	
 	./Catalog
 	./ConnQuic
-	./HTTPServerQuic
-	./LocalAI
+	./HTTPServerQuic	
 	./Logger
 	./RenderService
 	./SynQuic
 	./bench
-	./ollama
 	)
