@@ -2,7 +2,6 @@ package main
 
 import (
 	"io"
-	"log"
 	"net/http"
 	"path"
 	"sync"
@@ -68,7 +67,7 @@ func main() {
 	/*
 	   Запускаем сервер передаём в него канал, в который запишем обработанный запрос из браузера
 	*/
-	go ЗапуститьСерверТЛС()
+	go ЗапуститьСерверТЛС() // принимаем запрос от клиента и отправляем в обработчик, ОтправитьЗапросВОбработку
 	go СоединитсяСSynQuic()
 	Инфо(" %s", "запустили сервер")
 	/* Инициализирум сервисы коннектора передадим в них канал, из которого Коннектор будет читать сообщение, и отправлять его в synqTCP  */
@@ -95,12 +94,12 @@ func ЗапуститьСерверТЛС() {
 
 func обработчикЗапроса(w http.ResponseWriter, req *http.Request) {
 
-	Инфо(" %s \n", *req)
-	Инфо(" %s \n", req.URL.Path)
+	// Инфо(" %s \n", *req)
+	// Инфо(" %s \n", req.URL.Path)
 	if origin := req.Header.Get("Origin"); origin != "" {
 		w.Header().Set("Access-Control-Allow-Origin", origin)
 	}
-	Инфо(" path.Ext(req.URL.Path) %+v \n", path.Ext(req.URL.Path))
+	// Инфо(" path.Ext(req.URL.Path) %+v \n", path.Ext(req.URL.Path))
 	if каталог, статичныйФайл := ТипыСтатическихФайлов[path.Ext(req.URL.Path)]; статичныйФайл {
 		ОбработчикСтатичныхФайлов(w, req, каталог)
 		return
@@ -117,16 +116,16 @@ func обработчикЗапроса(w http.ResponseWriter, req *http.Request
 }
 
 func ОтправитьСообщениеКлиенту(сообщение Сообщение, w http.ResponseWriter) {
-	Инфо(" ОтправитьСообщениеКлиенту %+v \n", сообщение)
+	Инфо(" ОтправитьСообщениеКлиенту %+v  %+v \n", сообщение, w)
 	ответ := КодироватьСообщениеОтвет(сообщение)
 	УстановитьЗаголовкиОтвета(&сообщение, w)
 
 	if f, ok := w.(http.Flusher); ok {
-		Инфо("  %+v \n", string(ответ))
+		Инфо("   %+v  %+v \n", f, ok)
 		i, err := w.Write(ответ)
 		Инфо("  %+v \n", i)
 		if err != nil {
-			Ошибка(" %s ", err)
+			Ошибка("%v %s ", w, err.Error())
 		}
 		f.Flush()
 	}
@@ -197,7 +196,7 @@ func ОбработчикСтатичныхФайлов(w http.ResponseWriter, r
 			http.ServeContent(w, req, файл, time.Now(), content)
 			return
 		} else {
-			log.Printf("%+v\n", err)
+			Ошибка(" %+v\n", err)
 		}
 	}
 	http.NotFound(w, req)
