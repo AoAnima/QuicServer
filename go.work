@@ -1,13 +1,13 @@
-go 1.21.3
+go 1.21.5
 
 use (
 	./Auth
-	./AuthService	
+	./AuthService
 	./Catalog
 	./ConnQuic
-	./HTTPServerQuic	
+	./HTTPServerQuic
 	./Logger
 	./RenderService
 	./SynQuic
-	./bench
-	)
+	./bench	
+)

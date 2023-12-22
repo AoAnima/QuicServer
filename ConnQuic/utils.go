@@ -183,6 +183,7 @@ type Запрос struct {
 	СпособВставки      string
 	СтрокаЗапроса      *url.URL // url Path Query
 	МаршрутЗапроса     string   // url Path Query
+	КартаМаршрута      []string // url Path Query
 	Форма              map[string][]string
 	Файл               string
 	УИДЗапроса         Уид

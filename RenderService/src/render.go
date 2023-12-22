@@ -82,6 +82,16 @@ func ПолучитьОтветКлиенту(сообщение *Сообщен
 
 }
 
+/*! 
+Правила построения шаблонов буду описывать json 
+например /dashboard/profile?name="username"
+{
+	"content":"dashboard" // он же ИмяБазовогоШаблона
+	"subcontent": "path1"
+}
+
+*/
+
 func ПолныйРендер(сообщение *Сообщение) error {
 	Инфо("  %+v \n", "ПолныйРендер")
 	БуферHtml := new(bytes.Buffer)
@@ -95,8 +105,14 @@ func ПолныйРендер(сообщение *Сообщение) error {
 	// Так как это полный рендер страницы, а в index.html шаблон для основного контэнта помечен как content которого физически не существует, то необходимо создать новый шаблон с именем content и добавить в него дерефо нужного шаблона, каталог или товар или личный кабинет и т.д.в зависимости от запрошенной страницы
 	имяШаблона := сообщение.Запрос.ИмяБазовогоШаблона
 	// Инфо("  %+v Tree %+v \n", имяШаблона, ШаблонДляРендера.Lookup(string(имяШаблона)).Tree)
-	ШаблонДляРендера.AddParseTree("content", ШаблонДляРендера.Lookup(string(имяШаблона)).Tree)
 
+	if сообщение.Запрос.
+
+	
+	ШаблонДляРендера, err = ШаблонДляРендера.AddParseTree("content", ШаблонДляРендера.Lookup(string(имяШаблона)).Tree)
+	if err != nil {
+		Ошибка("  %+v \n", err)
+	}
 	// Инфо(" content %+v \n ", ШаблонДляРендера.Lookup("content").Tree)
 
 	КартаДанных := сообщение.Запрос.Шаблонизатор
@@ -171,18 +187,18 @@ func ПарсингШаблонов() {
 	ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов + "*/*.html"
 
 	Инфо(" Конфиг.КаталогШаблонов  %+v \n", ПатернПарсингаШаблонов)
-	// filenames, err := filepath.Glob(Конфиг.КаталогШаблонов + "*/*.html")
-	// if err != nil {
-	// 	Ошибка(" Ошибка парсинга каталога с шаблонами HTML %+v\n", err)
-	// }
-	// for _, file := range filenames {
-	// 	n, b, err := readFileOS(file)
-	// 	if err != nil {
-	// 		Ошибка(" Ошибка парсинга каталога с шаблонами HTML %+v\n", err)
-	// 	}
-	// 	Инфо("  %+v \n", n)
-	// 	Инфо("  %+s \n", b)
-	// }
+	filenames, err := filepath.Glob(Конфиг.КаталогШаблонов + "*/*.html")
+	if err != nil {
+		Ошибка(" Ошибка парсинга каталога с шаблонами HTML %+v\n", err)
+	}
+	for _, file := range filenames {
+		n, b, err := readFileOS(file)
+		if err != nil {
+			Ошибка(" Ошибка парсинга каталога с шаблонами HTML %+v\n", err)
+		}
+		Инфо("  %+v \n", n)
+		Инфо("  %+s \n", b)
+	}
 	// Инфо(" filenames %+v \n", filenames)
 	СырыеШаблоны, errParseGlob = template.New("").ParseGlob(ПатернПарсингаШаблонов)
 	// СырыеШаблоны = template.Must(template.New("index").Funcs(РендерФункции()).ParseGlob(Конфиг.КаталогШаблонов + "*/*.html"))
@@ -198,11 +214,11 @@ func ПарсингШаблонов() {
 
 }
 
-// func readFileOS(file string) (name string, b []byte, err error) {
-// 	name = filepath.Base(file)
-// 	b, err = os.ReadFile(file)
-// 	return
-// }
+func readFileOS(file string) (name string, b []byte, err error) {
+	name = filepath.Base(file)
+	b, err = os.ReadFile(file)
+	return
+}
 
 // func получитьВложенныеДиректории(directory string) ([]string, error) {
 // 	var подкаталоги []string
