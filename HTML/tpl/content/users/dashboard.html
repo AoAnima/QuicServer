@@ -1,0 +1,50 @@
+{{define "dashboard"}}
+<div class="container is-fluid">
+  <div class="columns">
+
+    <!-- Sidebar menu -->
+    <div class="column is-one-quarter">
+      <aside class="menu">
+        <p class="menu-label">
+          Личный кабинет
+        </p>
+        <ul class="menu-list">
+          <li><a href="/dashboard/address">Адрес</a></li>
+          <li><a href="/dashboard/orders">Заказы</a></li>
+          <li><a href="/dashboard/settings">Настройки</a></li>
+          <!-- Add more menu items here -->
+        </ul>
+      </aside>
+    </div>
+
+    <!-- Main content -->
+    <div class="column">
+      <div id="dashboard-content">
+        Нужно опять создавать виртаульный контент в который вставлять один из шаблонов, adress, order, setting и т.д. 
+        {{ template "dashboard-content" .}}
+        <!-- Content will be dynamically replaced based on menu selection, for example: -->
+        <!-- For Address -->
+        <!-- <div id="address-content" class="content is-hidden">
+          <h1 class="title">Адрес</h1> -->
+          <!-- Address content goes here -->
+        <!-- </div> -->
+
+        <!-- For Orders -->
+        <!-- <div id="orders-content" class="content is-hidden">
+          <h1 class="title">Заказы</h1> -->
+          <!-- Orders content goes here -->
+        <!-- </div> -->
+
+        <!-- For Settings -->
+        <!-- <div id="settings-content" class="content is-hidden">
+          <h1 class="title">Настройки</h1> -->
+          <!-- Settings content goes here -->
+        <!-- </div> -->
+
+        <!-- Add more content sections here -->
+      </div>
+    </div>
+
+  </div>
+</div>
+{{end}}
