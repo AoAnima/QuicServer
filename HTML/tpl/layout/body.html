@@ -1,8 +1,10 @@
 {{define "body"}}
 
     {{template "topbar" .}}
-    {{template "sidebar" .}}
+    <!-- {{template "sidebar" .}} -->
+    <div id="content"  data-updateMethod="replaceWith">
     {{template "content" .}}
+    </div>
     {{template "footer" .}}
 
 {{end}}

@@ -1,0 +1,72 @@
+{{define "товар"}}
+<div class="container">
+  <!-- First row: Product image slider and basic info -->
+  <div class="columns">
+    <!-- Left column: Image slider -->
+    <div class="column is-half">
+      <div class="slider">
+        <!-- Slider images here -->
+      </div>
+    </div>
+    <!-- Right column: Product info -->
+    <div class="column is-half">
+      <h1 class="title">Название</h1>
+      <p class="price">Цена:</p>
+      <div class="selection">
+        <label>Цвет</label>
+        <select>
+          <!-- Color options -->
+        </select>
+        <label>Размер</label>
+        <select>
+          <!-- Size options -->
+        </select>
+      </div>
+      <button class="button is-primary add-to-cart">В корзину</button>
+      <div class="quantity-selector is-hidden">
+        <button class="button is-small qty-minus">-</button>
+        <input type="number" value="1">
+        <button class="button is-small qty-plus">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Second row: Detailed product description with tabs -->
+  <div class="tabs">
+    <ul>
+      <li class="is-active"><a>Описание</a></li>
+      <li><a>Характеристики</a></li>
+    </ul>
+  </div>
+  <div class="tab-content">
+    <!-- Tab content goes here -->
+  </div>
+
+  <!-- Third row: Related product cards -->
+ {{template "рекомендуемые_товары"}}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const addToCartButton = document.querySelector('.add-to-cart');
+    const quantitySelector = document.querySelector('.quantity-selector');
+    const qtyPlus = document.querySelector('.qty-plus');
+    const qtyMinus = document.querySelector('.qty-minus');
+    const input = quantitySelector.querySelector('input');
+
+    addToCartButton.addEventListener('click', () => {
+      quantitySelector.classList.toggle('is-hidden');
+    });
+
+    qtyPlus.addEventListener('click', () => {
+      input.value = parseInt(input.value, 10) + 1;
+    });
+
+    qtyMinus.addEventListener('click', () => {
+      if (input.value > 1) {
+        input.value = parseInt(input.value, 10) - 1;
+      }
+    });
+  });
+</script>
+{{end}}
