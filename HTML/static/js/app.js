@@ -11,7 +11,8 @@ function connectToWebSocketServer() {
     socket.onmessage = function(event) {
       console.log('Получено сообщение с сервера:', event);
       if ( event.data == "reload"){
-        location.reload();
+        setTimeout(function() { location.reload() }, 1000);
+       
       }
     };
    

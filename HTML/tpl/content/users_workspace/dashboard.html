@@ -9,12 +9,12 @@
           Личный кабинет
         </p>
         <ul class="menu-list">
-          <li><a href="/dashboard/profile">Профиль</a></li>
-          <li><a href="/dashboard/address">Адрес</a></li>
-          <li><a href="/dashboard/orders">Заказы</a></li>
-          <li><a href="/dashboard/markets">Магазины</a></li>
-          <li><a href="/dashboard/messanger">Сообщения</a></li>
-          <li><a href="/dashboard/settings">Настройки</a></li>
+          <li><a href="/dashboard/profile" onclick="Получить()">Профиль</a></li>
+          <li><a href="/dashboard/address" onclick="Получить()">Адрес</a></li>
+          <li><a href="/dashboard/orders" onclick="Получить()">Заказы</a></li>
+          <li><a href="/dashboard/markets" onclick="Получить()">Магазины</a></li>
+          <li><a href="/dashboard/messanger" onclick="Получить()">Сообщения</a></li>
+          <li><a href="/dashboard/settings" onclick="Получить()"      >Настройки</a></li>
           <!-- Add more menu items here -->
         </ul>
       </aside>
@@ -24,7 +24,7 @@
     <div class="column">
       <div id="dashboard-content">
         Нужно опять создавать виртаульный контент в который вставлять один из шаблонов, adress, order, setting и т.д. 
-        {{ template "subcontent" .}}
+        {{ template "dashboard_content" .}}
         <!-- Content will be dynamically replaced based on menu selection, for example: -->
         <!-- For Address -->
         <!-- <div id="address-content" class="content is-hidden">
@@ -50,4 +50,7 @@
 
   </div>
 </div>
+{{end}}
+{{ define "dashboard_content"}}
+  {{template "profile" .}}
 {{end}}

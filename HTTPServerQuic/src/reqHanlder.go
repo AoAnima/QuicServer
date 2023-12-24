@@ -5,9 +5,10 @@ import (
 	"sync"
 	"time"
 
+	"strings"
+
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
-	"github.com/gobwas/glob/util/strings"
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
