@@ -14,6 +14,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	. "aoanima.ru/Logger"
@@ -422,7 +423,7 @@ func Json(данныеДляКодирования interface{}) ([]byte, error) 
 	return данные, nil
 }
 
-func ИзJson(пакет []byte, объект *any) error {
+func ИзJson(пакет []byte, объект any) error {
 	// Инфо(" ДекодироватьПакет пакет %+s \n", пакет)
 
 	// var запросОтКлиента = ЗапросКлиента{
@@ -441,4 +442,15 @@ func ИзJson(пакет []byte, объект *any) error {
 	// Инфо(" Сообщение входящее %+s \n", Сообщение)
 
 	return err
+}
+
+func НайтиВJson(объект []byte, путь string) interface{} {
+
+	срезПути := strings.Split(путь, ".")
+	срезИнтерфейсов := make([]interface{}, len(срезПути))
+	for i, v := range срезПути {
+		срезИнтерфейсов[i] = v
+	}
+	значение := jsoniter.Get(объект, срезИнтерфейсов...)
+	return значение.GetInterface()
 }
