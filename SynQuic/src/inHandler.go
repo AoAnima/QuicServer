@@ -7,6 +7,8 @@ import (
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
+	бд "github.com/dgraph-io/badger/v4"
+	jsoniter "github.com/json-iterator/go"
 )
 
 type ОтветПолучен bool
@@ -64,6 +66,14 @@ func обработчикСообщенийHTTPсервера(сообщение
 		Ошибка("  %+v \n", err)
 
 	}
+	/*
+		Сообщение должно содерать данные клиента если он есть, либо указывать что это гость
+	*/
+
+	// err = АутентифиацияКлиента(&сообщение)
+	// if err != nil {
+	// 	Ошибка("  %+v \n", err)
+	// }
 	/*
 		Сообщение должно содерать данные клиента если он есть, либо указывать что это гость
 	*/
@@ -379,6 +389,36 @@ func ПолучитьОчередьСервисовИзБД(сообщениеЗ
 	return очередь, nil
 }
 
+func НайтиВБазе(путь string) (interface{}, error) {
+	db, err := бд.Open(бд.DefaultOptions("/database"))
+	if err != nil {
+		Ошибка("  %+v \n", err)
+	}
+	defer db.Close()
+	тр := db.NewTransaction(false)
+	defer тр.Discard()
+
+	// Use the transaction...
+	значение, err := тр.Get([]byte(путь))
+	if err != nil {
+		return nil, err
+	}
+
+	// Commit the transaction and check for error.
+	if err := тр.Commit(); err != nil {
+		return nil, err
+
+	}
+	байтЗначение, err := значение.ValueCopy(nil)
+	if err != nil {
+		Ошибка("  %+v \n", err)
+		return nil, err
+	}
+	var результат interface{}
+	err = jsoniter.Unmarshal(байтЗначение, результат)
+	return результат, err
+}
+
 func ПостроитьМаршрут(Сообщение *Сообщение) error {
 	Инфо(" ПостроитьМаршрут \n")
 	// TODO: Доделать ПостроитьМаршрут, нет обработчика для БД
@@ -393,6 +433,15 @@ func ПостроитьМаршрут(Сообщение *Сообщение) er
 	// маршрут := strings.Split(параметрыЗапроса.Path, "/")
 	// Инфо("  %+v \n")
 	// // TODO: Тут нужно сделать обращение к БД для получения очереди сервисов которые должны обработать запрос еред возвратом клиенту
+
+	// if Сообщение.JWT != "" {
+	// 	// если JWT не пустой, отправим в сервис авторизации для проверки подписи.
+
+	// 	маршрут[0] = "verify"
+	// 	маршрут = append(маршрут, "/")
+	// } else {
+	// 	маршрут[0] = "/"
+	// }
 
 	// if Сообщение.JWT != "" {
 	// 	// если JWT не пустой, отправим в сервис авторизации для проверки подписи.
