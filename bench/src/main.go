@@ -1,5 +1,11 @@
 package main
 
+import (
+	"strings"
+
+	. "aoanima.ru/Logger"
+)
+
 // import (
 // 	"bytes"
 // 	"encoding/binary"
@@ -10,89 +16,118 @@ package main
 // 	"github.com/google/uuid"
 // 	jsoniter "github.com/json-iterator/go"
 // )
-import (
-	"context"
-	"crypto/tls"
-	"crypto/x509"
-	"log"
-	"os"
-	"sync"
-
-	quic "github.com/quic-go/quic-go"
-)
 
 func main() {
-	// Создайте контекст с таймаутом
-	wg := sync.WaitGroup{}
-	wg.Add(1)
-	go server()
+	// // Создайте контекст с таймаутом
+	// wg := sync.WaitGroup{}
+	// wg.Add(1)
+	// go server()
 
-	wg.Wait()
+	// wg.Wait()
+
+	объект := map[string]interface{}{
+	// 	"Логин": "логин_клиента",
+	// 	"Имя":   "Саня",
+	// 	"Адрес": map[string]string{
+	// 		"Страна":   "Россия",
+	// 		"Город":    "Москва",
+	// 		"Улица":    "Льва Толстого",
+	// 		"Дом":      "16",
+	// 		"Квартира": "2",
+	// 	},
+	// }
+	// GetValueFromPath(объект, "Адрес.Город")
 }
 
-func server() {
-	log.Println("server")
-	// Создайте TLS конфигурацию
+// func GetValueFromPath[K comparable, V any](m map[K]V, path string) {
+// 	keys := strings.Split(path, ".")
+// 	current := m
+// 	Инфо("key  %+v \n", keys)
 
-	config, err := tlsConfig()
-	if err != nil {
-		log.Println(err)
-	}
-	// Создайте сервер
-	listener, err := quic.ListenAddr("localhost:4242", config, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	for _, key := range keys {
+// 		k := key.(K)
+// 		next, ok := current[k]
 
-	// Примите соединение
-	session, err := listener.Accept(context.Background())
-	if err != nil {
-		log.Fatal(err)
-	}
+// 		Инфо(" key %+v  next %+v current %+v \n", key, next, current)
+// 		if !ok {
+// 			Ошибка(" key %+v  next %+v current %+v \n", key, next, current)
+// 		}
+// 		Инфо("key %+v  next %+v %#T  \n current  %+v \n", key, next, next, current)
+// 		switch t := any(next).(type) {
+// 		case map[string]T:
+// 			current = any(next).(map[string]T)
+// 			Инфо(" current %+v \n", current)
+// 		default:
 
-	// Примите поток
-	stream, err := session.AcceptStream(context.Background())
-	if err != nil {
-		log.Fatal(err)
-	}
+// 			Инфо("key %+v  next %+v %#T  \n t  %+s \n", key, next, next, t)
+// 		}
+// 	}
 
-	// Читайте данные из потока в цикле
-	buf := make([]byte, 1024)
-	for {
-		n, err := stream.Read(buf)
-		if err != nil {
+// }
 
-			log.Println("Stream closed by client")
-			break
+// func server() {
+// 	log.Println("server")
+// 	// Создайте TLS конфигурацию
 
-		}
-		log.Printf("Received: %s", buf[:n])
-	}
-}
+// 	config, err := tlsConfig()
+// 	if err != nil {
+// 		log.Println(err)
+// 	}
+// 	// Создайте сервер
+// 	listener, err := quic.ListenAddr("localhost:4242", config, nil)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-func tlsConfig() (*tls.Config, error) {
-	caCert, err := os.ReadFile("cert/ca.crt")
-	if err != nil {
-		return nil, err
-	}
+// 	// Примите соединение
+// 	session, err := listener.Accept(context.Background())
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	caCertPool := x509.NewCertPool()
-	caCertPool.AppendCertsFromPEM(caCert)
-	// Инфо("Корневой сертфикат создан?  %v ", ok)
+// 	// Примите поток
+// 	stream, err := session.AcceptStream(context.Background())
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	// Читайте данные из потока в цикле
+// 	buf := make([]byte, 1024)
+// 	for {
+// 		n, err := stream.Read(buf)
+// 		if err != nil {
 
-	return &tls.Config{
-		// InsecureSkipVerify: true,
-		RootCAs:      caCertPool,
-		Certificates: []tls.Certificate{cert},
-		// NextProtos:   []string{"h3", "quic", "websocket"},
-		NextProtos: []string{"h3", "quic", "websocket"},
-	}, nil
-}
+// 			log.Println("Stream closed by client")
+// 			break
+
+// 		}
+// 		log.Printf("Received: %s", buf[:n])
+// 	}
+// }
+
+// func tlsConfig() (*tls.Config, error) {
+// 	caCert, err := os.ReadFile("cert/ca.crt")
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	caCertPool := x509.NewCertPool()
+// 	caCertPool.AppendCertsFromPEM(caCert)
+// 	// Инфо("Корневой сертфикат создан?  %v ", ok)
+
+// 	cert, err := tls.LoadX509KeyPair("cert/server.crt", "cert/server.key")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	return &tls.Config{
+// 		// InsecureSkipVerify: true,
+// 		RootCAs:      caCertPool,
+// 		Certificates: []tls.Certificate{cert},
+// 		// NextProtos:   []string{"h3", "quic", "websocket"},
+// 		NextProtos: []string{"h3", "quic", "websocket"},
+// 	}, nil
+// }
 
 // // func main() {
 // // 	// Запуск бенчмарка

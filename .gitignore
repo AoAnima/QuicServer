@@ -4,3 +4,13 @@ LocalAI
 HTML/static/bootstrap-5.3.2-dist
 HTML/static/bootstrap-5.3.2
 HTML/static/bootstrap-5.3.2-examples
+ConnQuic/text.db/*.db
+ConnQuic/text.db/*.vlog
+ConnQuic/test.db/000001.sst
+ConnQuic/test.db/000002.vlog
+ConnQuic/test.db/000003.vlog
+ConnQuic/test.db/00002.mem
+ConnQuic/test.db/00003.mem
+ConnQuic/test.db/DISCARD
+ConnQuic/test.db/KEYREGISTRY
+ConnQuic/test.db/MANIFEST
