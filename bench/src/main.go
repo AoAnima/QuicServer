@@ -1,15 +1,25 @@
 package main
 
 import (
-	. "aoanima.ru/ConnQuic"
+	_ "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
 )
 
+type Данные map[string]interface{}
+
 func main() {
-	документ := Документ{}
-	Инфо("  %+v \n", документ)
-	документ.КодЗаписи()
-	Инфо("  %+v  %+v \n", документ)
+	строка := Данные{
+		"Логин":   "anima",
+		"Email":   "anima@ao.ru",
+		"Фамилия": "Петров",
+	}
+	Инфо("строка  %+v \n", строка)
+	интерфейс := interface{}(строка)
+	чтение(&интерфейс)
+
+}
+func чтение(данные *interface{}) {
+	Инфо("строка  %+v \n", *данные)
 }
 
 // // import (
