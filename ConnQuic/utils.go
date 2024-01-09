@@ -23,6 +23,13 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
+const (
+	истина = 0 == 0 // Untyped bool.
+	ложь   = 0 != 0 // Untyped bool.
+	да     = 0 == 0 // Untyped bool.
+	нет    = 0 != 0 // Untyped bool.
+)
+
 type ТипФайла struct {
 	ТипКонтента string
 	Каталог     string
@@ -137,13 +144,13 @@ type ДанныеAjaxHTML struct {
 }
 
 const (
-	Удалить         = "delete"
+	УдалитьОбъект   = "delete"
 	ВставитьВКонец  = "append"
 	ВставитьВНачало = "prepend"
 	ВставитьПеред   = "before"
 	ВставитьПосле   = "after"
-	Заменить        = "replaceWith"
-	Обновить        = "replaceWith"
+	ЗаменитьОбъект  = "replaceWith"
+	ОбновитьОбъект  = "replaceWith"
 )
 
 type Сообщение struct {

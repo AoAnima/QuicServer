@@ -5,9 +5,10 @@ use (
 	./AuthService
 	./Catalog
 	./ConnQuic
+	./DataBase
 	./HTTPServerQuic
 	./Logger
 	./RenderService
 	./SynQuic
-	./bench	
+	./bench
 )
