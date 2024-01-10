@@ -1,8 +1,10 @@
-module DataBase
+module aoanima.ru/DataBase
 
 go 1.21.5
 
 replace aoanima.ru/Logger => ../Logger
+
+replace aoanima.ru/DataBase => ../DataBase
 
 replace aoanima.ru/ConnQuic => ../ConnQuic
 

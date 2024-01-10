@@ -14,3 +14,4 @@ ConnQuic/test.db/00003.mem
 ConnQuic/test.db/DISCARD
 ConnQuic/test.db/KEYREGISTRY
 ConnQuic/test.db/MANIFEST
+DataBase/bin/database/

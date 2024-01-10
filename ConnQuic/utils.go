@@ -430,8 +430,30 @@ func Json(данныеДляКодирования interface{}) ([]byte, error) 
 	return данные, nil
 }
 
-func ИзJson(пакет []byte, объект any) error {
-	// Инфо(" ДекодироватьПакет пакет %+s \n", пакет)
+func ИзJson(пакет []byte, объект interface{}) error {
+	Инфо(" ДекодироватьПакет ИзJson  \n", объект)
+	switch v := объект.(type) {
+	case *string:
+		*v = string(пакет)
+		объект = v
+		return nil
+	default:
+		err := jsoniter.Unmarshal([]byte(пакет), &объект)
+		if err != nil {
+			Ошибка(" err  %+v пакет > %#T < \n объект > %+s < ; \n", err.Error(), пакет, объект)
+			return err
+		}
+		// объект = v
+		// Инфо("объект %+v \n", объект)
+
+	}
+	// switch (*объект).(type) {
+	// 	case string:
+	// 		*объект = string(пакет)
+	// 		return nil
+	// 	default:
+	// 		Инфо("  %+v \n", *объект)
+	// 	}
 
 	// var запросОтКлиента = ЗапросКлиента{
 	// 	Сервис:    []byte{},
@@ -441,23 +463,18 @@ func ИзJson(пакет []byte, объект any) error {
 
 	// TODO тут лишний парсинг, нужно получить только URL patch чтобы определить сервис, которому принадлежит запрос, потому nxj дальше весь запрос опять сериализуйется
 
-	err := jsoniter.Unmarshal(пакет, объект)
-	if err != nil {
-		Ошибка(" err  %+v пакет >%+s< объект >%+s< ; \n", err.Error(), пакет, объект)
-		return err
-	}
-	// Инфо(" Сообщение входящее %+s \n", Сообщение)
-
-	return err
+	return nil
 }
 
 func НайтиВJson(объект []byte, путь string) interface{} {
 
 	срезПути := strings.Split(путь, ".")
 	срезИнтерфейсов := make([]interface{}, len(срезПути))
+
 	for i, v := range срезПути {
 		срезИнтерфейсов[i] = v
 	}
 	значение := jsoniter.Get(объект, срезИнтерфейсов...)
+	Инфо(" значение %+v \n", значение)
 	return значение.GetInterface()
 }
