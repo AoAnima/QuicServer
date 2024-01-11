@@ -8,7 +8,9 @@ Copy-Item -Path .\Template\* -Destination $moduleName -Recurse
 Set-Location ".\$moduleName\src"
 Rename-Item -Path "main.go" -NewName "$moduleName.go"
 Set-Location "..\"
-go mod init $moduleName
+go mod init aoanima.ru/$moduleName
 go work use ./
 go mod edit -replace aoanima.ru/Logger=../Logger
 go mod edit -replace aoanima.ru/ConnQuic=../ConnQuic
+go mod edit -replace aoanima.ru/QErrors=../QErrors
+go mod edit -replace aoanima.ru/DataBase=../DataBase

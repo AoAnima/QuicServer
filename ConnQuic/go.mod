@@ -1,6 +1,7 @@
 module aoanima.ru/ConnQuic/v1
 
 replace aoanima.ru/Logger => ../Logger
+replace aoanima.ru/QErrors => ../QErrors
 
 go 1.21.3
 

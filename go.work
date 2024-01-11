@@ -8,6 +8,7 @@ use (
 	./DataBase
 	./HTTPServerQuic
 	./Logger
+	./QErrors
 	./RenderService
 	./SynQuic
 	./bench

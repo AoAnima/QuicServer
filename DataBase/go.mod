@@ -4,13 +4,14 @@ go 1.21.5
 
 replace aoanima.ru/Logger => ../Logger
 
-replace aoanima.ru/DataBase => ../DataBase
+replace aoanima.ru/QErrors => ../QErrors
 
 replace aoanima.ru/ConnQuic => ../ConnQuic
 
 require (
 	aoanima.ru/ConnQuic v0.0.0-00010101000000-000000000000
 	aoanima.ru/Logger v0.0.0-00010101000000-000000000000
+	aoanima.ru/QErrors v0.0.0-00010101000000-000000000000
 	github.com/dgraph-io/badger/v4 v4.2.0
 	github.com/google/uuid v1.5.0
 )

@@ -7,6 +7,7 @@ import (
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
+	. "aoanima.ru/QErrors"
 )
 
 // type ТаблицаИндексов interface {

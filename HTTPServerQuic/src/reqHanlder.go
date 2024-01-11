@@ -29,18 +29,18 @@ type КартаКлиентов struct {
 // 	Запрос     ЗапросОтКлиента
 // }
 
-func ПрочитатьТокенКлиета(req *http.Request) (ТокенКлинета, string) {
+func ПрочитатьТокенКлиета(req *http.Request) (ТокенКлиента, string) {
 
 	JWT := req.Header.Get("X-UAT")
 	if JWT != "" {
 		token, err := jwt.Parse(JWT, nil)
 		if err != nil {
 			Ошибка("Ошибка при парсинге JWT:", err)
-			return ТокенКлинета{}, JWT
+			return ТокенКлиента{}, JWT
 		}
 		Инфо("  %+v \n", token)
 		if ДанныеКлиента, ok := token.Claims.(jwt.MapClaims); ok {
-			return ТокенКлинета{
+			return ТокенКлиента{
 				ИдКлиента: ДанныеКлиента["UID"].(uuid.UUID),
 				Роль:      ДанныеКлиента["role"].([]string),
 				Токен:     ДанныеКлиента["token"].(string),
@@ -49,10 +49,10 @@ func ПрочитатьТокенКлиета(req *http.Request) (ТокенКл
 				Создан:    ДанныеКлиента["created"].(int64),
 			}, JWT
 		} else {
-			return ТокенКлинета{}, JWT
+			return ТокенКлиента{}, JWT
 		}
 	}
-	return ТокенКлинета{}, JWT
+	return ТокенКлиента{}, JWT
 }
 
 /*
@@ -147,6 +147,7 @@ func ОтправитьЗапросВОбработку(ЗапросОтКлие
 		запрос.СпособВставки = запрос.Форма["updateMethod"][0]
 	}
 	Инфо(" ЗапросОтКлиента.Method %+v \n", ЗапросОтКлиента.Method)
+
 	switch ЗапросОтКлиента.Method {
 	case "AJAX":
 		Инфо(" AJAX %+v \n", " Нужно построить массив блоков необхоимых для рендера HTML ")
