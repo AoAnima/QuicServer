@@ -217,10 +217,10 @@ type ОтветСервиса struct {
 type ТокенКлиента struct {
 	ИдКлиента uuid.UUID `json:"UID"`
 	Роль      []string  `json:"role"`
-	Токен     string    `json:"token"`
+	Токен     string    `json:"token"` // пока не используется навреное нафиг не нужно
 	Права     []string  `json:"access"`
-	Истекает  int64     `json:"expires"`
-	Создан    int64     `json:"created"`
+	Истекает  time.Time `json:"exp"`
+	Создан    time.Time `json:"iat"`
 }
 
 type Уид string
