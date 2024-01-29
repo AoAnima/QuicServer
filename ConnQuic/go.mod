@@ -1,9 +1,10 @@
 module aoanima.ru/ConnQuic/v1
 
 replace aoanima.ru/Logger => ../Logger
+
 replace aoanima.ru/QErrors => ../QErrors
 
-go 1.21.3
+go 1.21.5
 
 require (
 	aoanima.ru/Logger v0.0.0-00010101000000-000000000000
@@ -14,6 +15,7 @@ require (
 )
 
 require (
+	aoanima.ru/QErrors v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
