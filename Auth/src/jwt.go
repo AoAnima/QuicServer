@@ -21,7 +21,7 @@ type КлиентClaims struct {
 	jwt.RegisteredClaims
 }
 
-func СоздатьJWT(данныеТокена ТокенКлиента) (string, ОшибкаСервиса) {
+func СоздатьJWT(данныеТокена ДанныеКлиента) (string, ОшибкаСервиса) {
 
 	claims := КлиентClaims{
 		ИдКлиента: данныеТокена.ИдКлиента.String(),

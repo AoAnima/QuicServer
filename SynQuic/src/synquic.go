@@ -10,6 +10,7 @@ import (
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
+	. "aoanima.ru/QErrors"
 	"github.com/quic-go/quic-go"
 )
 
@@ -219,9 +220,9 @@ func ЧитатьHTTPПоток(поток quic.Stream, обработчикСо
 			Ошибка("  %+v \n", err)
 		}
 		Инфо(" отправляем ответ в HTTP поток,  %+v \n", поток.StreamID())
-		err = ОтправитьСообщение(поток, ответ)
-		if err != nil {
-			Ошибка("  %+v \n", err)
+		статус := ОтправитьСообщение(поток, ответ)
+		if статус.Код != Ок {
+			Ошибка("  %+v \n", статус)
 		}
 
 	}
