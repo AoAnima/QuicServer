@@ -1,0 +1,188 @@
+
+package main
+
+import (
+	"fmt"
+	"os"
+	"time"
+
+	" github.com/faiface/pixel"
+	"github.com/faiface/pixel/imdraw"
+	"github.com/faiface/pixel/pixelgl"
+)
+Пункт 2. Определите константы для игры.
+
+ const (
+	screenWidth  = 640
+	screenHeight = 480
+
+	tileSize = 16
+
+	appleCount = 1
+
+	snakeSpeed = 200 * time.Millisecond
+
+	gameOverText = "Game Over!"
+	pausedText = "Paused"
+	scoreboardText = "Score: %d"
+)
+Пункт 3. Создайте тип данных для представления змеи.
+
+type Snake struct {
+	body []pixel.Vec
+	dir  pixel.Vec
+}
+
+func NewSnake()  Snake {
+	return Snake{
+		body: []pixel.Vec{
+			{X: 100, Y: 100},
+			{X: 100, Y: 84},
+			{X: 100, Y: 68},
+			{X: 100, Y: 52},
+			{X: 100, Y: 36},
+		},
+		dir: pixel.V{X: 1, Y: 0},
+	}
+}
+Пункт 4. Создайте тип данных для представления яблока.
+
+type Apple struct {
+	pos pixel.Vec
+}
+
+func NewApple() Apple {
+	return Apple{
+		pos: pixel.V{X: 200, Y: 200},
+	}
+}
+Пункт 5. Напишите функцию для инициализации игры.
+
+func initGame(win *pixelgl.Window) (*Snake, *Apple) {
+	snake := NewSnake()
+	apple := NewApple()
+
+	return  &snake, &apple
+}
+Пункт 6. Напишите функцию для обновления состояния игры.
+
+func updateGame(snake *Snake, apple *Apple, dt float64) {
+	// Move the snake.
+	snake.body = append(snake.body, snake.body[len(snake.body)-1].Add(snake.dir))
+	snake.body = snake.body[1:]
+
+	// Check for collision with the apple.
+	if snake.body[0] == apple.pos {
+		// Grow the snake.
+		snake.body = append(snake.body, snake.body[len(snake.body)-1])
+
+		// Move the apple to a new random location.
+		apple.pos = pixel.V{
+			X: float64(rand.Intn(screenWidth / tileSize)) * tileSize,
+			Y: float64(rand.Intn(screenHeight / tileSize)) * tileSize,
+		}
+	}
+
+	// Check for collision with the walls or itself.
+	for i := 1; i < len(snake.body); i++ {
+		if snake.body[i] == snake.body[0] {
+			gameOver = true
+		}
+	}
+
+	if snake.body[0].X < 0 || snake.body[0].X > screenWidth || snake.body[0].Y < 0 || snake.body[0].Y > screenHeight {
+		gameOver = true
+	}
+}
+Пункт 7. Напишите функцию для отрисовки игрового поля.
+
+func drawGame(win *pixelgl.Window, snake *Snake, apple *Apple) {
+	win.Clear(pixel.RGB(0, 0, 0))
+
+	imd := imdraw.New(nil)
+	imd.Color = pixel.RGB(0, 1, 0)
+
+	// Draw the snake.
+	for _, seg := range snake.body {
+		imd.Rect(seg.Add(pixel.V{-tileSize / 2, -tileSize / 2}), seg.Add(pixel.V{tileSize / 2, tileSize / 2}), 0)
+	}
+
+	// Draw the apple.
+ 	imd.Color = pixel.RGB(1, 0, 0)
+	imd.Rect(apple.pos.Add(pixel.V{-tileSize / 2, -tileSize / 2}), apple.pos.Add(pixel.V{tileSize / 2, tileSize / 2}), 0)
+
+	imd.Draw(win)
+}
+Пункт 8. Напишите функцию для обработки ввода пользователя.
+
+func handleInput(snake *Snake, win *pixelgl.Window) {
+	if win.Pressed(pixelgl.KeyUp) {
+		if snake.dir.Y != 1 {
+			snake.dir = pixel.V{X: 0, Y: -1}
+		}
+	} else if win.Pressed(pixelgl.KeyDown) {
+		if snake.dir.Y != -1 {
+			snake.dir = pixel.V{X: 0, Y: 1}
+		}
+	} else if win.Pressed(pixelgl.KeyLeft) {
+		if snake.dir.X != 1 {
+			snake.dir = pixel.V{X: -1, Y: 0}
+		}
+	} else if win.Pressed(pixelgl.KeyRight) {
+		if snake.dir.X != -1 {
+			snake.dir = pixel.V{X: 1, Y: 0}
+		}
+	}
+
+	if win.JustPressed(pixelgl.KeyEscape) {
+		win.SetClosed(true)
+	}
+}
+Пункт 9. Напишите функцию для проверки завершения игры.
+
+func checkGameOver(snake *Snake) bool {
+	return gameOver
+}
+Пункт 10. Напишите функцию для запуска игры.
+
+
+
+func main() {
+	cfg := pixelgl.WindowConfig{
+		Title:  "Snake",
+		Bounds: pixel.R(0, 0, screenWidth, screenHeight),
+		VSync:  true,
+	}
+	win, err := pixelgl.NewWindow(cfg)
+	if err != nil {
+		panic(err)
+	}
+
+	snake, apple := initGame(win)
+
+	last :=  time.Now()
+
+	for !win.Closed() {
+		dt := time.Since(last).Seconds()
+		last = time.Now()
+
+		updateGame(snake, apple, dt)
+		drawGame(win, snake, apple)
+		handleInput(snake, win)
+
+		if checkGameOver(snake) {
+			win.Clear(pixel.RGB(0, 0, 0))
+
+			imd := imdraw.New(nil)
+			imd.Color = pixel.RGB(1, 0, 0)
+			imd.Push(pixel.V(screenWidth/2, screenHeight/2))
+			imd.Text(gameOverText, pixel.V(screenWidth/2, screenHeight/2))
+			imd.Draw(win)
+
+			time.Sleep(2 * time.Second)
+			win.SetClosed(true)
+		}
+
+		win.Update()
+	}
+}
