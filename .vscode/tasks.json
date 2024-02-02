@@ -14,9 +14,14 @@
       ],
     "tasks": [
         {
-            "label": "Новый модуль",
+            "label": "Новый модуль win",
             "type": "shell",
-            "command": "echo \"Создаю модуль ${input:moduleName}\" ; ${workspaceFolder}/CreateService.ps1 ${input:moduleName}",
+            "windows":{
+              "command": "echo \"Создаю модуль ${input:moduleName}\" ; ${workspaceFolder}/CreateService.ps1 ${input:moduleName}",
+            },
+           "linux":{
+            "command": "echo \"Создаю модуль ${input:moduleName}\" ; ${workspaceFolder}/CreateService.sh ${input:moduleName}",
+           },
             "problemMatcher": {
                 "base": "$go",
                 "background": {
@@ -24,7 +29,8 @@
                   "beginsPattern": ".*",
                   "endsPattern": "[.*]",                                  
                 }
-            }
+            },
+            "osx": "windows"
         },
         {
             "label": "test",
@@ -52,11 +58,16 @@
                                 
                 }
             }
-        }, {
+        },
+         {
             "label": "build",
             "type": "shell",
-            "command": "cd ${fileDirname}/..; go mod tidy;  go build -o ${fileDirname}/../bin/${fileBasenameNoExtension}.exe ${fileDirname}",
-            // "command": "go build -o ${fileDirname}/../bin/main.exe ${file}; ${fileDirname}/../bin/main.exe",
+            "windows":{
+              "command": "cd ${fileDirname}/..; go mod tidy;  go build -o ${fileDirname}/../bin/${fileBasenameNoExtension}.exe ${fileDirname}",
+            },
+          "linux":{
+            "command":"cd ${fileDirname}/..; go mod tidy;  go build -o ${fileDirname}/../bin/${fileBasenameNoExtension} ${fileDirname}"
+          },
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -80,9 +91,13 @@
             }
         },
         {
-            "label": "run",
+            "label": "run win",
             "type": "shell",
-            "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}.exe",         
+            "windows":{
+              "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}.exe"},  
+              "linux":{
+                "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}"
+              },       
             "group": {
                 "kind": "build",
                 "isDefault": false
@@ -101,7 +116,12 @@
          
             "label": "run exe",
             "type": "process",
-            "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}.exe",    
+            "windows":{
+              "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}.exe",    
+            },
+            "linux":{
+              "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}",    
+            },
             "problemMatcher": ["$go"],   
             "group": {
               "kind": "build",
