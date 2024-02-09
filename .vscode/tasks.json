@@ -17,10 +17,10 @@
             "label": "Новый модуль win",
             "type": "shell",
             "windows":{
-              "command": "echo \"Создаю модуль ${input:moduleName}\" ; ${workspaceFolder}/CreateService.ps1 ${input:moduleName}",
+              "command": "echo \"Создаю модуль ${input:moduleName}\" \n ; ${workspaceFolder}/CreateService.ps1 ${input:moduleName}",
             },
            "linux":{
-            "command": "echo \"Создаю модуль ${input:moduleName}\" ; ${workspaceFolder}/CreateService.sh ${input:moduleName}",
+            "command": "echo \"Создаю модуль ${input:moduleName}\" ;\n ${workspaceFolder}/CreateService.sh ${input:moduleName}",
            },
             "problemMatcher": {
                 "base": "$go",

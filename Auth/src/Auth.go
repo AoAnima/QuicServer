@@ -11,7 +11,7 @@ import (
 	"sync"
 
 	. "aoanima.ru/ConnQuic"
-	. "aoanima.ru/DataBase"
+	. "aoanima.ru/DGApi"
 	. "aoanima.ru/Logger"
 	. "aoanima.ru/QErrors"
 	"github.com/google/uuid"

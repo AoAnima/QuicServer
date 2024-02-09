@@ -3,7 +3,7 @@ module AuthService
 go 1.21.3
 
 replace aoanima.ru/Logger => ../Logger
-replace aoanima.ru/DataBase => ../DataBase
+replace aoanima.ru/DGApi => ../DGApi
 
 replace aoanima.ru/ConnQuic => ../ConnQuic
 

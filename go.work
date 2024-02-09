@@ -1,10 +1,11 @@
-go 1.21.6
+go 1.22.0
 
 use (
 	./Auth
 	./AuthService
 	./Catalog
 	./ConnQuic
+	./DGApi
 	./DataBase
 	./HTTPServerQuic
 	./Logger
@@ -12,5 +13,5 @@ use (
 	./RenderService
 	./SynQuic
 	./bench
-	
+
 )

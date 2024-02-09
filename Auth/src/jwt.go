@@ -7,7 +7,7 @@ import (
 	"time"
 
 	. "aoanima.ru/ConnQuic"
-	. "aoanima.ru/DataBase"
+	. "aoanima.ru/DGApi"
 	. "aoanima.ru/Logger"
 	. "aoanima.ru/QErrors"
 	jwt "github.com/golang-jwt/jwt/v5"

@@ -2,7 +2,7 @@ package main
 
 import (
 	. "aoanima.ru/ConnQuic"
-	. "aoanima.ru/DataBase"
+	. "aoanima.ru/DGApi"
 	. "aoanima.ru/Logger"
 	. "aoanima.ru/QErrors"
 )

@@ -15,3 +15,10 @@ ConnQuic/test.db/DISCARD
 ConnQuic/test.db/KEYREGISTRY
 ConnQuic/test.db/MANIFEST
 DataBase/bin/database/
+PostgreSQL
+old/jsoniter/go
+dg
+DGRaphScripts/dgraph
+DGRaphScripts/db
+DGRaphScripts/t
+DGRaphScripts/retal
