@@ -17,8 +17,8 @@ ConnQuic/test.db/MANIFEST
 DataBase/bin/database/
 PostgreSQL
 old/jsoniter/go
-dg
+dg 
 DGRaphScripts/dgraph
 DGRaphScripts/db
 DGRaphScripts/t
-DGRaphScripts/retal
+DGRaphScripts/ratel
