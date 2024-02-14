@@ -3,7 +3,7 @@ package main
 import (
 	"aoanima.ru/ConnQuic"
 
-	. "aoanima.ru/logger"
+	. "aoanima.ru/Logger"
 )
 
 // клиент это какойто сервис который установил содинение , для каждого ответа должен быть свой канал, в который будет писаться сообщение

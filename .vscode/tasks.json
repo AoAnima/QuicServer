@@ -13,129 +13,125 @@
         }
       ],
     "tasks": [
-        {
-            "label": "Новый модуль win",
-            "type": "shell",
-            "windows":{
-              "command": "echo \"Создаю модуль ${input:moduleName}\" \n ; ${workspaceFolder}/CreateService.ps1 ${input:moduleName}",
-            },
-           "linux":{
-            "command": "echo \"Создаю модуль ${input:moduleName}\" ;\n ${workspaceFolder}/CreateService.sh ${input:moduleName}",
-           },
-            "problemMatcher": {
-                "base": "$go",
-                "background": {
-                  "activeOnStart": true,
-                  "beginsPattern": ".*",
-                  "endsPattern": "[.*]",                                  
-                }
-            },
-            "osx": "windows"
+      {
+        "label": "Новый модуль",
+        "type": "shell",
+        "windows": {
+          "command": "echo \"Создаю модуль ${input:moduleName}\" \n ; ${workspaceFolder}/CreateService.ps1 ${input:moduleName}"
         },
-        {
-            "label": "test",
-            "type": "shell",
-            "command": "cd ${fileDirname} ;go run ${file} ",
-            // "command": "go build -o ${fileDirname}/../bin/main.exe ${file}; ${fileDirname}/../bin/main.exe",
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },      
-            "isBackground": true,    
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared"
-              },
-
-            "problemMatcher": {
-                "base": "$go",
-                "background": {
-                  "activeOnStart": true,
-                  "beginsPattern": ".*",
-                  "endsPattern": "[.*]",  
-                                
-                }
-            }
+        "linux": {
+          "command": "echo \"Создаю модуль ${input:moduleName}\" ;\n ${workspaceFolder}/CreateService.sh ${input:moduleName}"
         },
-         {
-            "label": "build",
-            "type": "shell",
-            "windows":{
-              "command": "cd ${fileDirname}/..; go mod tidy;  go build -o ${fileDirname}/../bin/${fileBasenameNoExtension}.exe ${fileDirname}",
-            },
-          "linux":{
-            "command":"cd ${fileDirname}/..; go mod tidy;  go build -o ${fileDirname}/../bin/${fileBasenameNoExtension} ${fileDirname}"
-          },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },      
-            "isBackground": true,    
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared"
-              },
-
-            "problemMatcher": {
-                "base": "$go",
-                "background": {
-                  "activeOnStart": true,
-                  "beginsPattern": ".*",
-                  "endsPattern": "[.*]",  
-                                
-                }
-            }
+        "problemMatcher": {
+          "base": "$go",
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".*",
+            "endsPattern": "[.*]"
+          }
+        }     
+      },
+      {
+        "label": "test",
+        "type": "shell",
+        "command": "cd ${fileDirname} ;go run ${file} ",
+        "group": {
+          "kind": "test",
+          "isDefault": true
         },
-        {
-            "label": "run win",
-            "type": "shell",
-            "windows":{
-              "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}.exe"},  
-              "linux":{
-                "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}"
-              },       
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "dependsOrder": "sequence",
-            "problemMatcher": ["$go"],
-            "dependsOn":"build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared"
-              }
+        "isBackground": true,
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "shared"
         },
-        {
-         
-            "label": "run exe",
-            "type": "process",
-            "windows":{
-              "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}.exe",    
-            },
-            "linux":{
-              "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}",    
-            },
-            "problemMatcher": ["$go"],   
-            "group": {
-              "kind": "build",
-              "isDefault": true
-            },
-            "isBackground": true,
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "new"
-              },
-              "instanceLimit":3
+        "problemMatcher": {
+          "base": "$go",
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".*",
+            "endsPattern": "[.*]"
+          }
         }
-      
+      },
+      {
+        "label": "Сборка",
+        "type": "shell",
+        "windows": {
+          "command": "cd ${fileDirname}/..; go mod tidy;  go build -o ${fileDirname}/../bin/${fileBasenameNoExtension}.exe ${fileDirname}"
+        },
+        "linux": {
+          "command": "cd ${fileDirname}/..; go mod tidy;  go build -o ${fileDirname}/../bin/${fileBasenameNoExtension} ${fileDirname}"
+        },
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "isBackground": true,
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "shared"
+        },
+        "problemMatcher": {
+          "base": "$go",
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".*",
+            "endsPattern": "[.*]"
+          }
+        }
+      },
+      {
+        "label": "Сбора и запуск",
+        "type": "shell",
+        "windows": {
+          "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}.exe"
+        },
+        "linux": {
+          "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}"
+        },
+        "group": {
+          "kind": "build",
+          "isDefault": false
+        },
+        "dependsOrder": "sequence",
+        "problemMatcher": [
+          "$go"
+        ],
+        "dependsOn": "Сборка",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "shared"
+        }
+      },
+      {
+        "label": "Запуск",
+        "type": "process",
+        "windows": {
+          "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}.exe"
+        },
+        "linux": {
+          "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}"
+        },
+        "problemMatcher": [
+          "$go"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "isBackground": true,
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "new"
+        }
+      }
     ]
 }

@@ -7,7 +7,6 @@ import (
 
 	. "aoanima.ru/Logger"
 	. "aoanima.ru/QErrors"
-
 	dgo "github.com/dgraph-io/dgo/v230"
 	"github.com/dgraph-io/dgo/v230/protos/api"
 	"google.golang.org/grpc"
@@ -28,8 +27,14 @@ type ДанныеЗапроса struct {
 }
 type КлиентДГраф *dgo.Dgraph
 
+type ГрафСвязь struct {
+	Граф         *dgo.Dgraph
+	ЗакрытьДГраф func()
+}
+
 // func ДГраф(каналДанных chan КаналДанны/х) {
-func ДГраф() (*dgo.Dgraph, ЗакрытьСоединение) {
+// func ДГраф() (*dgo.Dgraph, ЗакрытьСоединение) {
+func ДГраф() ГрафСвязь {
 	// Dial a gRPC connection. The address to dial to can be configured when
 	// setting up the dgraph cluster.
 	связь, err := grpc.Dial("localhost:9080", grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -88,12 +93,19 @@ func ДГраф() (*dgo.Dgraph, ЗакрытьСоединение) {
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
-
-	return граф, func() {
-		if err := связь.Close(); err != nil {
-			Ошибка(" Ошибка закрытия соединения %+v \n", err)
-		}
+	return ГрафСвязь{
+		Граф: граф,
+		ЗакрытьДГраф: func() {
+			if err := связь.Close(); err != nil {
+				Ошибка(" Ошибка закрытия соединения %+v \n", err)
+			}
+		},
 	}
+	// return граф, func() {
+	// // 	if err := связь.Close(); err != nil {
+	// // 		Ошибка(" Ошибка закрытия соединения %+v \n", err)
+	// // 	}
+	// // }
 }
 
 /*
@@ -120,13 +132,16 @@ func ДГраф() (*dgo.Dgraph, ЗакрытьСоединение) {
 //			Код: Ок,
 //		}
 //	}
-func Изменить(запрос ДанныеЗапроса, граф *dgo.Dgraph) (string, СтатусСервиса) {
+func (база ГрафСвязь) Изменить(запрос ДанныеЗапроса) ([]byte, СтатусБазы) {
+	граф := база.Граф
+
 	for {
 		ctx := context.Background()
 		транзакция := граф.NewTxn()
 		defer транзакция.Discard(ctx)
 
 		мутация := &api.Mutation{
+
 			CommitNow: true,
 		}
 		мутация.SetJson = []byte(запрос.Запрос)
@@ -138,7 +153,9 @@ func Изменить(запрос ДанныеЗапроса, граф *dgo.Dgr
 				Инфо(" Конфликт транзакции, повторяем %+v \n", ошибка.Error())
 				continue
 			}
-			return "", СтатусСервиса{
+			Ошибка(" ошибка %+s\n", ошибка.Error())
+
+			return nil, СтатусБазы{
 				Код:   ОшибкаЗаписи,
 				Текст: ошибка.Error(),
 			}
@@ -156,9 +173,27 @@ func Изменить(запрос ДанныеЗапроса, граф *dgo.Dgr
 		// 	}
 		// }
 
-		return результат.String(), СтатусСервиса{
+		return результат.Json, СтатусБазы{
 			Код: Ок,
 		}
+	}
+}
+
+func (база ГрафСвязь) Схема(запрос ДанныеЗапроса) СтатусБазы {
+	контекст := context.Background()
+	операция := &api.Operation{}
+	операция.Schema = запрос.Запрос
+	ошибка := база.Граф.Alter(контекст, операция)
+	if ошибка != nil {
+		Ошибка(" Ошибка изменения схемы данных  %+v \n", ошибка.Error())
+		return СтатусБазы{
+			Код:   ОшибкаИзмененияСхемы,
+			Текст: ошибка.Error(),
+		}
+	}
+	return СтатусБазы{
+		Код:   Ок,
+		Текст: "Схема успешно модифицированна",
 	}
 }
 
@@ -166,7 +201,17 @@ func Изменить(запрос ДанныеЗапроса, граф *dgo.Dgr
 Поллучить открывает транзакцию на выборку данных, отправляет запрос, возвращает результат в  виде json строки
 Берёт соединнение из пула, отправляет запрос и возвращает соелинение в пул
 */
-func Получить(Запрос string) string {
+func (база ГрафСвязь) Получить(запрос ДанныеЗапроса) ([]byte, СтатусБазы) {
+	ctx := context.Background()
+	транзакция := база.Граф.NewReadOnlyTxn()
+	defer транзакция.Discard(ctx)
 
-	return "резултать запроса"
+	ответ, ошибка := транзакция.QueryWithVars(context.Background(), запрос.Запрос, запрос.Данные)
+	if ошибка != nil {
+		Ошибка("  %+v \n", ошибка.Error())
+	}
+
+	return ответ.Json, СтатусБазы{
+		Код: Ок,
+	}
 }

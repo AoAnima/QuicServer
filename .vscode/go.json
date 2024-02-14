@@ -1,40 +1,56 @@
 {
-
+	// Place your snippets for go here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
 	"Обработчик err":{
 		"prefix":"err",
 		"body":[
-			"if err != nil {",
-			"	Ошибка(\" $1 %+v \\n\", err.Error())",
-			"}"
+			"if err != nil {"
+			"	Ошибка(\" ${1:ОписаниеОшибки} %+v \\n\", err)"
+			"} \n $0"
 		]
-	},
+	},	
     "Обработчик ошибок":{
-		"prefix":"ош",
+		"prefix":"ошш",
 		"body":[
-			"if ошибка != nil {",
-			"	Ошибка(\" $1 %+v \\n\", ошибка)",
-			"}"
+			"if ошибка != nil { \n Ошибка(\" ${1:ОписаниеОшибки}  %+v \\n\", ошибка) \n} \n $0"
+		]
+	},,
+    "Обработчик статуса ответа":{
+		"prefix":"стат",
+		"body":[
+			"if статус.Код != Ок { \n Ошибка(\" ${1:ОписаниеОшибки}  %+v \\n\", статус) \n} \n$0"
 		]
 	},
 	"Log":{
 		"prefix":"log",
 		"body":[			
-			"Инфо(\"  %+v \\n\", ${1} )"
+			"Инфо(\"  %+v \\n\", ${1} ) \n $0" 
 			
 		]
 	},
 	"Инфо":{
 		"prefix":"инфо",
 		"body":[			
-			"Инфо(\" %+v \\n\", ${1})"
-			
+			"Инфо(\" %+v \\n\", ${1}) \n $0"			
 		]
 	},
 	"Ошибка":{
 		"prefix":"ошибка",
 		"body":[			
-			"Ошибка(\" %+v \\n\", ${1})"
+			"Ошибка(\" ${1:ОписаниеОшибки} %+v \\n\", ${2:СообщениеОшибки}) \n $0"
 			
 		]
-	}
+	},
+	
 }
