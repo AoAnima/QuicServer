@@ -35,190 +35,140 @@ type ДанныеКлиента struct {
 }
 
 var База ГрафСвязь
-
+var СхемаБазы = `
+							type <Adres> {
+									<страна>: string 
+									<город>: string
+									<район>: string
+									<тип_улицы>: string
+									<название_улицы>: string
+									<номер_дома>: string
+									<корпус>: string
+									<номер_квартиры>: string
+							}
+							type <User> {
+									<имя>: string
+									<фамилия>: string
+									<отчество>: string
+									<логин>: string
+									<пароль>: password
+									email: string
+									<телефон>: string
+									<адрес>: <Adres>
+									<роль>: string
+									<создан>: datetime
+									<обновлен>: datetime
+									<статус>: string
+									<аватар>: string
+									<о_себе>: string
+									<социальные_ссылки>: [string]
+									<предпочтения>: string
+							}
+							<имя>: string  .
+							<фамилия>: string  .
+							<отчество>: string  .
+							<логин>: string   @index(term)  @upsert .
+							<пароль>: password .
+							email: string   @index(term)  @upsert .
+							<телефон>: string   @index(term)  @upsert .
+							<роль>: string  .
+							<создан>: datetime .
+							<обновлен>: datetime  .
+							<статус>: string  .
+							<аватар>: string .
+							<о_себе>: string .
+							<социальные_ссылки>: [string] .
+							<предпочтения>: string .
+							<адрес>: uid .
+							<страна>: string  .
+							<город>: string  .
+							<район>: string  .
+							<тип_улицы>: string  .
+							<название_улицы>: string  .
+							<номер_дома>: string  .
+							<корпус>: string  .
+							<номер_квартиры>: string  .
+						`
 func init() {
 	База = ГрафСвязь{}
 	База = ДГраф()
 
-	ответ, статусхемы := База.Получить(ДанныеЗапроса{
-		Запрос: `schema {
-			type
-			index
-			}`,
-		Данные: nil,
-	})
-	Инфо(" ответ %+s %+v \n", ответ, статусхемы)
-
-	схема := `
-    type <Пользователи> {
-        <логин>
-        <имя>
-        <email>
-    }
-    <логин>: string @index(exact) @upsert .
-    <имя>: string .
-    <email>: string @index(exact) @upsert .
-    `
+	// ответ, статусхемы := База.Получить(ДанныеЗапроса{
+	// 	Запрос: `schema {
+	// 		type
+	// 		index
+	// 		}`,
+	// 	Данные: nil,
+	// })
+	// Инфо(" ответ %+s %+v \n", ответ, статусхемы)
 
 	статус := База.Схема(ДанныеЗапроса{
-		Запрос: схема,
+		Запрос: СхемаБазы,
 	})
 
 	if статус.Код != Ок {
 		Ошибка(" Ошибка записи схемы  %+v \n", статус)
 	}
-
-	// ответ, статусхемы = База.Получить(ДанныеЗапроса{
-	// 	Запрос: `{
-	// 		michael(func: eq(<логин>, "Michael")) {
-	// 			email
-	// 			<логин>
-	// 			owns_pet {
-	// 			name
-	// 			}
-	// 			friend {
-	// 			name
-	// 			friend { expand(_all_) { expand(_all_) } }
-	// 			owns_pet { name }
-	// 			}
-	// 		}
-	// 	}`,
-	// 	Данные: nil,
-	// })
-	// Инфо(" ответ %+s %+v \n", ответ, статусхемы)
-	// СхемаПользователя := `
-	// 						type <Adres> {
-	// 								<страна>: string @
-	// 								<город>: string
-	// 								<район>: string
-	// 								<тип_улицы>: string
-	// 								<название_улицы>: string
-	// 								<номер_дома>: string
-	// 								<корпус>: string
-	// 								<номер_квартиры>: string
-	// 						}
-	// 						type <User> {
-	// 								<имя>: string
-	// 								<фамилия>: string
-	// 								<отчество>: string
-	// 								<логин>: string
-	// 								<пароль>: password
-	// 								email: string
-	// 								<телефон>: string
-	// 								<адрес>: <Adres>
-	// 								<роль>: string
-	// 								<создан>: datetime
-	// 								<обновлен>: datetime
-	// 								<статус>: string
-	// 								<аватар>: string
-	// 								<о_себе>: string
-	// 								<социальные_ссылки>: [string]
-	// 								<предпочтения>: string
-	// 						}
-	// 						<имя>: string  .
-	// 						<фамилия>: string  .
-	// 						<отчество>: string  .
-	// 						<логин>: string   @index(term)  @upsert .
-	// 						<пароль>: password .
-	// 						email: string   @index(term)  @upsert .
-	// 						<телефон>: string   @index(term)  @upsert .
-	// 						<роль>: string  .
-	// 						<создан>: datetime .
-	// 						<обновлен>: datetime  .
-	// 						<статус>: string  .
-	// 						<аватар>: string .
-	// 						<о_себе>: string .
-	// 						<социальные_ссылки>: [string] .
-	// 						<предпочтения>: string .
-	// 						<адрес>: uid .
-	// 						<страна>: string  .
-	// 						<город>: string  .
-	// 						<район>: string  .
-	// 						<тип_улицы>: string  .
-	// 						<название_улицы>: string  .
-	// 						<номер_дома>: string  .
-	// 						<корпус>: string  .
-	// 						<номер_квартиры>: string  .
-	// 					`
-	// СхемаПользователя := `
-	// type <Client> {
-	// 		<имя>: string
-	// 		<логин>: string
-	// 		email: string
-	// }
-	// <имя>: string  .
-	// <логин>: string   @index(hash)  @upsert .
-	// email: string   @index(hash)  @upsert .
-	// `
-	// Инфо("  СхемаПользователя %+v \n", СхемаПользователя)
-	// статус := База.Схема(ДанныеЗапроса{
-	// 	Запрос: СхемаПользователя,
-	// })
-	// Инфо(" %+v \n", статус)
+	
+	
 	// ответЛогин, статусОтвета := ЛогинСвободен("anima")
 	// Инфо(" %+v  %+v \n", ответЛогин, статусОтвета)
 	// добавить := "{ set { _:Пользователь <логин> \"Michael\" . } }"
+	
+	// добавить := `[
+    //     {
+    //         "логин": "user5",
+    //         "имя": "Алексей Алексеев",
+    //         "email": "alexey@example.com",
+    //         "dgraph.type": "Пользователи"
+    //     },
+    //     {
+    //         "логин": "user6",
+    //         "имя": "Наталья Натальева",
+    //         "email": "natalya@example.com",
+    //         "dgraph.type": "Пользователи"
+    //     }
+    // ]`
+	// ответиз, статусИзменения := База.Изменить(ДанныеЗапроса{
+	// 	Запрос: добавить,
+	// })
+	// Инфо(" ответ %+s %+v \n", ответиз, статусИзменения)
 
-	// добавить := ` {
-	// 	"set": [
-	// 	  {
-	// 		"uid": "_:sad",
-	// 	   	"name": "sad",
-	// 	   	"логин": "sad",
-	// 	   	"email":"asd222222@dsa.ru",
-	// 	   	"dgraph.type": "Client"
-	// 	  }
-	// 	]
-	//   }  `
-	// добавить = `{
-	// 	"delete": [{
-	// 	 "uid":"0x2f",
-	// 	 "dgraph.type": "Client"
-	// 	}]
-	//   }`
-	// добавить := `mutation {
-	// 	set {
-	// 		_:client <email> "ivanov@example.com" .
-	// 	}
-	// }`
-	// н := `{mutation {set {
-	// 				_:user <email> "john.doe@example.com" .
-	// 			  }}}
-	// 			`
-	добавить := `[
-        {
-            "логин": "user5",
-            "имя": "Алексей Алексеев",
-            "email": "alexey@example.com",
-            "dgraph.type": "Пользователи"
-        },
-        {
-            "логин": "user6",
-            "имя": "Наталья Натальева",
-            "email": "natalya@example.com",
-            "dgraph.type": "Пользователи"
-        }
-    ]`
-	ответиз, статусИзменения := База.Изменить(ДанныеЗапроса{
-		Запрос: добавить,
-	})
-	Инфо(" ответ %+s %+v \n", ответиз, статусИзменения)
-
-	ответ, статусхемы = База.Получить(ДанныеЗапроса{
+	// ответ, статусхемы := База.Получить(ДанныеЗапроса{
+	// 	Запрос: `{
+	// 		Pols(func: has(email)) {
+	// 		  email
+	// 		  name
+	// 		  uid
+	// 		  dgraph.type
+	// 		  <логин>			 
+	// 		}
+	// 	  }`,
+	// 	Данные: nil,
+	// })	
+	
+	ответ, статусхемы := База.Получить(ДанныеЗапроса{
 		Запрос: `{
-			Pols(func: has(name, "email")) {
-			  email
-			  name
-			  uid
-			  dgraph.type
-			  <логин>
-			 
+			checkLogin(func: eq(<логин>, "user6")) {
+			  count(uid)
+			}
+			checkEmail(func: eq(email, "alexey@example.com")) {
+			  count(uid)
 			}
 		  }`,
 		Данные: nil,
 	})
+	// {
+//   me(func: eq(name@en, "Steven Spielberg")) @filter(has(director.film)) {
+//     name@en
+//     director.film @filter(allofterms(name@en, "jones indiana") OR allofterms(name@en, "jurassic park"))  {
+//       uid
+//       name@en
+//     }
+//   }
+// }
 
-	Инфо(" н %+s  %+s %+v \n", добавить, ответ, статусхемы)
+	Инфо("   %+s %+v \n",  ответ, статусхемы)
 
 	// ответ, статус := База.Получить(ДанныеЗапроса{
 	// 	Запрос: `schema {
@@ -539,10 +489,7 @@ func ЛогинСвободен(логин string) (bool, ОшибкаСерви
 		Запрос: `query {
 			checkLogin(func: eq(<логин>, "ваш_логин")) {
 			  count(uid)
-			}
-			checkEmail(func: eq(email, "ваш_email")) {
-			  count(uid)
-			}
+			}			
 		  }`,
 		Данные: nil,
 	})
