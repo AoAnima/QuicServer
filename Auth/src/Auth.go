@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/DGApi"
@@ -24,18 +25,50 @@ var Сервис ИмяСервиса = "Авторизация"
 // TODO
 
 type ДанныеКлиента struct {
-	ИдКлиента uuid.UUID
-	Роль      []string
-	Права     []string
-	Email     string
-	Логин     string
-	Пароль    string
-	JWT       string
+	Имя       string    `json:"имя,omitempty"`
+	Фамилия   string    `json:"фамилия,omitempty"`
+	Отчество  string    `json:"отчество,omitempty"`
+	ИдКлиента uuid.UUID `json:"ид_клиента"`
+	Роль      []string  `json:"роль,omitempty"`
+	Права     []string  `json:"права_доступа,omitempty"`
+	Статус    string    `json:"статус,omitempty"`
+	Аватар    string    `json:"аватар,omitempty"`
+	Email     string    `json:"email,omitempty"`
+	Логин     string    `json:"логин,omitempty"`
+	JWT       string    `json:"jwt,omitempty"`
+	Телефон   string    `json:"телефон,omitempty"`
+	Адрес     Адрес     `json:"адрес,omitempty"`
+	Создан    time.Time `json:"создан,omitempty"`
+	Обновлен  time.Time `json:"обновлен,omitempty"`
+	ОСебе     string    `json:"о_себе,omitempty"`
+	СоцСети   []string  `json:"социальные_ссылки,omitempty"`
 	Профиль   map[string]interface{}
 }
 
-var База ГрафСвязь
+type Адрес struct {
+	Страна        string `json:"страна,omitempty"`
+	Город         string `json:"город,omitempty"`
+	Район         string `json:"район,omitempty"`
+	ТипУлицы      string `json:"тип_улицы,omitempty"`
+	НазваниеУлицы string `json:"название_улицы,omitempty"`
+	НомерДома     string `json:"номер_дома,omitempty"`
+	Корпус        string `json:"корпус,omitempty"`
+	НомерКвартиры string `json:"номер_квартиры,omitempty"`
+}
+type Секрет struct {
+	ИдКлиента string    `json:"ид_клиента"`
+	Секрет    string    `json:"секрет"`
+	Обновлен  time.Time `json:"обновлен"`
+}
+
+var База СоединениеСДГраф
+var СекретноеСоединение СоединениеСДГраф
 var СхемаБазы = `
+							type <Секрет> {	
+								<ид_клиента> : string
+								<секрет> : string
+								<обновлен> : datetime								
+							}
 							type <Adres> {
 									<страна>: string 
 									<город>: string
@@ -47,6 +80,7 @@ var СхемаБазы = `
 									<номер_квартиры>: string
 							}
 							type <User> {
+									<ид_клиента>: string
 									<имя>: string
 									<фамилия>: string
 									<отчество>: string
@@ -55,15 +89,17 @@ var СхемаБазы = `
 									email: string
 									<телефон>: string
 									<адрес>: <Adres>
-									<роль>: string
+									<права_доступа>: string
 									<создан>: datetime
 									<обновлен>: datetime
 									<статус>: string
 									<аватар>: string
 									<о_себе>: string
-									<социальные_ссылки>: [string]
-									<предпочтения>: string
+									<социальные_ссылки>: [string]								
+									jwt: string
 							}
+							<ид_клиента>: string   @index(term)  @upsert.
+							<секрет> : string .
 							<имя>: string  .
 							<фамилия>: string  .
 							<отчество>: string  .
@@ -77,8 +113,7 @@ var СхемаБазы = `
 							<статус>: string  .
 							<аватар>: string .
 							<о_себе>: string .
-							<социальные_ссылки>: [string] .
-							<предпочтения>: string .
+							<социальные_ссылки>: [string] .							
 							<адрес>: uid .
 							<страна>: string  .
 							<город>: string  .
@@ -88,11 +123,13 @@ var СхемаБазы = `
 							<номер_дома>: string  .
 							<корпус>: string  .
 							<номер_квартиры>: string  .
+							jwt: string .
 						`
-func init() {
-	База = ГрафСвязь{}
-	База = ДГраф()
 
+func init() {
+	// База = СоединениеСДГраф{}
+	База = ДГраф()
+	СекретноеСоединение = ДГраф()
 	// ответ, статусхемы := База.Получить(ДанныеЗапроса{
 	// 	Запрос: `schema {
 	// 		type
@@ -109,26 +146,25 @@ func init() {
 	if статус.Код != Ок {
 		Ошибка(" Ошибка записи схемы  %+v \n", статус)
 	}
-	
-	
+
 	// ответЛогин, статусОтвета := ЛогинСвободен("anima")
 	// Инфо(" %+v  %+v \n", ответЛогин, статусОтвета)
 	// добавить := "{ set { _:Пользователь <логин> \"Michael\" . } }"
-	
+
 	// добавить := `[
-    //     {
-    //         "логин": "user5",
-    //         "имя": "Алексей Алексеев",
-    //         "email": "alexey@example.com",
-    //         "dgraph.type": "Пользователи"
-    //     },
-    //     {
-    //         "логин": "user6",
-    //         "имя": "Наталья Натальева",
-    //         "email": "natalya@example.com",
-    //         "dgraph.type": "Пользователи"
-    //     }
-    // ]`
+	//     {
+	//         "логин": "user5",
+	//         "имя": "Алексей Алексеев",
+	//         "email": "alexey@example.com",
+	//         "dgraph.type": "Пользователи"
+	//     },
+	//     {
+	//         "логин": "user6",
+	//         "имя": "Наталья Натальева", ит
+	//         "email": "natalya@example.com",
+	//         "dgraph.type": "Пользователи"
+	//     }
+	// ]`
 	// ответиз, статусИзменения := База.Изменить(ДанныеЗапроса{
 	// 	Запрос: добавить,
 	// })
@@ -141,12 +177,12 @@ func init() {
 	// 		  name
 	// 		  uid
 	// 		  dgraph.type
-	// 		  <логин>			 
+	// 		  <логин>
 	// 		}
 	// 	  }`,
 	// 	Данные: nil,
-	// })	
-	
+	// })
+
 	ответ, статусхемы := База.Получить(ДанныеЗапроса{
 		Запрос: `{
 			checkLogin(func: eq(<логин>, "user6")) {
@@ -159,16 +195,16 @@ func init() {
 		Данные: nil,
 	})
 	// {
-//   me(func: eq(name@en, "Steven Spielberg")) @filter(has(director.film)) {
-//     name@en
-//     director.film @filter(allofterms(name@en, "jones indiana") OR allofterms(name@en, "jurassic park"))  {
-//       uid
-//       name@en
-//     }
-//   }
-// }
+	//   me(func: eq(name@en, "Steven Spielberg")) @filter(has(director.film)) {
+	//     name@en
+	//     director.film @filter(allofterms(name@en, "jones indiana") OR allofterms(name@en, "jurassic park"))  {
+	//       uid
+	//       name@en
+	//     }
+	//   }
+	// }
 
-	Инфо("   %+s %+v \n",  ответ, статусхемы)
+	Инфо("   %+s %+v \n", ответ, статусхемы)
 
 	// ответ, статус := База.Получить(ДанныеЗапроса{
 	// 	Запрос: `schema {
@@ -688,8 +724,44 @@ func ПроверитьДанныеВБД(ИдКлиента string, логин 
 	// 	Код:   Ок,
 	// 	Текст: "Пользователь [" + логин + "] Авторизован",
 	// }
+	запрос := ДанныеЗапроса{
+		Запрос: `query User($login: string, $password: string) {
+			User(func: eq(login, $login)) @filter(checkpwd(password, $password)) {
+				<идКлиента>
+				<имя>
+				<фамилия>
+				<отчество>
+				<логин>				
+				email					
+				<права_доступа>				
+				<статус>
+				<аватар>				
+				jwt
+			}
+		}
+		`,
+		Данные: map[string]string{
+			"$login":    логин,
+			"$password": пароль,
+		},
+	}
 
-	return ДанныеКлиента{}, СтатусБазы{}
+	ответ, статус := База.Получить(запрос) // граф - экземпляр вашего Dgraph API
+
+	if статус.Код != Ок {
+		return ДанныеКлиента{}, статус
+	}
+
+	клиент := ДанныеКлиента{}
+	ошибка := ИзJson(ответ, &клиент)
+
+	if ошибка != nil {
+		Ошибка("  %+v \n", ошибка)
+	}
+
+	return клиент, СтатусБазы{
+		Код: Ок,
+	}
 
 }
 
