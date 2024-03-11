@@ -2,13 +2,13 @@ go 1.22.0
 
 use (
 	./Auth
-	./AuthService
 	./Catalog
 	./ConnQuic
 	./DGApi
 	./DataBase
 	./HTTPServerQuic
 	./Logger
+	./Orkestrator
 	./QErrors
 	./RenderService
 	./SynQuic

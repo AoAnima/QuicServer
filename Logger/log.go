@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 
+	_ "github.com/gookit/color"
 	json "github.com/json-iterator/go"
 	"github.com/quic-go/quic-go"
 )
@@ -16,14 +17,21 @@ import (
 var StdLog = log.New(os.Stderr, "", log.Lshortfile|log.Ltime)
 
 func Инфо(формат string, данные ...interface{}) {
-	StdLog.SetFlags(log.Lshortfile | log.Ltime)
-	формат = strings.ReplaceAll(формат, "%+v", "\u001b[38;5;48m %+v  \u001b[0m\u001b[38;5;75m")
 
-	// log.Printf("1 %+v ", len(данные))
+	StdLog.SetFlags(log.Lshortfile | log.Ltime)
+	формат = strings.ReplaceAll(формат, "%+v", "\x1b[38;5;48m %+v  \x1b[0m\x1b[38;5;75m")
+	// формат = strings.ReplaceAll(формат, "%+v", "\u001b[38;5;48m %+v  \u001b[0m\u001b[38;5;75m")
+	// green := color.FgGreen.Render
+	// textColor := color.C256(75)
 	данные = КрасивыйВывод(данные...)
 
-	str := fmt.Sprintf("\u001b[0m\u001b[36mИНФО: \u001b[38;5;75m "+формат+" \u001b[0m \n", данные...)
+	str := fmt.Sprintf("\x1b[0m\x1b[36m ИНФО : \x1b[38;5;123m "+формат+" \x1b[0m \n", данные...)
+	// str := fmt.Sprintf("\u001b[0m\u001b[36m ИНФО : \u001b[38;5;75m "+формат+" \u001b[0m \n", данные...)
+
+	// str := fmt.Sprintf(green("1 ИНФО :")+textColor.Sprint(формат), данные...)
+	// log.Printf("log %+s", red(данные...))
 	err := StdLog.Output(2, str)
+	// err := StdLog.Output(2, str)
 
 	if err != nil {
 		log.Printf("%+v", err)
@@ -31,6 +39,26 @@ func Инфо(формат string, данные ...interface{}) {
 
 }
 
+func Ошибка(формат string, данные ...interface{}) {
+	//StdLog.SetFlags(log.Lshortfile|log.Ltime)
+	// textColor := color.C256(196)
+	// red := color.FgRed.Render
+
+	формат = strings.ReplaceAll(формат, "%+v", "\x1b[38;5;213m %+v  \x1b[0m\x1b[38;5;1m")
+	// формат = strings.ReplaceAll(формат, "%+v", "\u001b[38;5;204m %+v  \u001b[0m\u001b[38;5;1m")
+
+	данные = КрасивыйВывод(данные...)
+
+	str := fmt.Sprintf("\u001b[48;5;124m ОШИБКА >> \x1b[0m  \x1b[38;5;1m  "+формат+" \x1b[0m \n", данные...)
+	// str := fmt.Sprintf("\u001b[48;5;124m ОШИБКА >> \u001b[0m  \u001b[38;5;1m  "+формат+" \u001b[0m \n", данные...)
+
+	// str = fmt.Sprintf(red(str))
+
+	err := StdLog.Output(2, str)
+	if err != nil {
+		log.Printf("%+v", err)
+	}
+}
 func КрасивыйВывод(данные ...interface{}) []interface{} {
 	данныеДляВывода := []interface{}{}
 	// log.Print(данные)
@@ -134,18 +162,6 @@ func КрасивыйВывод(данные ...interface{}) []interface{} {
 func Вывод(w io.Writer, формат string, данные ...interface{}) {
 
 	fmt.Fprintf(w, формат, данные)
-}
-
-func Ошибка(формат string, данные ...interface{}) {
-	//StdLog.SetFlags(log.Lshortfile|log.Ltime)
-	формат = strings.ReplaceAll(формат, "%+v", "\u001b[38;5;204m %+v  \u001b[0m\u001b[38;5;1m")
-	данные = КрасивыйВывод(данные...)
-	str := fmt.Sprintf("\u001b[48;5;124m ОШИБКА >> \u001b[0m  \u001b[38;5;1m  "+формат+" \u001b[0m \n", данные...)
-
-	err := StdLog.Output(2, str)
-	if err != nil {
-		log.Printf("%+v", err)
-	}
 }
 
 //var Stdout = log.New(os.Stdout, "", log.Llongfile)

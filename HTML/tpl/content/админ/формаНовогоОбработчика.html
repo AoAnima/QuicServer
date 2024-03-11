@@ -1,0 +1,41 @@
+{{define "формаНовогоОбработчика"}}
+<div class="container">
+    <h1 class="title">Добавдение обработчика</h1>
+    <form id="newRouteForm" class="columns" jsHanlder="Перехват sumbit со всего документа  обработка через ajaxPost()" action="добавитьОбработчик">
+        <div class="field column">
+            <label class="label">URL</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="URL" name="URL" value="url маршрут">
+            </div>
+        </div>
+        <div class="field column">
+            <label class="label">Шаблон</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Шаблон" name="шаблон" value="имя шаблона">
+            </div>
+        </div>
+        <div class="field column">
+            <label class="label">Обработчики</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Обработчики" name ="обработчики" value="имя обработчика">
+            </div>
+        </div>
+        <div class="field column">
+            <label class="label">Права доступа</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Права доступа" name="праваДоступа" value="имя права доступа">
+            </div>
+        </div>
+        <div class="field column">
+            <input class="is-checkradio" id="isActive" type="checkbox" name="isActive" checked="checked" name="активно" value="1">
+            <label for="isActive">Активен</label>
+        </div>
+        <div class="field column is-grouped">
+            <div class="control">
+                <button class="button is-link">Добавить</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{{end}}

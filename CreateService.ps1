@@ -14,3 +14,4 @@ go mod edit -replace aoanima.ru/Logger=../Logger
 go mod edit -replace aoanima.ru/ConnQuic=../ConnQuic
 go mod edit -replace aoanima.ru/QErrors=../QErrors
 go mod edit -replace aoanima.ru/DataBase=../DataBase
+go mod edit -replace aoanima.ru/DGApi=../DGApi

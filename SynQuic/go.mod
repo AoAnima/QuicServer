@@ -1,15 +1,20 @@
 module aoanima.ru/SynQuic
 
-go 1.21.3
+go 1.21.5
+
+toolchain go1.22.0
 
 replace aoanima.ru/Logger => ../Logger
 
 replace aoanima.ru/ConnQuic => ../ConnQuic
 
+replace aoanima.ru/QErrors => ../QErrors
+
 require (
 	aoanima.ru/ConnQuic v0.0.0-00010101000000-000000000000
 	aoanima.ru/Logger v0.0.0-00010101000000-000000000000
-	github.com/quic-go/quic-go v0.39.3
+	aoanima.ru/QErrors v0.0.0-00010101000000-000000000000
+	github.com/quic-go/quic-go v0.41.0
 
 )
 
@@ -23,8 +28,10 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/google/flatbuffers v1.12.1 // indirect
+	github.com/gookit/color v1.5.4 // indirect
 	github.com/klauspost/compress v1.12.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
 	go.opencensus.io v0.22.5 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 )
@@ -39,12 +46,11 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/onsi/ginkgo/v2 v2.9.5 // indirect
-	github.com/quic-go/qtls-go1-20 v0.4.1 // indirect
 	go.uber.org/mock v0.3.0 // indirect
 	golang.org/x/crypto v0.4.0 // indirect
 	golang.org/x/exp v0.0.0-20221205204356-47842c84f3db // indirect
 	golang.org/x/mod v0.11.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
 )

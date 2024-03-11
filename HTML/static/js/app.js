@@ -3,9 +3,13 @@ function ajax(event){
   event.preventDefault();
   event.stopPropagation();  
   let target = event.currentTarget   
-  let href = target.getAttribute('href');
+  console.log("target", target);
+  let действие = target.getAttribute('action');
+  let данныеФормы = new FormData(target); // создаем объект FormData и автоматически парсим форму
+  данныеФормы.append("действие", "добавитьОбработчик")
   fetch(href, {
         method: 'AJAX',
+        body: formData, // передаем данные формы в теле запроса
         headers: {
           'Method': 'AJAX'
         }
@@ -13,6 +17,8 @@ function ajax(event){
         .then(data => {
           console.log(data);
           for ( имяБлока in data) {
+
+            // Обработчик вставка ньд нужно вынести в отдельную функцию
             console.log(data[имяБлока]);
             let данныеБлока = data[имяБлока]
             if (!!данныеБлока.HTML && данныеБлока.HTML !== "") {            
@@ -30,6 +36,49 @@ function ajax(event){
           console.log(error);
       });
 }
+
+function ajaxPost(event){
+  event.preventDefault();
+  event.stopPropagation();  
+  let target = event.target;   
+  console.log("event", event);
+  let действие = target.getAttribute('action');
+  let formData = new FormData(target); // создаем объект FormData и автоматически парсим форму
+  formData.append("действие", действие)
+  fetch(действие, {
+        method: 'AJAXPost',
+        body: formData,
+        headers: {
+          'Method': 'AJAXPost'
+        }
+      }).then(response => response.json())
+        .then(data => {
+          console.log(data);
+          for ( имяБлока in data) {
+
+            // Обработчик вставка ньд нужно вынести в отдельную функцию
+            console.log(data[имяБлока]);
+            let данныеБлока = data[имяБлока]
+            if (!!данныеБлока.HTML && данныеБлока.HTML !== "") {            
+              let template = document.createElement("template");
+              template.innerHTML = данныеБлока.HTML               
+              let первыйЭлемент = template.content.firstElementChild
+              if (!!первыйЭлемент.dataset){
+                let методВставки  = первыйЭлемент.dataset.updatemethod                  
+                let id = первыйЭлемент.id  
+                document.getElementById(id)[методВставки](template.content)
+              }
+            }
+          }
+      }).catch(error => {
+          console.log(error);
+      });
+}
+
+
+
+
+
 function ОткрытьСтраницу(event) { 
   event.preventDefault();
   event.stopPropagation();  
@@ -67,3 +116,7 @@ function connectToWebSocketServer() {
     };
   }
   connectToWebSocketServer() 
+  document.addEventListener("submit", function(event) {
+    // Все отправки форм отправляем ajax методом, перехватываем всё, чтобы не писать н акаждой форме onsubmit 
+    ajaxPost(event);
+  });

@@ -85,7 +85,8 @@ func ЗапуститьSynQuicСервер(Адрес string,
 	if err != nil {
 		Ошибка(" %+v ", err)
 	}
-	Инфо("  Запустил SynQuic сервер %+v \n", Адрес)
+
+	Ошибка(" Запустил SynQuic сервер %+v \n", Адрес)
 
 	for {
 		сессия, err := listener.Accept(context.Background())
