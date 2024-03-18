@@ -1,7 +1,6 @@
 {{define "рабочийСтол"}}
-<div id="content"  data-updateMethod="replaceWith">
-    <div class="container is-fluid">
-      <div class="columns">
+<div class="container is-fluid">
+    <div class="columns">
     
         <!-- Sidebar menu -->
         <div class="column is-one-quarter">
@@ -10,24 +9,27 @@
               Рабочий стол
             </p>
             <ul class="menu-list">
-              <li><a href="/админ/обработчики" onclick="ajax(event)">Обработчики</a></li>
-              <li><a href="/админ/адреса" onclick="ajax(event)">Адрес</a></li>
-              <li><a href="/админ/заказы" onclick="ajax(event)">Заказы</a></li>
-              <li><a href="/админ/магазины" onclick="ajax(event)">Мои магазины</a></li>
-              <li><a href="/админ/сообщения" onclick="ajax(event)">Сообщения</a></li>
-              <li><a href="/админ/настройки" onclick="ajax(event)">Настройки</a></li>
+              <li><a href="/обработчики" onclick="ajax(event)">Обработчики</a></li>
+              <li><a href="/очередиОбработкиМаршрутов" onclick="ajax(event)">Очерь обработчиков маршрутов</a></li>
+              <li><a href="/заказы" onclick="ajax(event)">Заказы</a></li>
+              <li><a href="/магазины" onclick="ajax(event)">Мои магазины</a></li>
+              <li><a href="/сообщения" onclick="ajax(event)">Сообщения</a></li>
+              <li><a href="/настройки" onclick="ajax(event)">Настройки</a></li>
               <!-- Add more menu items here -->
             </ul>
           </aside>
         </div>
     
         <!-- Main content -->
-        <div class="column">     
+        <div class="column" id="content_block" >     
             {{ template "админ_контент" .}}    
         </div>
     
-      </div>
-    </div>
-    </div>
+    </div>   
+</div>
  {{end}}
+
+{{ define "админ_контент"}}
+  {{template "обработчики" .}}
+{{end}}
 

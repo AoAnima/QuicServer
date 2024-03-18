@@ -1,0 +1,60 @@
+{{ define "ВерхнееМеню" }}
+<header>
+    <!-- Sub Navigation -->
+    <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+          <strong>Пион.рф</strong>
+        </a>
+      </div>
+   
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/">
+            Главная
+          </a>
+   
+          <a class="navbar-item" href="кабинет">
+            Кабинет
+          </a>
+   
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Админка
+            </a>
+   
+            <div class="navbar-dropdown">
+              <a class="navbar-item" href="рабочийСтол">
+                Рабочий стол
+              </a>
+              <a class="navbar-item" href="#">
+                Jobs
+              </a>
+              <a class="navbar-item" href="#">
+                Contact
+              </a>
+              <hr class="navbar-divider">
+              <a class="navbar-item" href="#"> 
+                Report an issue
+              </a>
+            </div>
+          </div>
+        </div>
+   
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button" href="/формаРегистрации" onclick="ajax(event)">
+                <strong>Регистрация</strong>
+              </a>
+              <a class="button is-primary" href="/формаАвторизации" onclick="ajax(event)">
+                Вход
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>  
+  </header>
+
+{{end}}

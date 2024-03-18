@@ -1,15 +1,18 @@
 
+/*
+Обработка нажатия кнопок ajax ? в соновном меню, личный кабинет, не требующих открытия новой вкладки
+*/ 
+
 function ajax(event){
   event.preventDefault();
   event.stopPropagation();  
   let target = event.currentTarget   
   console.log("target", target);
-  let действие = target.getAttribute('action');
-  let данныеФормы = new FormData(target); // создаем объект FormData и автоматически парсим форму
-  данныеФормы.append("действие", "добавитьОбработчик")
-  fetch(href, {
-        method: 'AJAX',
-        body: formData, // передаем данные формы в теле запроса
+  let действие = target.getAttribute('href');
+  // let данныеФормы = new FormData(target); // создаем объект FormData и автоматически парсим форму
+  // данныеФормы.append("действие", "добавитьОбработчик")
+  fetch(действие, {
+        method: 'AJAX',   
         headers: {
           'Method': 'AJAX'
         }
@@ -78,7 +81,7 @@ function ajaxPost(event){
 
 
 
-
+/* ОткрытьСтраницу - Открывает новую вкладку и загружает страницу. для товаров к примеру. */
 function ОткрытьСтраницу(event) { 
   event.preventDefault();
   event.stopPropagation();  

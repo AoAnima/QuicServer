@@ -1,26 +1,12 @@
 {{define "обработчики"}}
+<div id="dashboard-content" data-updateMethod="replaceWith">
     <section class="section">
         <div class="container">
 
             <div id="addRote">
              {{template "формаНовогоОбработчика" .}}
             </div>
-            <div class="modal" id="newRouteModal">
-                <div class="modal-background"></div>
-                <div class="modal-card">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Новый Маршрут</p>
-                        <button class="delete" aria-label="close"></button>
-                    </header>
-                    <section class="modal-card-body">
-                        <!-- Content ... -->
-                    </section>
-                    <footer class="modal-card-foot">
-                        <button class="button is-success">Сохранить изменения</button>
-                        <button class="button">Отмена</button>
-                    </footer>
-                </div>
-            </div>
+          
 
             <table class="table is-fullwidth">
                 <thead>
@@ -37,6 +23,6 @@
             </table>
         </div>
     </section>
-
+</div>
 
 {{end}}
