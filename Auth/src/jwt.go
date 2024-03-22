@@ -26,7 +26,7 @@ func СоздатьJWT(данныеТокена ДанныеКлиента) (str
 
 	требование := ПараметрыКлиента{
 		ИдКлиента: данныеТокена.ИдКлиента.String(),
-		Права:     данныеТокена.Права,
+		// Права:     данныеТокена.Права,
 		RegisteredClaims: jwt.RegisteredClaims{
 			// ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour).Round(time.Second)),

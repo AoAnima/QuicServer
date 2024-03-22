@@ -23,13 +23,15 @@ func Инфо(формат string, данные ...interface{}) {
 	// формат = strings.ReplaceAll(формат, "%+v", "\u001b[38;5;48m %+v  \u001b[0m\u001b[38;5;75m")
 	// green := color.FgGreen.Render
 	// textColor := color.C256(75)
+
 	данные = КрасивыйВывод(данные...)
 
 	str := fmt.Sprintf("\x1b[0m\x1b[36m ИНФО : \x1b[38;5;123m "+формат+" \x1b[0m \n", данные...)
 	// str := fmt.Sprintf("\u001b[0m\u001b[36m ИНФО : \u001b[38;5;75m "+формат+" \u001b[0m \n", данные...)
 
 	// str := fmt.Sprintf(green("1 ИНФО :")+textColor.Sprint(формат), данные...)
-	// log.Printf("log %+s", red(данные...))
+	// log.Printf("log %+v", данные)
+
 	err := StdLog.Output(2, str)
 	// err := StdLog.Output(2, str)
 
@@ -61,9 +63,9 @@ func Ошибка(формат string, данные ...interface{}) {
 }
 func КрасивыйВывод(данные ...interface{}) []interface{} {
 	данныеДляВывода := []interface{}{}
-	// log.Print(данные)
+
 	for _, д := range данные {
-		// log.Printf("1 %+v %#T", д, д)
+
 		switch д.(type) {
 		case byte:
 			данныеДляВывода = append(данныеДляВывода, д)
@@ -112,56 +114,67 @@ func КрасивыйВывод(данные ...interface{}) []interface{} {
 			// log.Printf("2 %+v ", д)
 			empJSON, err := json.MarshalIndent(д, "", "  ")
 			if err != nil {
+				log.Printf("err %+v ", err.Error())
 				данныеДляВывода = append(данныеДляВывода, д)
 			}
 			данныеДляВывода = append(данныеДляВывода, string(empJSON))
+			continue
+
+		case http.Response:
+
+			empJSON, err := json.MarshalIndent(д, "", "  ")
+			if err != nil {
+				log.Printf("err %+v ", err.Error())
+				данныеДляВывода = append(данныеДляВывода, д)
+			} else {
+				данныеДляВывода = append(данныеДляВывода, string(empJSON))
+
+			}
 			continue
 		case quic.Stream:
 			// log.Printf("2 %+v ", д)
 			empJSON, err := json.MarshalIndent(д, "", "  ")
 			if err != nil {
-				log.Printf("101 *Stream %#T %+v %+v \n", д, д, err)
+				log.Printf("err %+v ", err.Error())
 
 				данныеДляВывода = append(данныеДляВывода, д)
+			} else {
+				данныеДляВывода = append(данныеДляВывода, string(empJSON))
 			}
-			данныеДляВывода = append(данныеДляВывода, string(empJSON))
 			continue
 		case *quic.Stream:
-			log.Printf("101 *Stream %#T %+v \n", д, д)
 
-			// log.Printf("2 %+v %+v", тип, д)
-			// log.Printf("2 %+v ", д)
 			empJSON, err := json.MarshalIndent(д, "", "  ")
 			if err != nil {
-				log.Printf("101 *Stream %#T %+v %+v \n", д, д, err)
+				log.Printf("err %+v ", err.Error())
 				данныеДляВывода = append(данныеДляВывода, д)
+			} else {
+				данныеДляВывода = append(данныеДляВывода, string(empJSON))
 			}
-			данныеДляВывода = append(данныеДляВывода, string(empJSON))
 			continue
 		case string:
-			// log.Printf("2 %+v %+v", тип, д)
-			// log.Printf("2 %+v ", д)
+
 			данныеДляВывода = append(данныеДляВывода, д)
 			continue
 		default:
-			// log.Printf("3 %+v ", д)
-			// log.Printf("default %+v %+v", тип, д)
+
 			empJSON, err := json.MarshalIndent(д, "", "  ")
 			if err != nil {
-				log.Printf("default %+v %#T", д, д)
+				// log.Printf("default %+v ", err.Error())
 				данныеДляВывода = append(данныеДляВывода, д)
+			} else {
+				данныеДляВывода = append(данныеДляВывода, string(empJSON))
 			}
-			данныеДляВывода = append(данныеДляВывода, string(empJSON))
 		}
 
 	}
-	// log.Print(данныеДляВывода)
+
 	return данныеДляВывода
 }
 
 func Вывод(w io.Writer, формат string, данные ...interface{}) {
 
-	fmt.Fprintf(w, формат, данные)
+	// fmt.Fprintf(w, формат, данные)
 }
 
 //var Stdout = log.New(os.Stdout, "", log.Llongfile)

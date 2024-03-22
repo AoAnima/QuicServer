@@ -140,7 +140,7 @@
           "command": "${workspaceFolder}/Orkestrator/bin/Orkestrator.exe SynQuic HTTPServerQuic RenderService"
         },
         "linux": {
-          // "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}"
+          "command": "${workspaceFolder}/Orkestrator/bin/Orkestrator SynQuic HTTPServerQuic RenderService"
         },
         "problemMatcher": [
           "$go"
