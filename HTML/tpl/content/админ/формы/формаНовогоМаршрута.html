@@ -5,21 +5,47 @@
             <div class="field">
                 <label class="label">URL</label>
                 <div class="control">
-                    <input class="input" type="text" name="url" placeholder="URL">
+                    <input class="input" type="text" name="маршрут" placeholder="URL">
                 </div>
             </div>
-
-            <div class="field">
-                <label class="label">Доступ</label>
-                <div class="control">
-                    <input class="input" type="text" name="access" placeholder="Доступ">
+            <fieldset id="access_1">
+                <div class="field">
+                    <label class="label">Роль</label>
+                    <div class="control">
+                        <select id="role_1" name="роль[]">
+                            <option value="Роль1">Роль 1</option>
+                            <option value="Роль2">Роль 2</option>
+                            <option value="Роль3">Роль 3</option>
+                            <option value="Роль4">Роль 4</option>
+                        </select>
+                    </div>                 
                 </div>
-            </div>
 
+                <div class="field">
+                    <label class="label">Права доступа</label>
+                    <div class="control">
+                        <select id="service_1" multiple name="доступ[]">
+                            <option value="доступ1">доступ 1</option>
+                            <option value="доступ2">доступ 2</option>
+                            <option value="доступ3">доступ 3</option>
+                            <option value="доступ4">доступ 4</option>
+                        </select>
+                    </div>    
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="button" class="button is-link" onclick="удалитьПраваДоступа('access_1')">Удалить права Доступа</button>
+                    </div>
+                    <div class="control">
+                        <button type="button" class="button is-link"  onclick="добавитьПраваДоступа('access_1')">Добавить права Доступа</button>
+                    </div>
+                </div>
+
+            </fieldset>
             <div class="field">
                 <label class="label">Описание</label>
                 <div class="control">
-                    <textarea class="textarea" name="description" placeholder="Описание"></textarea>
+                    <textarea class="textarea" name="описание" placeholder="Описание"></textarea>
                 </div>
             </div>
 
@@ -77,10 +103,19 @@
 {{define "ДобавлениеУдалениеБлокаОбработчиков.js"}} 
 
 <script>
+
+
+
+
     // Нужно добавить в рендер функцию, точнее в парсинг функцию обработчик который будет собирать все javascript из шаблонов и помещать их в один файл,  
     /*
     может можно сделать так чтобы каждый js блок кода был объявлен как {{define "обработчикФормыНовогоМаршрута.js"}}
     */
+
+
+    function добавитьПраваДоступа (){
+
+    }
 
     var количествоОбработчиков = 0 // просто номе добавленного обработчика, не уменьшается при удалении, потому что просто для идентификации
 console.log("sdasd")

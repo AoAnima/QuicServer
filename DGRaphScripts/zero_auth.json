@@ -1,4 +1,5 @@
 {
+ 
     "telemetry": "sentry=false",
     "postings": "./db/zero/p",
     "wal":"./db/zero/w"   , 

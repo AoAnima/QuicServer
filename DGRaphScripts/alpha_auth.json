@@ -1,5 +1,7 @@
 {
     "telemetry": "sentry=false",
+    "limit": "mutations=strict",
+    "mutations":"strict",
     "postings": "./db/alpha/p",
     "wal":"./db/alpha/w"   , 
     "badger": { "compression": "zstd:1" },  
