@@ -436,7 +436,7 @@ func Json(данныеДляКодирования interface{}) ([]byte, error) 
 }
 
 func ИзJson(пакет []byte, объект interface{}) error {
-	Инфо(" ДекодироватьПакет ИзJson  \n", объект)
+	Инфо(" ДекодироватьПакет ИзJson %#T \n", объект)
 	switch v := объект.(type) {
 	case *string:
 		*v = string(пакет)
@@ -445,7 +445,7 @@ func ИзJson(пакет []byte, объект interface{}) error {
 	default:
 		err := jsoniter.Unmarshal([]byte(пакет), &объект)
 		if err != nil {
-			Ошибка(" err  %+v пакет > %#T < \n объект > %+s < ; \n", err.Error(), пакет, объект)
+			Ошибка(" err  %+s; \n\n Тип пакета > %#T < \n\n В какой объект помещаем: > %+s < ; \n", err.Error(), пакет, объект)
 			return err
 		}
 		// объект = v
