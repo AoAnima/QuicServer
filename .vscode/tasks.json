@@ -91,7 +91,7 @@
           "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}.exe"
         },
         "linux": {
-          "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}"
+          "command": "cd ${fileDirname}/../bin ;sudo .${pathSeparator}${fileBasenameNoExtension}"
         },
         "group": {
           "kind": "build",
@@ -116,7 +116,7 @@
           "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}.exe"
         },
         "linux": {
-          "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}"
+          "command": "sudo ${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}"
         },
         "problemMatcher": [
           "$go"

@@ -166,7 +166,7 @@ func ЗапуститьWebСервер() {
 
 	// err := http.ListenAndServe(":6060", nil)
 	if err != nil {
-		Ошибка(" %s ", err)
+		Ошибка(" %+s ", err.Error())
 	}
 	go func() {
 		http.ListenAndServe("localhost:6060", nil)

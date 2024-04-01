@@ -2,51 +2,57 @@ package main
 
 import (
 	"context"
-	"time"
+	"fmt"
+	"log"
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/DGApi"
 	. "aoanima.ru/Logger"
 	. "aoanima.ru/QErrors"
+	dgo "github.com/dgraph-io/dgo/v230"
+	"github.com/dgraph-io/dgo/v230/protos/api"
 	"github.com/google/uuid"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
-type Адрес struct {
-	Страна        string `json:"страна,omitempty"`
-	Город         string `json:"город,omitempty"`
-	Район         string `json:"район,omitempty"`
-	ТипУлицы      string `json:"тип_улицы,omitempty"`
-	НазваниеУлицы string `json:"название_улицы,omitempty"`
-	НомерДома     string `json:"номер_дома,omitempty"`
-	Корпус        string `json:"корпус,omitempty"`
-	НомерКвартиры string `json:"номер_квартиры,omitempty"`
-}
-type Секрет struct {
-	ИдКлиента string    `json:"ид_клиента"`
-	Секрет    string    `json:"секрет"`
-	Обновлен  time.Time `json:"обновлен"`
-}
-type ДанныеКлиента struct {
-	Имя       string    `json:"имя,omitempty"`
-	Фамилия   string    `json:"фамилия,omitempty"`
-	Отчество  string    `json:"отчество,omitempty"`
-	ИдКлиента uuid.UUID `json:"ид_клиента,omitempty"`
-	Роль      []string  `json:"роль,omitempty"`
-	Права     []string  `json:"права_доступа,omitempty"`
-	Статус    string    `json:"статус,omitempty"`
-	Аватар    string    `json:"аватар,omitempty"`
-	Email     string    `json:"email,omitempty"`
-	Логин     string    `json:"логин,omitempty"`
-	Пароль    string    `json:"пароль,omitempty"`
-	JWT       string    `json:"jwt,omitempty"`
-	Телефон   string    `json:"телефон,omitempty"`
-	Адрес     Адрес     `json:"адрес,omitempty"`
-	Создан    time.Time `json:"создан,omitempty"`
-	Обновлен  time.Time `json:"обновлен,omitempty"`
-	ОСебе     string    `json:"о_себе,omitempty"`
-	СоцСети   []string  `json:"социальные_ссылки,omitempty"`
-	Профиль   map[string]interface{}
-}
+// type Адрес struct {
+// 	Страна        string `json:"страна,omitempty"`
+// 	Город         string `json:"город,omitempty"`
+// 	Район         string `json:"район,omitempty"`
+// 	ТипУлицы      string `json:"тип_улицы,omitempty"`
+// 	НазваниеУлицы string `json:"название_улицы,omitempty"`
+// 	НомерДома     string `json:"номер_дома,omitempty"`
+// 	Корпус        string `json:"корпус,omitempty"`
+// 	НомерКвартиры string `json:"номер_квартиры,omitempty"`
+// }
+// type Секрет struct {
+// 	ИдКлиента string    `json:"ид_клиента"`
+// 	Секрет    string    `json:"секрет"`
+// 	Обновлен  time.Time `json:"обновлен"`
+// }
+// type ДанныеКлиента struct {
+// 	Имя       string    `json:"имя,omitempty"`
+// 	Фамилия   string    `json:"фамилия,omitempty"`
+// 	Отчество  string    `json:"отчество,omitempty"`
+// 	ИдКлиента uuid.UUID `json:"ид_клиента,omitempty"`
+// 	Роль      []string  `json:"роль,omitempty"`
+// 	Права     []string  `json:"права_доступа,omitempty"`
+// 	Статус    string    `json:"статус,omitempty"`
+// 	Аватар    string    `json:"аватар,omitempty"`
+// 	Email     string    `json:"email,omitempty"`
+// 	Логин     string    `json:"логин,omitempty"`
+// 	Пароль    string    `json:"пароль,omitempty"`
+// 	JWT       string    `json:"jwt,omitempty"`
+// 	Телефон   string    `json:"телефон,omitempty"`
+// 	Адрес     Адрес     `json:"адрес,omitempty"`
+// 	Создан    time.Time `json:"создан,omitempty"`
+// 	Обновлен  time.Time `json:"обновлен,omitempty"`
+// 	ОСебе     string    `json:"о_себе,omitempty"`
+// 	СоцСети   []string  `json:"социальные_ссылки,omitempty"`
+// 	Профиль   map[string]interface{}
+// }
 
 var База = ДГраф()
 
@@ -140,6 +146,7 @@ func main() {
 	// }
 	// Аутентификация()
 	ИзменитьКоличествоПопытокАутентификации()
+	Аутентификация()
 	// ПримерРегистрацииКлиента()
 	// свободен, статуслогин := ЛогинСвободен("anima_ao")
 	// Инфо("ЛогинСвободен %+v  статуслогин %+v \n", свободен, статуслогин)
@@ -147,6 +154,9 @@ func main() {
 	// свободен, статуслогин = EmailСвободен("nefri@ya.ru")
 	// Инфо("EmailСвободен %+v  статус  %+v \n", свободен, статуслогин)
 
+	// InitSchema()
+	// // SetClient()
+	// Auth()
 }
 
 func ИзменитьКоличествоПопытокАутентификации() {
@@ -169,50 +179,49 @@ func ИзменитьКоличествоПопытокАутентификац�
 	defer транзакция.Discard(ctx)
 	данные := ДанныеЗапроса{
 		Запрос: `query User($login: string, $pass: string) {
-					 v as val(func: eq(<логин>, $login) ) {		
+					 var(func: eq(<логин>, $login) ) {
 						<статус_пароля> as checkpwd(<пароль>, $pass)
 					}
 					<ПарольВерный>(func: eq(val(<статус_пароля>), 1)) {
-						<aутентифицирован>: val(<статус_пароля>)	
+						<aутентифицирован>: val(<статус_пароля>)
+						uid
 						<ид_клиента>
-						<имя>						
+						<имя>
 						<отчество>
-						<логин>		
-						email					
-						<права_доступа>				
-						<статус>							
-						jwt
-						<количество_неудачных_попыток_входа>	
-						expand(_all_)		
-						
-									
+						<логин>
+						email
+						<права_доступа>
+						<статус>
+						jwt					
+						<количество_неудачных_попыток_входа>
+						<удача> as <количество_удачных_попыток_входа>
+						<количество_удач> as math(<удача>+1)	
 					}
-					f(func: uid(v)) {
-						<логин>						
-					}
+
 					<ПарольНеВерный>(func: eq(val(<статус_пароля>), 0)) {
 						<aутентифицирован>: val(<статус_пароля>)
-						<количество_неудачных_попыток_входа>						
-						expand(_all_)
+						<неудача> as <количество_неудачных_попыток_входа>
+						<количество_неудач> as math(<неудача>+1)	
 					}
 				}
 				`,
 		Мутация: []Мутация{
 			{
-				Условие: "@if(eq(val(<статус_пароля>), 1))",
+				Условие: "@if(ge(len(<удача>), 1))",
 				Мутация: []byte(`
 									{
-									"uid": "uid(v)",
-									"количество_неудачных_попыток_входа": 3
+									"uid": "uid(статус_пароля)",
+									"количество_удачных_попыток_входа": "val(количество_удач)",
+									"количество_неудачных_попыток_входа": 0
 									}
 								`),
 			},
 			{
-				Условие: "@if(eq(val(<статус_пароля>), 0))",
+				Условие: "@if(ge(len(<неудача>), 1))",
 				Мутация: []byte(`
 					{
-					"uid": "0x111c7",
-					"количество_неудачных_попыток_входа": 3
+					"uid": "uid(статус_пароля)",
+					"количество_неудачных_попыток_входа": "val(количество_неудач)"
 					}
 				`),
 			},
@@ -230,7 +239,6 @@ func ИзменитьКоличествоПопытокАутентификац�
 			"$pass":  "password",
 		},
 	}
-
 	ответ, статус := транзакция.Измененить(данные, ctx)
 	Инфо(" %+v  %+v \n", ответ, статус)
 	транзакция.Commit(ctx)
@@ -255,15 +263,14 @@ func Аутентификация() {
 				<права_доступа>				
 				<статус>							
 				jwt	
+				<количество_неудачных_попыток_входа>
+				<количество_удачных_попыток_входа>
 			  }
 			
 			  <ПарольНеВерный>(func: eq(val(<статус_пароля>), 0)) {
 				<статус_пароля>: val(<статус_пароля>)
 				expand(_all_)
 			  }
-		}
-		mutation  {
-			
 		}
 		`,
 		Данные: map[string]string{
@@ -274,7 +281,7 @@ func Аутентификация() {
 
 	ответ, статус := База.Получить(запрос)
 
-	Инфо("ответ %+s; статус %+v \n", ответ, статус)
+	Инфо("Аутентификация ответ %+s; статус %+v \n", ответ, статус)
 
 }
 
@@ -497,7 +504,7 @@ func ПримерРегистрацииКлиента() {
 		},
 	}
 
-	данныеПользователя, статусПолучения := транзакция.Получить(данные, ctx)
+	данныеПользователя, статусПолучения := транзакция.Получить(данные)
 	Инфо(" данныеПользователя %+s  статусПолученияия %+v  данные %+v \n", данныеПользователя, статусПолучения, данные)
 	транзакция.Commit(ctx)
 }
@@ -538,6 +545,8 @@ var СхемаБазы = `<маршрут>: string  @index(exact) @upsert .
 									<создатель>
 							}							
 							<количество_неудачных_попыток_входа> : int .
+							<количество_удачных_попыток_входа> : int .
+							<aутентифицирован>: bool .
 							<ид_клиента>: string @index(exact) @upsert .
 							<права_доступа>: [string] .
 							<секрет> : string .
@@ -580,7 +589,9 @@ var СхемаБазы = `<маршрут>: string  @index(exact) @upsert .
 												<номер_квартиры>
 										}
 										type <Пользователь> {
+											<aутентифицирован>
 												<количество_неудачных_попыток_входа>
+												<количество_удачных_попыток_входа>
 												<ид_клиента>
 												<имя>
 												<фамилия>
@@ -615,3 +626,156 @@ var СхемаБазы = `<маршрут>: string  @index(exact) @upsert .
 // 							"описание": "описание маргрута",
 // 							"dgraph.type": "Маршрут"
 // 				}]}`
+
+var Schema = `
+	login: string @index(exact) @upsert .
+	password: password .
+	authorized: bool .
+	borken_authorization: int .
+	type Uuser {
+		login
+		password
+		authorized
+		borken_authorization
+	}
+`
+
+func DgraphConnect() (*dgo.Dgraph, func()) {
+	conn, err := grpc.Dial("localhost:9080", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	dc := api.NewDgraphClient(conn)
+	return dgo.NewDgraphClient(dc), func() {
+		if err := conn.Close(); err != nil {
+			log.Printf("Error while closing connection:%v", err)
+		}
+	}
+
+}
+
+func InitSchema() {
+	dg, cancel := DgraphConnect()
+	defer cancel()
+	err := dg.Alter(context.Background(), &api.Operation{
+		Schema: Schema,
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func Auth() {
+	dg, cancel := DgraphConnect()
+	defer cancel()
+	ctx := context.Background()
+	req := &api.Request{
+		CommitNow: true,
+		Query: `query User($login: string, $pass: string) {
+						var(func: eq(login, $login)){								
+							status as checkpwd(password, $pass)
+						}	
+						User(func: eq(val(status), 1)) {
+							login
+							email
+							authorized : val(status)
+						}	
+						BrokenAuth(func: eq(val(status), 0)) {
+							login							
+							authorized : val(status)
+							countBroken as borken_authorization
+							countBrokenAuth as math(countBroken+1)
+
+						}				
+					}
+			`,
+		Mutations: []*api.Mutation{
+			{
+				Cond: "@if(eq(val(status), 1))",
+				SetJson: []byte(`{
+					"uid": "uid(status)",
+					"authorized": "true",
+					"borken_authorization": 0
+					}`),
+			},
+			{
+				Cond: "@if(eq(val(status), 0))",
+				SetJson: []byte(`{
+					"uid": "uid(status)",
+					"authorized": true,
+					"borken_authorization": "val(countBrokenAuth)"
+					}`),
+			},
+		},
+		Vars: map[string]string{
+			"$login": "UserName",
+			"$pass":  "Password",
+		},
+	}
+	fmt.Printf(" req %+v \n", req)
+	res, err := dg.NewTxn().Do(ctx, req)
+
+	fmt.Printf("%+v \n", res)
+	if err != nil {
+		fmt.Printf("err %+v; res %+v \n", err, res)
+	}
+}
+
+func SetClient() {
+	dg, cancel := DgraphConnect()
+	defer cancel()
+	ctx := context.Background()
+	req := &api.Request{
+		CommitNow: true,
+		Query: `query User($login : string, $email : string) {
+						logins(func: eq(login, $login)){								
+							loginCount as login
+						}	
+						emails(func: eq(email, $email)) {
+							emailCount as email		
+						}				
+					
+					}
+			`,
+		Mutations: []*api.Mutation{
+			{
+				Cond: "@if(lt(len(loginCount), 1) OR lt(len(emailCount), 1))",
+				SetJson: []byte(`{
+					"borken_authorization": 0,
+					"login": "UserName",
+					"email": "userName@mail.com",
+					"password": "Password"
+					}`),
+			},
+		},
+		Vars: map[string]string{
+			"$login": "UserName",
+			"$email": "userName@mail.com",
+		},
+	}
+	fmt.Printf(" req %+v \n", req)
+	res, err := dg.NewTxn().Do(ctx, req)
+
+	fmt.Printf("%+v \n", res)
+	if err != nil {
+		fmt.Printf("err %+v; res %+v \n", err, res)
+	}
+
+}
+
+// query User($login : string, $email : string) {
+// 	logins(func: eq(login, $login)){\
+// 		loginCount as login
+// 		}
+// 		emails: eq(email, $email)) {
+// 			emailCount as email
+// 			}
+// 		}
+// 		" vars:<key:"$email" value:"userName@mail.com" > vars:<key:"$login" value:"UserName" >
+// 		mutations:<set_json:"{
+// 			"login": "UserName",
+// 			"email": "userName@mail.com",
+// 			"password": "Password"
+// 			}">
+// 		cond:"@if(lt(len(loginCount), 1) AND lt(len(email), 1))"

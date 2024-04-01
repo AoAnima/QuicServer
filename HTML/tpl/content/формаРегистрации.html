@@ -10,11 +10,20 @@
       </header>
       <div class="card-content">
         <div class="content">
-          <form>
+          <form  id="registerForm" action="регистрация" method="ajaxPost" jsHanlder="Перехват sumbit со всего документа  обрабатывается через ajaxPost()">
+            <div class="field">
+              <label class="label" for="login">Логин</label>
+              <div class="control has-icons-left">
+                <input class="input" type="text" id="login"  name="логин" placeholder="Логин">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+              </div>
+            </div>
             <div class="field">
               <label class="label" for="email">Email</label>
               <div class="control has-icons-left">
-                <input class="input" type="email" id="email" placeholder="Email">
+                <input class="input" type="email" id="email" name="email" placeholder="Email">
                 <span class="icon is-small is-left">
                   <i class="fas fa-envelope"></i>
                 </span>
@@ -23,7 +32,7 @@
             <div class="field">
               <label class="label" for="password">Пароль</label>
               <div class="control has-icons-left">
-                <input class="input" type="password" id="password" placeholder="Пароль">
+                <input class="input" type="password" id="password" name="пароль" placeholder="Пароль">
                 <span class="icon is-small is-left">
                   <i class="fas fa-lock"></i>
                 </span>
@@ -32,7 +41,7 @@
             <div class="field">
               <label class="label" for="repeat-password">Повторите пароль</label>
               <div class="control has-icons-left">
-                <input class="input" type="password" id="repeat-password" placeholder="Повторите пароль">
+                <input class="input" type="password" id="repeat-password" name="повто_пароля" placeholder="Повторите пароль">
                 <span class="icon is-small is-left">
                   <i class="fas fa-lock"></i>
                 </span>

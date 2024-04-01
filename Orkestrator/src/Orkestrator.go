@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 
 	_ "aoanima.ru/ConnQuic"
@@ -50,7 +49,12 @@ func main() {
 
 func ЗапускСервиса(папка string) {
 
-	открытаяПапка, ошибка := os.Open("D:/QuicMarket/GoP/" + папка + "/bin/")
+	dir, err := os.Getwd()
+	Инфо(" %+v  %+v \n", dir, err)
+	ДиреткорияПрокета := dir + "/../../"
+
+	открытаяПапка, ошибка := os.Open(ДиреткорияПрокета + папка + "/bin/")
+	// открытаяПапка, ошибка := os.Open("D:/QuicMarket/GoP/" + папка + "/bin/")
 	if ошибка != nil {
 		Ошибка("  %+v \n", ошибка)
 	}
@@ -62,15 +66,21 @@ func ЗапускСервиса(папка string) {
 	}
 
 	for _, файл := range файлы {
-		if filepath.Ext(файл.Name()) == ".exe" {
-			Инфо(" Запуск приложения%+v \n", "D:/QuicMarket/GoP/"+папка+"/bin/"+файл.Name())
+		Инфо(" %+v  %+v \n", файл.Name(), папка)
 
-			cmd := exec.Command("cmd", "/C", "start", "cmd.exe", "/K", "D:/QuicMarket/GoP/"+папка+"/bin/"+файл.Name())
+		// if filepath.Ext(файл.Name()) == ".exe" {
+		if файл.Name() == папка {
+			go func() {
+				Инфо(" Запуск приложения%+v \n", ДиреткорияПрокета+папка+"/bin/"+файл.Name())
+				cmd := exec.Command("mate-terminal", "-e", "bash -c '"+ДиреткорияПрокета+папка+"/bin/"+файл.Name()+"; exec bash'")
 
-			if err := cmd.Run(); err != nil {
-				Ошибка(" %+v \n", err)
-			}
-			break
+				// cmd := exec.Command("cmd", "/C", "start", "cmd.exe", "/K", "D:/QuicMarket/GoP/"+папка+"/bin/"+файл.Name())
+
+				if err := cmd.Run(); err != nil {
+					Ошибка(" %+v \n", err)
+				}
+				// break
+			}()
 		}
 	}
 }
