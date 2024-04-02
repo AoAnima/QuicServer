@@ -9,6 +9,8 @@ function ajax(event){
   let target = event.currentTarget   
   console.log("target", target);
   let действие = target.getAttribute('href');
+  const headers = response.headers;
+  
   // let данныеФормы = new FormData(target); // создаем объект FormData и автоматически парсим форму
   // данныеФормы.append("действие", "добавитьОбработчик")
   fetch(действие, {

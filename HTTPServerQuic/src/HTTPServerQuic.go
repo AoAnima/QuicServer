@@ -154,6 +154,23 @@ func УстановитьЗаголовкиОтвета(сообщение *Со
 	w.Header().Set("X-UID", сообщение.ИдКлиента.String())
 	w.Header().Set("X-UAT", сообщение.JWT)
 
+	jwtCookie := &http.Cookie{
+		Name:    "jwt",
+		Value:   сообщение.JWT,
+		Path:    "/",
+		Expires: time.Now().Add(168 * time.Hour), // Устанавливаем срок действия cookie на 168 часов - 7 дней
+	}
+	uuidCookie := &http.Cookie{
+		Name:    "uuid",
+		Value:   сообщение.ИдКлиента.String(),
+		Path:    "/",
+		Expires: time.Now().Add(168 * time.Hour), // Устанавливаем срок действия cookie на 168 часов - 7 дней
+	}
+
+	// Устанавливаем cookie в ответе
+	http.SetCookie(w, jwtCookie)
+	http.SetCookie(w, uuidCookie)
+
 }
 
 func ЗапуститьWebСервер() {
