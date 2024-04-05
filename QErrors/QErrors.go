@@ -8,6 +8,7 @@ type ОшибкаБазы struct {
 	Код      int
 }
 type СтатусБазы ОшибкаБазы
+
 type ОшибкаСервиса struct {
 	Текст string
 	Код   int
