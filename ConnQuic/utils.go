@@ -312,6 +312,37 @@ type Секрет struct {
 	Обновлен  time.Time `json:"обновлен,omitempty"`
 }
 
+
+type КонфигурацияОбработчика struct {
+	UID          string         `json:"uid,omitempty"`
+	Маршрут      string         `json:"маршрут,omitempty"`
+	Действие     string         `json:"действие,omitempty"`
+	Обработчик   string         `json:"обработчик,omitempty"`
+	ПраваДоступа []ПраваДоступа `json:"доступ"`
+	Описание     string         `json:"описание,omitempty"`
+	Шаблонизатор []Шаблон       `json:"шаблонизатор,omitempty"`
+	Ассинхронно  bool           `json:"ассинхронно,omitempty"`
+	Тип          string         `json:"dgraph.type,omitempty"`
+}
+
+type Шаблон struct {
+	UID          string         `json:"uid,omitempty"`
+	Тип          string         `json:"dgraph.type,omitempty"`
+	Код          int            `json:"код,omitempty"` // статус ответа сервиса QErrors
+	Шаблон       string         `json:"имя_шаблона,omitempty"`
+	ПраваДоступа []ПраваДоступа `json:"доступ,omitempty"`
+}
+type ПраваДоступа struct {
+	UID   string   `json:"uid,omitempty"`
+	Тип   string   `json:"dgraph.type,omitempty"`
+	Логин []string `json:"пользователи"`
+	Роль  []string `json:"роль"`
+	Права []string `json:"права"`
+}
+
+
+
+
 func ОпределитьДирректориюЗапуска() {
 	if ДирректорияЗапуска != "" {
 		Инфо("Директория из которой запущен текущий файл уже определена: %+v \n", ДирректорияЗапуска)
@@ -498,6 +529,7 @@ func Кодировать(данныеДляКодирования interface{}) 
 	// Инфо(" Кодировать %+s %+s \n", данные, string(данные))
 	return данные, nil
 }
+
 func Json(данныеДляКодирования interface{}) ([]byte, error) {
 
 	данные, err := jsoniter.Marshal(&данныеДляКодирования)
