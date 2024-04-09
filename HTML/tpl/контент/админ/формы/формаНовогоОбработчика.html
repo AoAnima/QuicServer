@@ -1,41 +1,321 @@
 {{define "формаНовогоОбработчика"}}
 <div class="container">
     <h1 class="title">Добавдение обработчика</h1>
-    <form id="newRouteForm" class="columns" jsHanlder="Перехват sumbit со всего документа  обрабатывается через ajaxPost()" action="добавитьОбработчик">
-        <div class="field column">
-            <label class="label">URL</label>
+    <form id="newRouteForm" class="columns is-multiline" jsHanlder="Перехват sumbit со всего документа  обрабатывается через ajaxPost()" action="добавитьОбработчик">
+        <div class="field column  is-narrow">
+            <label class="label">URL 
+                <span class="icon has-text-info has-tooltip-arrow has-tooltip-info" data-tooltip="Не обязатель еслиестновлен обрабочтик, или действие, можно задать только URL и права, чтобы ограничить доступ к URL ">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+            </label>           
             <div class="control">
-                <input class="input" type="text" placeholder="URL" name="URL" value="url маршрут">
+                <input class="input" type="text" placeholder="URL" name="URL" value="">
+            </div>
+        </div> 
+        <div class="field column  is-narrow">
+            <label class="label">Действие 
+                <span class="icon has-text-info has-tooltip-arrow has-tooltip-info" data-tooltip="Не обязатель еслиестновлен обрабочтик, может соответствовать какой либо функции в сервисе, или быть просто обозначением очереди обработчиков. Имеет приоритет над осальными полями">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+            </label>           
+            <div class="control">
+                <input class="input" type="text" placeholder="авторизация" name="действие" value="">
             </div>
         </div>
-        <div class="field column">
-            <label class="label">HTML Шаблон</label>
+
+        <div class="field column is-narrow">
+            <label class="label">HTML Шаблон <span class="icon has-text-info has-tooltip-arrow has-tooltip-info" data-tooltip="Шаблон может быть указан в виде пути основнойКонтент/вложенныйКонтент">
+                <i class="fas fa-info-circle" ></i>
+            </span> </label>
             <div class="control">
-                <input class="input" type="text" placeholder="Шаблон" name="шаблон" value="имя шаблона">
+                <input class="input" type="text" placeholder="Шаблон" name="основнойКонтент/вложенныйКонтент" value="имя шаблона">
             </div>
         </div>
-        <div class="field column">
-            <label class="label">Обработчик</label>
-            <div class="control">
-                <input class="input" type="text" placeholder="Обработчик" name ="обработчик" value="имя обработчика">
-            </div>
-        </div>
-        <div class="field column">
-            <label class="label">Права доступа</label>
-            <div class="control">
-                <input class="input" type="text" placeholder="Права доступа" name="праваДоступа" value="имя права доступа">
-            </div>
-        </div>
+
+
         <div class="field column">
             <input class="is-checkradio" id="isActive" type="checkbox" name="isActive" checked="checked" name="активно" value="1">
             <label for="isActive">Активен</label>
         </div>
-        <div class="field column is-grouped">
-            <div class="control">
-                <button class="button is-link">Добавить</button>
+        </div>
+
+        <div id ="accessInputBlocks" class=" p-3 columns">
+            <div class="panel is-info ">
+                <div class="panel-block ">
+                    {{template "БлокПравДоступа" "1"}}                   
+
+                </div>
             </div>
         </div>
+  
+
+        <div id="handlersInputBlocks" class="p-3 columns">
+            <div class="panel is-info ">
+                <div class="panel-block ">
+                    {{template "БлокОбработчиков" "1"}}
+                </div>
+            </div>
+        </div>
+
+      
     </form>
+
 </div>
 
+    {{template "ДобавлениеУдалениеБлокаОбработчиков.js"}} 
+
+{{end}}
+
+
+{{define "БлокПравДоступа"}}
+
+    {{ $num := . }}
+    {{ if . }}
+    {{ $num := . }}
+    {{else}}
+    {{ $num := "${номер}" }}
+    {{end}}
+   
+    <fieldset class="columns" id="role_access-{{$num }}">  
+        <div class="field column" id="role-1">
+            <label class="label">Роль</label>
+            <div class="dropdown is-hoverable">
+                <div class="dropdown-trigger">
+                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                    <span>Выбрать</span>
+                    <span class="icon is-small">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                <div class="dropdown-item">
+                    <label class="checkbox ">
+                        <input type="checkbox"  name="роль[{{$num }}]" value="1"/>
+                        Роль 1
+                    </label>
+                    <hr class="dropdown-divider" />
+                    <label class="checkbox">
+                        <input type="checkbox"  name="роль[{{$num }}]" value="2"/>
+                        Роль 2
+                    </label>
+                    <hr class="dropdown-divider" />
+                    <label class="checkbox">
+                        <input type="checkbox"  name="роль[{{$num }}]" value="3"/>
+                        Роль 2
+                    </label>
+                    <hr class="dropdown-divider" />
+                    <label class="checkbox">
+                        <input type="checkbox"  name="роль[{{$num }}]" value="4"/>
+                        Роль 2
+                    </label>
+                    <hr class="dropdown-divider" />
+                    <label class="checkbox">
+                        <input type="checkbox"  name="роль[{{$num }}]" value="5"/>
+                        роль 2
+                    </label>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div> 
+
+        <div class="field column" id="access-{{$num }}">
+            <label class="label">Права доступа</label>
+            <div class="dropdown is-hoverable">
+                <div class="dropdown-trigger">
+                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                    <span>Выбрать</span>
+                    <span class="icon is-small">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                <div class="dropdown-item">
+                    <label class="checkbox ">
+                        <input type="checkbox" name="права_доступа[{{$num }}]" value="1"/>
+                        права_доступа 1
+                    </label>
+                    <hr class="dropdown-divider" />
+                    <label class="checkbox">
+                        <input type="checkbox"  name="права_доступа[{{$num }}]" value="2"/>
+                        права_доступа 2
+                    </label>
+                    <hr class="dropdown-divider" />
+                    <label class="checkbox">
+                        <input type="checkbox"  name="права_доступа[{{$num }}]" value="3"/>
+                        права_доступа 3
+                    </label>
+                    <hr class="dropdown-divider" />
+                    <label class="checkbox">
+                        <input type="checkbox"  name="права_доступа[{{$num }}]" value="4"/>
+                        права_доступа 4
+                    </label>
+                    <hr class="dropdown-divider" />
+                    <label class="checkbox">
+                        <input type="checkbox" name="права_доступа[{{$num}}]" value="5"/>
+                        права_доступа 5
+                    </label>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>    
+
+    {{template "КнопкиДобавленияУдаления" "role_access"  }}                     
+    </fieldset>
+
+
+{{end}}
+{{define "БлокОбработчиков"}}
+{{ $num := . }}
+{{ if . }}
+{{ $num := . }}
+{{else}}
+{{ $num := "${номер}" }}
+{{end}}
+            <fieldset id="service_handler-{{$num}}"  class="columns">   
+                <div class="column   ">
+                        <label class="label">№</label>
+                        <input class="input" type="number" name ="order[{{$num}}]" value="" id="order-service_handler-{{$num}}" min="1">
+                </div>
+                <div class="field column  ">
+                    <label class="label">Сервис
+                        <span class="icon has-text-info has-tooltip-arrow has-tooltip-info" data-tooltip="Нужно для того чтобы понять в какой сервис отправлять запрос для обработчки маршрута или действия, если обработчик не задан. Если задан обработчик, то скорей всего он зарегистрирован в СинКвике и соответсвует какому то Сервису">
+                            <i class="fas fa-info-circle" ></i>
+                        </span>
+
+                    </label>
+
+                    <div class="control">
+                        <!-- <input class="input" type="text" placeholder="Имя сервиса" name ="сервис" value=""> -->
+                        <div class="select">
+                            <select id="service-1" name="сервис[{{$num}}]"  onchange="изменитьСписокОбработчиков(event)">
+                                <option value="option1">Сервис 1</option>
+                                <option value="option2">Сервис 2</option>
+                                <option value="option3">Сервис 3</option>
+                                <option value="option4">Сервис 4</option>
+                            </select>
+                        </div>
+                    </div>
+                </div> 
+                <div class="field column">
+                    <label class="label">Обработчик
+                        <span class="icon has-text-info has-tooltip-arrow has-tooltip-info" data-tooltip="Имя обработчика который существуе в Сервисе, если задан то поле Сервис можно не заполнять">
+                            <i class="fas fa-info-circle" ></i>
+                        </span>
+                    </label>
+                    <div class="select">
+                        <!-- <input class="input" type="text" placeholder="Обработчик" name ="обработчик" value=""> -->
+                        <div class="control">
+                            <select id="handler-1"  name="обработчик[{{$num}}]">
+                                <option value="option1">Обработчик 1</option>
+                                <option value="option2">Обработчик 2</option>
+                                <option value="option3">Обработчик 3</option>
+                                <option value="option4">Обработчик 4</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+               {{template "КнопкиДобавленияУдаления" "service_handler"}} 
+              </fieldset>     
+{{end}}
+
+{{define "КнопкиДобавленияУдаления"}}
+    <div class="field column is-grouped  is-align-items-center">
+        <div class="control">
+            <button onclick="добавитьБлок(event, '{{.}}')" class="button is-link fas fa-plus has-background-primary is-small "> 
+        </div> 
+        <div class="control">
+            <button onclick="удалитьБлок(event, '{{.}}-1')" class="button is-link fas fa-minus has-background-danger is-small "></button>
+        </div>
+    </div>
+{{end}}
+
+
+{{define "ДобавлениеУдалениеБлокаОбработчиков.js"}} 
+
+<script>
+    function Шаблон (имяШаблона, номер) {        
+        let шаблоны =   {
+            "role_access": `{{template "БлокПравДоступа"}}`,
+            "service_handler": `{{template "БлокОбработчиков"}}`,
+        }       
+        return шаблоны[имяШаблона]
+    }  
+
+    function добавитьБлок(event, имяШаблона) {
+       
+        
+        let блоки = document.querySelectorAll(`[id^="${имяШаблона}"]`);
+        console.log(блоки);
+// теперь elements содержит все элементы с id, начинающимся с "yourString"
+
+        let количествоБлоков = блоки.length;
+        let номерНовогоБлока = +количествоБлоков + 1;
+        let новыйИд = `${имяШаблона}-${номерНовогоБлока}`;
+        console.log(имяШаблона, номерНовогоБлока);
+        let новыйБлок = Шаблон(имяШаблона, номерНовогоБлока);
+        let блокКоторыйВызвалСобытие = event.target.closest(`[id^="${имяШаблона}"]`);
+        console.log("блокКоторыйВызвалСобытие", блокКоторыйВызвалСобытие);
+        блокКоторыйВызвалСобытие.insertAdjacentHTML('afterend', новыйБлок);
+    }
+
+    // Нужно добавить в рендер функцию, точнее в парсинг функцию обработчик который будет собирать все javascript из шаблонов и помещать их в один файл,  
+    /*
+    может можно сделать так чтобы каждый js блок кода был объявлен как define "обработчикФормыНовогоМаршрута.js"
+    */
+
+    var количествоОбработчиков = 0 // просто номер добавленного обработчика, не уменьшается при удалении, потому что просто для идентификации
+
+    // function удалитьОбработчик(идТекущегоОбработчика) {
+    //     let удаляемыйБлок = document.getElementById(идТекущегоОбработчика)
+    //     следующийБлок = удаляемыйБлок.nextElementSibling
+    //     while (следующийБлок) {
+    //         следующийБлок.dataset.order = следующийБлок.dataset.order - 1
+    //         следующийБлок = следующийБлок.nextElementSibling
+    //     }
+    //     удаляемыйБлок.remove()
+
+    // }
+    // function добавитьОбработчик(идТекущегоОбработчика) {
+    //     // event.preventDefault();
+    //     // event.stopPropagation();
+
+    //     var ИдНовогоОбработчика=количествоОбработчиков+1
+
+    //     let предидущийОбработчик=document.getElementById(идТекущегоОбработчика) 
+
+
+    //     // если решили вставить в середину, то проверим следующие элементы и изменим очередь всех послеюущий обработчиков +1
+    //     let следущийСуществующийЭлемент = предидущийОбработчик.nextElementSibling
+    //     if (следущийСуществующийЭлемент) {            
+    //         while (следущийСуществующийЭлемент) {
+    //            let очередь=parseInt(следущийСуществующийЭлемент.dataset.order  ,10)           
+                
+    //            let инпутОчереди = document.getElementById(`order_handler-${очередь}`)
+    //             инпутОчереди.value= очередь + 1
+    //             инпутОчереди.id= `order_handler-${очередь+1}`                
+    //             следущийСуществующийЭлемент.dataset.order = очередь + 1
+    //             следущийСуществующийЭлемент = следущийСуществующийЭлемент.nextElementSibling
+    //         }
+    //     }
+
+    //     let очередь=parseInt(предидущийОбработчик.dataset.order,10) + 1 // получаем очередь предидущего обработчика и формируем следующий номер очереди +1
+        
+
+    //     const inputBlocks = document.getElementById('inputBlocks');
+    //     const новыйБлок = document.createElement('div');
+ 
+    //     новыйБлок.className = 'block';
+    //     новыйБлок.innerHTML = "";
+    //     предидущийОбработчик.insertAdjacentElement('afterend', новыйБлок);
+
+    //     // inputBlocks.appendChild(block);
+    //     количествоОбработчиков=ИдНовогоОбработчика
+    // }
+</script>
 {{end}}

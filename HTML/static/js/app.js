@@ -3,16 +3,20 @@
 Обработка нажатия кнопок ajax ? в соновном меню, личный кабинет, не требующих открытия новой вкладки
 */ 
 
-function ajax(event){
+function ajax(event, изменитьАдреснуюСтроку = false) {
   event.preventDefault();
   event.stopPropagation();  
   let target = event.currentTarget   
   console.log("target", target);
   let действие = target.getAttribute('href');
-  const headers = response.headers;
+  // const headers = response.headers;
   
   // let данныеФормы = new FormData(target); // создаем объект FormData и автоматически парсим форму
   // данныеФормы.append("действие", "добавитьОбработчик")
+  if (изменитьАдреснуюСтроку) {
+    history.pushState({}, '', действие);
+
+  }
   fetch(действие, {
         method: 'AJAX',   
         headers: {

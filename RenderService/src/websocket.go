@@ -69,7 +69,7 @@ func WSСервер() {
 	Инфо(" конфигТлс %+v \n", конфигТлс)
 	err = srv.ListenAndServeTLS("./cert/server.crt", "./cert/server.key")
 	if err != nil {
-		Ошибка(" %s ", err)
+		Ошибка(" %+s ", err.Error())
 	}
 }
 

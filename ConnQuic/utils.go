@@ -312,7 +312,6 @@ type Секрет struct {
 	Обновлен  time.Time `json:"обновлен,omitempty"`
 }
 
-
 type КонфигурацияОбработчика struct {
 	UID          string         `json:"uid,omitempty"`
 	Маршрут      string         `json:"маршрут,omitempty"`
@@ -339,9 +338,6 @@ type ПраваДоступа struct {
 	Роль  []string `json:"роль"`
 	Права []string `json:"права"`
 }
-
-
-
 
 func ОпределитьДирректориюЗапуска() {
 	if ДирректорияЗапуска != "" {
@@ -523,10 +519,11 @@ func Кодировать(данныеДляКодирования interface{}) 
 	данные := make([]byte, len(b)+4)
 
 	binary.LittleEndian.PutUint32(данные, uint32(len(b)))
+	// Инфо(" %+v %+v данные %+v \n", uint32(len(b)), len(b), данные)
 
 	copy(данные[4:], b)
 	// log.Print(данные, string(данные))
-	// Инфо(" Кодировать %+s %+s \n", данные, string(данные))
+	// Инфо(" Кодировать %+s %+s %+v \n", данные, string(данные), len(b))
 	return данные, nil
 }
 
