@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"reflect"
 	"strconv"
@@ -12,6 +13,30 @@ import (
 
 func РендерФункции() template.FuncMap {
 	return template.FuncMap{
+		"JS": func(s string) template.JS {
+			return template.JS(s)
+		},
+		"Слайс": func(аргументы ...interface{}) []interface{} {
+			return аргументы
+		},
+		"Мап": func(КлючЗначение ...interface{}) map[string]interface{} {
+			if len(КлючЗначение)%2 != 0 {
+				return map[string]interface{}{
+					"ошибка": "не чётное количество аргументов для map",
+				}
+			}
+			Карта := make(map[string]interface{}, len(КлючЗначение)/2)
+			for i := 0; i < len(КлючЗначение); i += 2 {
+				key, ok := КлючЗначение[i].(string)
+				if !ok {
+					return map[string]interface{}{
+						"ошибка": fmt.Sprintf("Ключ %+v должен быть строкой", КлючЗначение[i]),
+					}
+				}
+				Карта[key] = КлючЗначение[i+1]
+			}
+			return Карта
+		},
 		"ВременнаяМетка": func() int64 {
 			return time.Now().Unix()
 		},
