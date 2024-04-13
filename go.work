@@ -4,8 +4,7 @@ use (
 	./Auth
 	./Catalog
 	./ConnQuic
-	./DGApi
-	./DataBase
+	./DGApi	
 	./HTTPServerQuic
 	./HandlerManager
 	./Logger
@@ -14,6 +13,6 @@ use (
 	./RenderService
 	./SynQuic
 	./bench
-	./proxy
+	
 
 )
