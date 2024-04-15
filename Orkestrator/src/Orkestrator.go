@@ -1,10 +1,12 @@
 package main
 
 import (
-	"io/ioutil"
+	"bufio"
+	"io"
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	_ "aoanima.ru/ConnQuic"
 	_ "aoanima.ru/DGApi"
@@ -26,7 +28,7 @@ func main() {
 		defer файлСервисов.Close()
 
 		// Читаем содержимое файла
-		данные, ошибка := ioutil.ReadAll(файлСервисов)
+		данные, ошибка := io.ReadAll(файлСервисов)
 		if ошибка != nil {
 			Ошибка("  %+v \n", ошибка)
 		}
@@ -38,6 +40,11 @@ func main() {
 				ЗапускСервиса(сервисы[i])
 			}
 		}
+	}
+
+	for {
+		time.Sleep(time.Minute * 1)
+		Инфо(" прошло 1 минут %+v \n")
 	}
 
 	// // Замените ./microservice2 на путь к вашему микросервису
@@ -72,17 +79,37 @@ func ЗапускСервиса(папка string) {
 		if файл.Name() == папка {
 			go func() {
 				Инфо(" Запуск приложения%+v \n", ДиреткорияПрокета+папка+"/bin/"+файл.Name())
-				cmd := exec.Command("mate-terminal", "-e", "bash -c '"+ДиреткорияПрокета+папка+"/bin/"+файл.Name()+"; exec bash'")
 
-				// cmd := exec.Command("cmd", "/C", "start", "cmd.exe", "/K", "D:/QuicMarket/GoP/"+папка+"/bin/"+файл.Name())
+				// cmd := exec.Command("mate-terminal", "-e", "bash -c '"+ДиреткорияПрокета+папка+"/bin/"+файл.Name()+"; exec bash'")
 
-				if err := cmd.Run(); err != nil {
+				cmd := exec.Command("cmd", "/C", "start", "cmd.exe", "/K", "D:/QuicMarket/GoP/"+папка+"/bin/"+файл.Name())
+
+				стандартныйВывод, err := cmd.StdoutPipe()
+				if err != nil {
 					Ошибка(" %+v \n", err)
 				}
-				// break
+
+				if err := cmd.Start(); err != nil {
+					Ошибка(" %+v \n", err)
+				}
+				scanner := bufio.NewScanner(стандартныйВывод)
+				go func() {
+					for scanner.Scan() {
+						ЧитатьСтандртныйВывод(файл.Name(), scanner.Text())
+					}
+				}()
+
+				if err := cmd.Wait(); err != nil {
+					Ошибка(" %+v \n", err)
+				}
 			}()
 		}
 	}
+
+}
+
+func ЧитатьСтандртныйВывод(ИмяСервиса string, лог string) {
+	Инфо(" %+v  %+v \n", ИмяСервиса, лог)
 }
 
 func runPowerShell() {

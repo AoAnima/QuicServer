@@ -8,7 +8,7 @@ replace aoanima.ru/ConnQuic => ../ConnQuic
 
 replace aoanima.ru/QErrors => ../QErrors
 
-replace aoanima.ru/DataBase => ../DataBase
+// replace aoanima.ru/DataBase => ../DataBase
 
 replace aoanima.ru/DGApi => ../DGApi
 

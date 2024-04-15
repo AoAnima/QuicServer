@@ -4,7 +4,7 @@ go 1.21.5
 
 replace aoanima.ru/ConnQuic => ../ConnQuic
 
-replace aoanima.ru/DataBase => ../DataBase
+// replace aoanima.ru/DataBase => ../DataBase
 
 replace aoanima.ru/Logger => ../Logger
 
@@ -15,7 +15,7 @@ require (
 
 require (
 	aoanima.ru/ConnQuic v0.0.0-00010101000000-000000000000 // indirect
-	aoanima.ru/DataBase v0.0.0-00010101000000-000000000000
+	// aoanima.ru/DataBase v0.0.0-00010101000000-000000000000
 )
 
 require (
