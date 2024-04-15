@@ -2,9 +2,11 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"io"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"time"
 
@@ -71,7 +73,8 @@ func ЗапускСервиса(папка string) {
 	if ошибка != nil {
 		Ошибка("  %+v \n", ошибка)
 	}
-
+	Инфо("Текущая операционная система: %+v", runtime.GOOS)
+	ОС := runtime.GOOS
 	for _, файл := range файлы {
 		Инфо(" %+v  %+v \n", файл.Name(), папка)
 
@@ -79,25 +82,96 @@ func ЗапускСервиса(папка string) {
 		if файл.Name() == папка {
 			go func() {
 				Инфо(" Запуск приложения%+v \n", ДиреткорияПрокета+папка+"/bin/"+файл.Name())
+				var cmd *exec.Cmd
+				if ОС == "linux" {
 
-				// cmd := exec.Command("mate-terminal", "-e", "bash -c '"+ДиреткорияПрокета+папка+"/bin/"+файл.Name()+"; exec bash'")
-
-				cmd := exec.Command("cmd", "/C", "start", "cmd.exe", "/K", "D:/QuicMarket/GoP/"+папка+"/bin/"+файл.Name())
-
-				стандартныйВывод, err := cmd.StdoutPipe()
-				if err != nil {
-					Ошибка(" %+v \n", err)
+					// Вот так читается лог из сервисов
+					// cmd = exec.Command(ДиреткорияПрокета + папка + "/bin/" + файл.Name())
+					// Так запускаются отдельные терминалы
+					cmd = exec.Command("mate-terminal", "-e", "bash -c '"+ДиреткорияПрокета+папка+"/bin/"+файл.Name()+"; exec bash'")
+				} else {
+					cmd = exec.Command("cmd", "/C", "start", "cmd.exe", "/K", "D:/QuicMarket/GoP/"+папка+"/bin/"+файл.Name())
 				}
+
+				stderr, err := cmd.StderrPipe()
+				if err != nil {
+					Ошибка("Ошибка при создании StderrPipe:", err)
+					return
+				}
+				Инфо("stderr %+v \n", stderr)
+
+				// reader := bufio.NewReader(stderr)
+				scanner := bufio.NewScanner(stderr)
 
 				if err := cmd.Start(); err != nil {
-					Ошибка(" %+v \n", err)
+					Инфо("Ошибка при запуске приложения:", err)
+					return
 				}
-				scanner := bufio.NewScanner(стандартныйВывод)
+
+				scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
+					if atEOF && len(data) == 0 {
+						return 0, nil, nil
+					}
+					if i := bytes.Index(data, []byte("<!>")); i >= 0 {
+						// Найдена строка "$EOS", возвращаем все данные до этой строки
+						return i + len("<!>"), data[:i+len("<!>")], nil
+					}
+					// Если "$EOS" не найден, продолжаем чтение
+					if atEOF {
+						return len(data), data, nil
+					}
+					return
+				})
 				go func() {
+					// scanner := bufio.NewScanner(stderr)
 					for scanner.Scan() {
-						ЧитатьСтандртныйВывод(файл.Name(), scanner.Text())
+						Инфо("%+v: %+v", файл.Name(), scanner.Text())
+						// Здесь вы можете обработать каждую строку вывода как вам нужно
 					}
 				}()
+				// стандартныйВыводОшибок, err := cmd.StdoutPipe()
+				// Инфо("стандартныйВыводОшибок %+v \n", стандартныйВыводОшибок)
+
+				// if err != nil {
+				// 	Ошибка(" %+v \n", err.Error())
+				// }
+				// стандартныйВывод, err := cmd.
+				// Инфо("стандартныйВывод %+v \n", стандартныйВывод)
+
+				// if err != nil {
+				// 	Ошибка(" %+v \n", err.Error())
+				// }
+				// bufio.NewReader(stderr).ReadString("\n")
+
+				// go func() {
+
+				// 	output, err := io.ReadAll(stderr)
+				// 	if err != nil {
+				// 		Ошибка("Ошибка при чтении:", err)
+				// 		return
+				// 	}
+
+				// 	Инфо("%+v#  %+v", файл.Name(), output)
+
+				// 	// for scanner.Scan() {
+				// 	// 	Инфо("%+v#  %+v", файл.Name(), scanner.Text())
+				// 	// 	// Здесь вы можете обработать каждую строку вывода как вам нужно
+				// 	// }
+				// }()
+				// go func() {
+				// 	scanner := bufio.NewScanner(стандартныйВывод)
+				// 	for scanner.Scan() {
+				// 		Инфо("STDOUT: %+v \n", scanner.Text())
+				// 	}
+				// }()
+
+				// go func() {
+				// 	scanner := bufio.NewScanner(стандартныйВыводОшибок)
+				// 	for scanner.Scan() {
+				// 		Инфо("ERR: %+v \n", scanner.Text())
+				// 	}
+				// }()
+				// }(scanner)
 
 				if err := cmd.Wait(); err != nil {
 					Ошибка(" %+v \n", err)
@@ -108,19 +182,23 @@ func ЗапускСервиса(папка string) {
 
 }
 
-func ЧитатьСтандртныйВывод(ИмяСервиса string, лог string) {
-	Инфо(" %+v  %+v \n", ИмяСервиса, лог)
-}
+func ЧитатьСтандартныйВывод(scanner *bufio.Scanner) {
+	for scanner.Scan() {
+		Инфо(" %+v \n")
 
-func runPowerShell() {
-	cmd := exec.Command("cmd", "/C", "start", "powershell.exe", "-NoExit", "-NoProfile", "-Command", "D:/QuicMarket/GoP/SynQuic/bin/synquic.exe")
-
-	if err := cmd.Run(); err != nil {
-		Ошибка(" %+v \n")
-	}
-
-	cmd = exec.Command("cmd", "/C", "start", "powershell.exe", "-NoExit", "-NoProfile", "-Command", "D:/QuicMarket/GoP/HTTPServerQuic/bin/HTTPServerQuic.exe")
-	if err := cmd.Run(); err != nil {
-		Ошибка(" %+v \n")
+		Инфо(" %+v  %+v \n", scanner.Text(), scanner.Err())
 	}
 }
+
+// func runPowerShell() {
+// 	cmd := exec.Command("cmd", "/C", "start", "powershell.exe", "-NoExit", "-NoProfile", "-Command", "D:/QuicMarket/GoP/SynQuic/bin/synquic.exe")
+
+// 	if err := cmd.Run(); err != nil {
+// 		Ошибка(" %+v \n")
+// 	}
+
+// 	cmd = exec.Command("cmd", "/C", "start", "powershell.exe", "-NoExit", "-NoProfile", "-Command", "D:/QuicMarket/GoP/HTTPServerQuic/bin/HTTPServerQuic.exe")
+// 	if err := cmd.Run(); err != nil {
+// 		Ошибка(" %+v \n")
+// 	}
+// }

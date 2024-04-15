@@ -32,7 +32,7 @@ func Инфо(формат string, данные ...interface{}) {
 	// str := fmt.Sprintf(green("1 ИНФО :")+textColor.Sprint(формат), данные...)
 	// log.Printf("log %+v", данные)
 
-	err := StdLog.Output(2, str)
+	err := StdLog.Output(2, str+"<!>")
 	// err := StdLog.Output(2, str)
 
 	if err != nil {

@@ -13,9 +13,7 @@ import (
 
 func РендерФункции() template.FuncMap {
 	return template.FuncMap{
-		"JS": func(s string) template.JS {
-			return template.JS(s)
-		},
+
 		"Слайс": func(аргументы ...interface{}) []interface{} {
 			return аргументы
 		},

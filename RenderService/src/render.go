@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	js "text/template"
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
@@ -13,6 +14,7 @@ import (
 )
 
 var СырыеШаблоны *template.Template
+var JavaScript *js.Template
 
 func ОтрендеритьОтветКлиенту(сообщение *Сообщение) {
 
@@ -328,20 +330,35 @@ func ПарсингШаблонов() {
 	// ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов + "*/*/*.html"
 
 	СырыеШаблоны = template.New("")
+	JavaScript = js.New("JS")
 	СырыеШаблоны.Funcs(РендерФункции())
+	JavaScript.Funcs(РендерФункции())
+
 	err := filepath.WalkDir(ПатернПарсингаШаблонов, func(путь string, описание os.DirEntry, err error) error {
 		if описание.IsDir() {
 
 			Инфо("  парсим %+v \n", путь+"/*.html")
 
 			_, err := СырыеШаблоны.ParseGlob(путь + "/*.html")
-			Инфо("следующийШаблон %+v \n", СырыеШаблоны.Templates())
+			// Инфо("следующийШаблон %+v \n", СырыеШаблоны.Templates())
 			if err != nil {
 				Ошибка("Ошибка парсинга шаблона : %+s путь %+s ", err.Error(), путь)
 			}
 
-		}
+			_, err = JavaScript.ParseGlob(путь + "/*.js")
+			// Инфо("следующийШаблон %+v \n", JavaScript.Templates())
+			if err != nil {
+				Ошибка("Ошибка парсинга шаблона : %+s путь %+s ", err.Error(), путь)
+			}
 
+			// именаJS := []string{}
+			// for _, шаблон := range JavaScript.Templates() {
+			// 	именаJS = append(именаJS, шаблон.Name())
+			// }
+			// Инфо("Список шаблонов JavaScript: %+v\n", именаJS)
+		}
+		именаJS := JavaScript.DefinedTemplates()
+		Инфо("Список шаблонов JavaScript: %+v\n", именаJS["test.js"])
 		return nil
 	})
 	// Инфо("СырыеШаблоны %+v  \n", СырыеШаблоны.Templates())
