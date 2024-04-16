@@ -101,6 +101,8 @@ func обработчикЗапроса(w http.ResponseWriter, req *http.Request
 	}
 	// Инфо(" path.Ext(req.URL.Path) %+v \n", path.Ext(req.URL.Path))
 	if каталог, статичныйФайл := ТипыСтатическихФайлов[path.Ext(req.URL.Path)]; статичныйФайл {
+		Инфо("Статичный файл %+v \n", каталог)
+
 		ОбработчикСтатичныхФайлов(w, req, каталог)
 		return
 	}
