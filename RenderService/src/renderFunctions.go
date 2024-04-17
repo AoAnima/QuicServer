@@ -11,9 +11,59 @@ import (
 	. "aoanima.ru/Logger"
 )
 
+func генераторИд() string {
+	timestamp := time.Now().UnixNano() / int64(time.Millisecond)
+	return strconv.FormatInt(timestamp, 36)
+}
+
+func Сумма(числа ...interface{}) float64 {
+	var сумма float64
+	for _, число := range числа {
+		switch v := число.(type) {
+		case int:
+			сумма += float64(v)
+		case int8:
+			сумма += float64(v)
+		case int16:
+			сумма += float64(v)
+		case int32:
+			сумма += float64(v)
+		case int64:
+			сумма += float64(v)
+		case uint:
+			сумма += float64(v)
+		case uint8:
+			сумма += float64(v)
+		case uint16:
+			сумма += float64(v)
+		case uint32:
+			сумма += float64(v)
+		case uint64:
+			сумма += float64(v)
+		case float32:
+			сумма += float64(v)
+		case float64:
+			сумма += v
+		default:
+			return 0
+		}
+	}
+	return сумма
+}
+
 func РендерФункции() template.FuncMap {
 	return template.FuncMap{
-
+		"jsStr": func(s string) template.JSStr {
+			return template.JSStr(s)
+		},
+		"JS": func(s string) template.JS {
+			return template.JS(s)
+		},
+		"Сумма": Сумма,
+		"ИД": func() string {
+			timestamp := time.Now().UnixNano() / int64(time.Millisecond)
+			return strconv.FormatInt(timestamp, 36)
+		},
 		"Слайс": func(аргументы ...interface{}) []interface{} {
 			return аргументы
 		},
@@ -31,6 +81,8 @@ func РендерФункции() template.FuncMap {
 						"ошибка": fmt.Sprintf("Ключ %+v должен быть строкой", КлючЗначение[i]),
 					}
 				}
+				// Инфо(" %+v %#T \n", КлючЗначение[i+1], КлючЗначение[i+1])
+
 				Карта[key] = КлючЗначение[i+1]
 			}
 			return Карта

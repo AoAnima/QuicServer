@@ -2,11 +2,10 @@ package main
 
 import (
 	"bytes"
-	"html/template"
 	"os"
 	"path/filepath"
 	"strings"
-	js "text/template"
+	"text/template"
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
@@ -20,13 +19,13 @@ func ПарсингШаблонов() {
 	// ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов + "*/*/*.html"
 
 	СырыеШаблоны = template.New("")
-	JavaScript = js.New("JS")
+	// JavaScript = js.New("JS")
 	СырыеШаблоны.Funcs(РендерФункции())
-	JavaScript.Funcs(РендерФункции())
+	// JavaScript.Funcs(РендерФункции())
 
 	err := filepath.WalkDir(ПатернПарсингаШаблонов, func(путь string, описание os.DirEntry, err error) error {
 		if описание.IsDir() {
-			Инфо("  парсим %+v \n", путь+"/*.html")
+			// Инфо("  парсим %+v \n", путь+"/*.html")
 
 			_, err := СырыеШаблоны.ParseGlob(путь + "/*.html")
 			// Инфо("следующийШаблон %+v \n", СырыеШаблоны.Templates())
@@ -53,7 +52,7 @@ func РендерJS() {
 			Ошибка("Error removing file: %+v", err.Error())
 		}
 	}
-	файл, err := os.OpenFile(путьJSфайл, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	файл, err := os.OpenFile(путьJSфайл, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
 
 	if err != nil {
 		Ошибка(" ошибка открытия файла %+v \n", err.Error())
@@ -68,13 +67,24 @@ func РендерJS() {
 	for _, шаблон := range клонШаблонов.Templates() {
 		if strings.HasSuffix(шаблон.Name(), ".js") {
 			var буфер bytes.Buffer
+			// Инфо(" %+v \n", шаблон.Name())
+			// Инфо(" %+v \n", шаблон.Tree.Root.Nodes)
+			// for _, n := range шаблон.Tree.Root.Nodes {
+			// 	if defineNode, ok := n.(*parse.TemplateNode); ok {
+			// 		// Инфо("Имя определения: %s\n", defineNode.Name)
+			// 	}
+			// }
+
 			if err := шаблон.Execute(&буфер, nil); err != nil {
 				Ошибка(" Ошибка выполнения шаблона %+v \n", err.Error())
 			}
-			jsШаблон := template.JS(буфер.String())
-			// Инфо("jsШаблон %+v \n", jsШаблон)
 
-			if _, err := файл.WriteString(string(jsШаблон)); err != nil {
+			// jsШаблон := template.JS(буфер.String())
+			// htmlШаблон := template.HTML(буфер.String())
+			Инфо("jsШаблhtmlШаблонон %+v \n", буфер.String())
+			// Инфо("уфбуферер.String() %+v \n", буфер.String())
+
+			if _, err := файл.WriteString(string(буфер.String())); err != nil {
 				Ошибка(" ошибка записи в файл ]%+v \n", err.Error())
 			}
 		}

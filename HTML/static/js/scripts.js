@@ -1,14 +1,16 @@
  
 
    
-    function Шаблон (имяШаблона, номер) {   
+    function Шаблон (имяШаблона, данныеШаблона) {   
        
-        console.log("Шаблон", имяШаблона, номер);
+        console.log("Шаблон", имяШаблона, данныеШаблона);
+
         let шаблоны =   {
-            "role_access": `<fieldset class="field is-horizontal" id="role_access-${номер}">     
+            "role_access":  `
+<no value><fieldset class="field is-horizontal" id="role_access-${данныеШаблона.УИД}">     
             <div class="field-body">
                 <div class="control field" id="role-1">
-                    
+                    <!-- <label class="label">Роль</label> -->
                     <div class="dropdown is-hoverable">
                         <div class="dropdown-trigger">
                         <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -22,27 +24,27 @@
                         <div class="dropdown-content">
                         <div class="dropdown-item">
                             <label class="checkbox ">
-                                <input type="checkbox"  name="роль[${номер}]" value="1"/>
+                                <input type="checkbox"  name="роль[${данныеШаблона.УИД}]" value="1"/>
                                 Роль 1
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="роль[${номер}]" value="2"/>
+                                <input type="checkbox"  name="роль[${данныеШаблона.УИД}]" value="2"/>
                                 Роль 2
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="роль[${номер}]" value="3"/>
+                                <input type="checkbox"  name="роль[${данныеШаблона.УИД}]" value="3"/>
                                 Роль 2
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="роль[${номер}]" value="4"/>
+                                <input type="checkbox"  name="роль[${данныеШаблона.УИД}]" value="4"/>
                                 Роль 2
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="роль[${номер}]" value="5"/>
+                                <input type="checkbox"  name="роль[${данныеШаблона.УИД}]" value="5"/>
                                 роль 2
                             </label>
                         </div>
@@ -51,8 +53,8 @@
                     </div>
                 </div> 
 
-                <div class="field control" id="access-${номер}">
-                    
+                <div class="field control" id="access-${данныеШаблона.УИД}">
+                    <!-- <label class="label">Права доступа</label> -->
                     <div class="dropdown is-hoverable">
                         <div class="dropdown-trigger">
                         <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -66,27 +68,27 @@
                         <div class="dropdown-content">
                         <div class="dropdown-item">
                             <label class="checkbox ">
-                                <input type="checkbox" name="права_доступа[${номер}]" value="1"/>
+                                <input type="checkbox" name="права_доступа[${данныеШаблона.УИД}]" value="1"/>
                                 права_доступа 1
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="права_доступа[${номер}]" value="2"/>
+                                <input type="checkbox"  name="права_доступа[${данныеШаблона.УИД}]" value="2"/>
                                 права_доступа 2
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="права_доступа[${номер}]" value="3"/>
+                                <input type="checkbox"  name="права_доступа[${данныеШаблона.УИД}]" value="3"/>
                                 права_доступа 3
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="права_доступа[${номер}]" value="4"/>
+                                <input type="checkbox"  name="права_доступа[${данныеШаблона.УИД}]" value="4"/>
                                 права_доступа 4
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox" name="права_доступа[${номер}]" value="5"/>
+                                <input type="checkbox" name="права_доступа[${данныеШаблона.УИД}]" value="5"/>
                                 права_доступа 5
                             </label>
                         </div>
@@ -94,14 +96,16 @@
                         </div>
                     </div>
                 </div>    
-                <div class="field control has-addons">
+                
+    <div class="field control has-addons">
         <div class="control ">
-            <button onclick="добавитьБлок(event, '${имяШаблона}', '${номер}')" class="button  is-primary control"> 
+
+            <button onclick='добавитьБлок(event, map[УИД:${данныеШаблона.УИД} имяШаблона:${данныеШаблона.имяШаблона}] )' class="button  is-primary control"> 
                 <i class="fas fa-plus p-1"></i>
             </button>
                     </div>
         <div class="control ">
-            <button onclick="удалитьБлок(event, '${имяШаблона}', &#34;${номер}&#34;)" class="button  is-danger control">
+            <button onclick='удалитьБлок(event, map[УИД:${данныеШаблона.УИД} имяШаблона:${данныеШаблона.имяШаблона}] )' class="button  is-danger control">
             <i class="fas fa-minus p-1"></i>
         </button>
         </div>
@@ -110,16 +114,17 @@
             </div>          
     </fieldset>
 `,
-            "service_handler": `<fieldset id="service_handler-${номер}" class="field is-horizontal">
+            "service_handler": `<fieldset id="service_handler-${данныеШаблона.УИД}" class="field is-horizontal">
     <div class="field-body">
+       
             <div class="field control" style="max-width: 80px;">
-                <input class="input" type="number" name="order[${номер}]" value="" id="order-service_handler-${номер}" min="1">
+                <input class="input" type="number" name="очередь[${данныеШаблона.УИД}]" value="${данныеШаблона.очередь+1}" id="order-service_handler-${данныеШаблона.УИД}" min="1">
             </div>
             <div
                 class="field control">
-                
+                <!-- <input class="input" type="text" placeholder="Имя сервиса" name ="сервис" value=""> -->
                 <div class="select">
-                    <select id="service-1" name="сервис[${номер}]" class="" onchange="изменитьСписокОбработчиков(event, &#34;${номер}&#34;)">
+                    <select id="service-1" name="сервис[${данныеШаблона.УИД}]" class="" onchange="изменитьСписокОбработчиков(event, '${данныеШаблона.УИД}')">
                         <option disabled="disabled" value="" selected="selected">Выбрать сервис</option>
                         <option value="option1">Сервис 1Сервис 1Сервис 1Сервис 1</option>
                         <option value="option2">Сервис 2</option>
@@ -131,7 +136,7 @@
             <div class="field control">
                 <div class="select">
                     <div class="control">
-                        <select id="handler-1" name="обработчик[${номер}]">
+                        <select id="handler-1" name="обработчик[${данныеШаблона.УИД}]">
                             <option disabled="disabled" value="" selected="selected">Выбрать обработчик</option>
                             <option value="option2">Обработчик 2</option>
                             <option value="option3">Обработчик 3</option>
@@ -140,14 +145,17 @@
                     </div>
                 </div>
             </div>
-            <div class="field control has-addons">
+
+            
+    <div class="field control has-addons">
         <div class="control ">
-            <button onclick="добавитьБлок(event, '${имяШаблона}', '${номер}')" class="button  is-primary control"> 
+
+            <button onclick='добавитьБлок(event, map[УИД:${данныеШаблона.УИД} имяШаблона:${данныеШаблона.имяШаблона} очередь:${данныеШаблона.очередь+1}] )' class="button  is-primary control"> 
                 <i class="fas fa-plus p-1"></i>
             </button>
                     </div>
         <div class="control ">
-            <button onclick="удалитьБлок(event, '${имяШаблона}', &#34;${номер}&#34;)" class="button  is-danger control">
+            <button onclick='удалитьБлок(event, map[УИД:${данныеШаблона.УИД} имяШаблона:${данныеШаблона.имяШаблона} очередь:${данныеШаблона.очередь+1}] )' class="button  is-danger control">
             <i class="fas fa-minus p-1"></i>
         </button>
         </div>
@@ -160,44 +168,53 @@
 
 `,
         }       
-        console.log(шаблоны[имяШаблона]);
+        // console.log(шаблоны[имяШаблона]);
         return шаблоны[имяШаблона]
     }  
+    function НовыйИд(){
+        return Date.now().toString(36)
+    }
 
-    function добавитьБлок(event, имяШаблона, номер) {  
+    // function добавитьБлок(event, имяШаблона, УИД) {  
+    function добавитьБлок(event, данные) {  
         event.preventDefault();
         event.stopPropagation();
+        console.log(данные);
+        console.log(`[id^="${данные.имяШаблона}"]`);
 
-        let блоки = document.querySelectorAll(`[id^="${имяШаблона}"]`);
-        console.log(блоки);
-// теперь elements содержит все элементы с id, начинающимся с "yourString"
+        let блокКоторыйВызвалСобытие = event.target.closest(`[id^="${данные.имяШаблона}"]`);
 
-        let количествоБлоков = блоки.length;
-        let номерНовогоБлока = +количествоБлоков + 1;
-        let новыйИд = `${имяШаблона}-${номерНовогоБлока}`;
-        console.log(имяШаблона, номерНовогоБлока);
-        let новыйБлок = Шаблон(имяШаблона, номерНовогоБлока);
-        let блокКоторыйВызвалСобытие = event.target.closest(`[id^="${имяШаблона}"]`);
-        console.log("блокКоторыйВызвалСобытие", блокКоторыйВызвалСобытие);
+
+        let ИдНовогоБлока = НовыйИд();
+        // let новыйИд = `${данные.имяШаблона}-${ИдНовогоБлока}`;
+
+        console.log("данные", данные, ИдНовогоБлока, блокКоторыйВызвалСобытие);
+
+        данные["УИД"] = ИдНовогоБлока;
+        let новыйБлок = Шаблон(данные.имяШаблона,  данные);
+       console.log(новыйБлок);
+        // console.log("блокКоторыйВызвалСобытие",`[id^="${данные.имяШаблона}"]`,  блокКоторыйВызвалСобытие);
 
         блокКоторыйВызвалСобытие.insertAdjacentHTML('afterend', новыйБлок);
     }
 
-    function удалитьБлок(event, имяШаблона, номер) {
+    // function удалитьБлок(event, имяШаблона, УИД) {
+    function удалитьБлок(event, данные) {
         event.preventDefault();
         event.stopPropagation();
-        let родительскаяСекция = event.target.closest(`[id="section-${имяШаблона}"]`);
+        let родительскаяСекция = event.target.closest(`[id="section-${данные.имяШаблона}"]`);
         // если был удалён последний элемент в сексии блоков, то добавим новый
       
        
-        let блокКоторыйВызвалСобытие = event.target.closest(`[id^="${имяШаблона}"]`);
+        let блокКоторыйВызвалСобытие = event.target.closest(`[id^="${данные.имяШаблона}"]`);
             блокКоторыйВызвалСобытие.remove();
-        let блоки = document.querySelectorAll(`[id^="${имяШаблона}"]`);
+        let блоки = document.querySelectorAll(`[id^="${данные.имяШаблона}"]`);
 
         console.log(блоки);
 
         if (блоки.length == 0) {
-            let новыйБлок = Шаблон(имяШаблона, 1);
+            данные["УИД"] = НовыйИд();
+            let новыйБлок = Шаблон(данные.имяШаблона, данные);
             console.log(родительскаяСекция);
             // найдём родительскую секцию и вставим внеё новый блок
             родительскаяСекция.insertAdjacentHTML('afterbegin', новыйБлок);
@@ -211,6 +228,6 @@
     может можно сделать так чтобы каждый js блок кода был объявлен как define "обработчикФормыНовогоМаршрута.js"
     */
 
-    var количествоОбработчиков = 0 // просто номер добавленного обработчика, не уменьшается при удалении, потому 
+    var количествоОбработчиков = 0 // просто УИД добавленного обработчика, не уменьшается при удалении, потому 
 
 

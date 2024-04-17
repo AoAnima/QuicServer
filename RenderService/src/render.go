@@ -2,11 +2,10 @@ package main
 
 import (
 	"bytes"
-	"html/template"
 	"log"
 	"os"
 	"path/filepath"
-	js "text/template"
+	"text/template"
 
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
@@ -14,7 +13,8 @@ import (
 )
 
 var СырыеШаблоны *template.Template
-var JavaScript *js.Template
+
+// var JavaScript *js.Template
 
 func ОтрендеритьОтветКлиенту(сообщение *Сообщение) {
 
@@ -55,7 +55,7 @@ func ОтрендеритьОтветКлиенту(сообщение *Сооб
 		Ошибка("   %+v \n", err.Error())
 
 	}
-	Инфо(" сообщение %+v \n", сообщение)
+	// Инфо(" сообщение %+v \n", сообщение)
 
 }
 
@@ -216,7 +216,7 @@ func РендерБлоков(сообщение *Сообщение) error {
 		Инфо("рендерим имяШаблона  %+v \n", имяШаблона)
 		Html, err := Рендер(имяШаблона, сообщение.Ответ) // перредадим во все шаблоны все данные, вдруг каким то шаблнам нужны данные из другиъ сервисов, не зря же очердь обработчикв из сервисов
 		if err != nil {
-			Ошибка("  %+v \n", err)
+			Ошибка("  %+v \n", err.Error())
 			return err
 		}
 		ответКлиенту.AjaxHTML[имяШаблона] = ДанныеAjaxHTML{
@@ -256,7 +256,7 @@ func Рендер(имяШаблона string, Данные interface{}) ([]byte
 	Инфо(" ШаблонДляРендера  %+v  \n  имяШаблона  %+v  \n  Данные %+v \n", ШаблонДляРендера, имяШаблона, Данные)
 
 	if errs := ШаблонДляРендера.ExecuteTemplate(Html, имяШаблона, Данные); errs != nil {
-		Ошибка("%+v\n", errs)
+		Ошибка("%+v\n", errs.Error())
 		return nil, errs
 	}
 

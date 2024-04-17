@@ -58,7 +58,7 @@ func Ошибка(формат string, данные ...interface{}) {
 
 	err := StdLog.Output(2, str)
 	if err != nil {
-		log.Printf("%+v", err)
+		log.Printf("61 %+v", err)
 	}
 }
 func КрасивыйВывод(данные ...interface{}) []interface{} {
