@@ -134,21 +134,52 @@
         }
       },
       {
+        "label": "Сборка оркестратора",
+        "type": "shell",
+        "windows": {
+          "command": "cd ${workspaceFolder}/Orkestrator/; go mod tidy;  go build -o ${workspaceFolder}/Orkestrator/bin/Orkestrator.exe ${workspaceFolder}/Orkestrator/src"
+        },
+        "linux": {
+          "command": "cd ${workspaceFolder}/Orkestrator/; go mod tidy;  go build -o ${workspaceFolder}/Orkestrator/bin/Orkestrator ${workspaceFolder}/Orkestrator/src"
+        },
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "isBackground": true,
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": true,
+          "panel": "shared"
+        },
+        "problemMatcher": {
+          "base": "$go",
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".*",
+            "endsPattern": "[.*]"
+          }
+        }
+      },
+      {
         "label": "Запуск Оркестратора",
         "type": "shell",
         "windows": {
-          "command": "${workspaceFolder}/Orkestrator/bin/Orkestrator.exe SynQuic HTTPServerQuic RenderService"
+          "command": "${workspaceFolder}/Orkestrator/bin/Orkestrator.exe"
         },
         "linux": {
-          "command": "${workspaceFolder}/Orkestrator/bin/Orkestrator SynQuic HTTPServerQuic RenderService"
+          "command": "cd  ${workspaceFolder}/Orkestrator/bin/ && sudo ${workspaceFolder}/Orkestrator/bin/Orkestrator "
         },
         "problemMatcher": [
           "$go"
         ],
-        // "group": {
-        //   "kind": "build",
-        //   "isDefault": true
-        // },
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "dependsOrder": "sequence",
+        "dependsOn": "Сборка оркестратора",
         "isBackground": true,
         "presentation": {
           "echo": true,
