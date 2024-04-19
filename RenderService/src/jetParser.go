@@ -4,6 +4,9 @@ import (
 	"github.com/CloudyKit/jet/examples/asset_packaging/assets/templates"
 	"github.com/CloudyKit/jet/v6"
 	"github.com/CloudyKit/jet/v6/loaders/httpfs"
+
+	. "aoanima.ru/ConnQuic"
+	. "aoanima.ru/Logger"
 )
 
 var views = jet.NewSet(
@@ -12,10 +15,17 @@ var views = jet.NewSet(
 )
 var views *jet.Set
 
+
+
+привет 
+ыва
+ghbdtn 
+
 func JetПарсингШаблонов() {
+	ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов
 	httpfsLoader, err := httpfs.NewLoader(templates.Assets)
 	if err != nil {
-		panic(err)
+		Ошибка()
 	}
 
 	views = jet.NewSet(

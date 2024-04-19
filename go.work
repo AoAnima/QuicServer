@@ -4,15 +4,15 @@ use (
 	./Auth
 	./Catalog
 	./ConnQuic
-	./DGApi	
+	./DGApi
 	./HTTPServerQuic
 	./HandlerManager
 	./Logger
 	./Orkestrator
 	./QErrors
 	./RenderService
+	./Switcher
 	./SynQuic
 	./bench
-	
 
 )
