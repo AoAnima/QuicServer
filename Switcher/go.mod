@@ -12,9 +12,10 @@ replace aoanima.ru/DGApi => ../DGApi
 
 require (
 	aoanima.ru/Logger v0.0.0-00010101000000-000000000000
+	github.com/godbus/dbus/v5 v5.1.0
 	github.com/gvalkov/golang-evdev v0.0.0-20220815104727-7e27d6ce89b6
 	github.com/json-iterator/go v1.1.12
-	golang.org/x/text v0.9.0
+	github.com/micmonay/keybd_event v1.1.2
 )
 
 require (
@@ -31,6 +32,7 @@ require (
 	golang.org/x/exp v0.0.0-20221205204356-47842c84f3db // indirect
 	golang.org/x/mod v0.11.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sys v0.10.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
 )
