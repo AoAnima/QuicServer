@@ -22,6 +22,7 @@ import (
 xset -q | grep -A 0 'LED' | cut -c59-67
 It prints 00000002 or 00001002 depending on your current keyboard layout.
 */
+
 var РусскиеБуквы map[string]float64
 var РусскиеБиграммы map[string]float64
 var РусскиеТриграммы map[string]float64

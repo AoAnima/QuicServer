@@ -7,5 +7,7 @@
 			"path": "../DGO"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"i18n-ally.localesPaths": []
+	}
 }
