@@ -1,0 +1,46 @@
+{{ define "профиль"}}
+<div id="dashboard-content" data-updateMethod="replaceWith">
+<div class="section">
+  <div class="container">
+    <h1 class="title">Сводная страница пользователя</h1>
+    <div class="columns">
+      
+      <!-- Блок заказов -->
+      <div class="column is-one-third">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Заказы</p>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <p>Количество заказов: <strong>42</strong></p>
+              <p>На сумму: <strong>123 456 ₽</strong></p>
+              <!-- Добавьте сюда дополнительную статистику по заказам -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Блок возвратов -->
+      <div class="column is-one-third">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Возвраты</p>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <p>Количество возвратов: <strong>5</strong></p>
+              <p>На сумму: <strong>15 678 ₽</strong></p>
+              <!-- Добавьте сюда дополнительную статистику по возвратам -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Дополнительные блоки могут быть добавлены здесь -->
+
+    </div>
+  </div>
+</div>
+</div>
+{{end}}

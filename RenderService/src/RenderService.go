@@ -27,7 +27,8 @@ func init() {
 
 	// каталогСтатичныхФайлов = "../../HTML/static/"
 	ЧитатьКонфиг(Конфиг)
-	ПарсингШаблонов()
+	JetПарсингШаблонов()
+	// ПарсингШаблонов()
 	// ПарсингШаблонов()
 	go наблюдатьЗаИзменениямиШаблонов()
 	go наблюдатьЗаИзменениямиСтатичныхФайлов()
@@ -77,7 +78,7 @@ func ОбработчикЗапросовСервера(поток quic.Stream, 
 		specificTemplate := tmpl.Lookup("catalog")
 		Создаём новый шаблон и передаём в него Дерево
 		// newTmpl := template.New("content")
-		newTmpl = tmpl.AddParseTree("content", specificTemplate.Tree) 
+		newTmpl = tmpl.AddParseTree("content", specificTemplate.Tree)
 	*/
 	ПарсингШаблонов()
 	СтруктурироватьДанныеОтветов(&сообщение)

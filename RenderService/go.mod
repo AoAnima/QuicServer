@@ -2,8 +2,6 @@ module RenderService
 
 go 1.21.5
 
-toolchain go1.22.0
-
 replace aoanima.ru/Logger => ../Logger
 
 replace aoanima.ru/ConnQuic => ../ConnQuic
@@ -16,13 +14,13 @@ require (
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/gorilla/websocket v1.5.1
 	github.com/quic-go/quic-go v0.41.0
+	gitverse.ru/Ao/jet v0.0.0-20240424125205-83ad722d5afc
 )
 
 require github.com/CloudyKit/fastprinter v0.0.0-20200109182630-33d98a066a53 // indirect
 
 require (
 	aoanima.ru/QErrors v0.0.0-00010101000000-000000000000 // indirect
-	github.com/CloudyKit/jet/v6 v6.2.0
 	github.com/dgryski/go-metro v0.0.0-20211217172704-adc40b04c140 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38 // indirect
