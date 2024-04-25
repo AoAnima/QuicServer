@@ -9,21 +9,25 @@ import (
 	. "aoanima.ru/Logger"
 )
 
-var views = jet.NewSet(
-	// jet.NewOSFileSystemLoader(ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов),
-	jet.NewOSFileSystemLoader("./jetHTML"),
-	jet.InDevelopmentMode(), // remove or set false in production
-	jet.WithTemplateNameExtensions([]string{".html", ".js", ".jet"}),
-)
+var Шаблоны *jet.Set
+
+// (
+// 	// jet.NewOSFileSystemLoader(ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов),
+// 	jet.NewOSFileSystemLoader(ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов),
+// 	jet.InDevelopmentMode(), // remove or set false in production
+// 	jet.WithTemplateNameExtensions([]string{"", ".html", ".js"}),
+// )
 
 // git config --global url."git@gitverse.ru:2222/Ao/jet.git".insteadOf "https://gitverse.ru/sc/Ao/jet.git"
 
 // git config --global url."git@gitverse.ru:2222/Ao/jet".insteadOf "https://gitverse.ru/sc/Ao/jet"
 
 func JetПарсингШаблонов() {
-	Инфо("JetПарсингШаблонов views1 %+s \n", ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов)
+	Инфо("JetПарсингШаблонов %+s \n", ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов)
+	// Инфо("JetПарсингШаблонов views1 %+s \n", "./jetHTML")
+	Инфо(" %+v \n", Шаблоны)
 
-	view, err := views.GetTemplate("/index.jet")
+	шаблон, err := Шаблоны.GetTemplate("/index.jet")
 	if err != nil {
 		Ошибка("Unexpected template err: %+v", err.Error())
 	}
@@ -31,7 +35,10 @@ func JetПарсингШаблонов() {
 	// var w io.Writer
 	w := new(bytes.Buffer) // создаем буфер и присваиваем его переменной w
 
-	view.Execute(w, nil, nil)
+	шаблон.Execute(w, nil, nil)
+
+	Инфо(" %+v \n  шаблон %+v \n", w.String(), шаблон)
+
 	// ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов
 	// httpfsLoader, err := httpfs.NewLoader(templates.Assets)
 	// if err != nil {

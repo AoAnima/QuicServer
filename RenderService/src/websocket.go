@@ -51,7 +51,7 @@ type Client struct {
 var hub = newHub()
 
 func WSСервер() {
-	Инфо("  %+v \n", "WSСервер")
+	// Инфо("  %+v \n", "WSСервер")
 
 	go hub.run()
 	конфигТлс, err := КлиентскийТлсКонфиг()
@@ -66,7 +66,7 @@ func WSСервер() {
 		Handler:   http.HandlerFunc(serveWs),
 		TLSConfig: конфигТлс,
 	}
-	Инфо(" конфигТлс %+v \n", конфигТлс)
+	// Инфо(" конфигТлс %+s \n", конфигТлс)
 	err = srv.ListenAndServeTLS("./cert/server.crt", "./cert/server.key")
 	if err != nil {
 		Ошибка(" %+s ", err.Error())

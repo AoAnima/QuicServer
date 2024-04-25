@@ -7,6 +7,7 @@ import (
 	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
 	quic "github.com/quic-go/quic-go"
+	"gitverse.ru/Ao/jet"
 )
 
 var клиент = make(Клиент)
@@ -27,6 +28,13 @@ func init() {
 
 	// каталогСтатичныхФайлов = "../../HTML/static/"
 	ЧитатьКонфиг(Конфиг)
+	Шаблоны = jet.NewSet(
+		// jet.NewOSFileSystemLoader(ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов),
+		jet.NewOSFileSystemLoader(ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов),
+		jet.InDevelopmentMode(), // remove or set false in production
+		jet.WithTemplateNameExtensions([]string{"", ".html", ".js"}),
+	)
+
 	JetПарсингШаблонов()
 	// ПарсингШаблонов()
 	// ПарсингШаблонов()
