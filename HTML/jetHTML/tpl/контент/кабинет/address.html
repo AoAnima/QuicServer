@@ -1,0 +1,77 @@
+{{define "address"}}
+<div class="section">
+  <div class="container">
+    <div class="columns is-multiline">
+      <!-- Example of an address card -->
+      <div class="column is-one-third">
+        <div class="card">
+          <div class="card-content">
+            <div class="content">
+              <p>1234 Elm Street, Apt 101<br>Springfield, USA</p>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <a href="#" class="card-footer-item button is-small is-info modal-trigger" data-target="modal-edit-address">Редактировать</a>
+            <a href="#" class="card-footer-item button is-small is-danger">Удалить</a>
+          </footer>
+        </div>
+      </div>
+      <!-- Repeat the above block of code for each address in the list -->
+    </div>
+  </div>
+</div>
+
+<!-- Modal for editing address -->
+<div id="modal-edit-address" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Редактирование адреса</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Form for editing an address -->
+      <form>
+        <div class="field">
+          <label class="label">Адрес</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Адрес">
+          </div>
+        </div>
+        <!-- Add additional fields as necessary -->
+        <div class="field is-grouped">
+          <div class="control">
+            <button type="submit" class="button is-link">Сохранить</button>
+          </div>
+          <div class="control">
+            <button type="button" class="button is-link is-light modal-close">Отмена</button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+
+<script>
+  // JavaScript to handle modal behavior
+  document.addEventListener('DOMContentLoaded', () => {
+    const modalTriggers = document.querySelectorAll('.modal-trigger');
+    modalTriggers.forEach(trigger => {
+      const modalId = trigger.dataset.target;
+      const modal = document.getElementById(modalId);
+
+      trigger.addEventListener('click', () => {
+        modal.classList.add('is-active');
+      });
+
+      modal.querySelector('.delete').addEventListener('click', () => {
+        modal.classList.remove('is-active');
+      });
+
+      modal.querySelector('.modal-close').addEventListener('click', () => {
+        modal.classList.remove('is-active');
+      });
+    });
+  });
+</script>
+{{end}}

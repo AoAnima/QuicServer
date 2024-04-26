@@ -1,0 +1,135 @@
+{{ define "ВерхнееМеню" }}
+<header>
+    <!-- Sub Navigation -->
+    <nav class="level navbar " role="navigation" aria-label="main navigation">
+      <p class="level-item has-text-centered">
+        <a class="navbar-item link is-info" href="/">
+          Главная
+        </a>
+      </p>
+      <p class="level-item has-text-centered">      
+        <a class="navbar-item ink is-info" href="каталог">
+          Каталог
+        </a>
+      </p>
+      <p class="level-item has-text-centered">
+        <figure class="media-left">
+          <p class="image is-64x64">
+            <a href="https://localhost"><img src="/logo.png" /></a>
+          </p>
+        </figure>     
+      </p>
+      <div class="level-item">
+        <div class="field has-addons">
+          <p class="control">
+            <input class="input" type="text" placeholder="Искать на ПИОН" />
+          </p>
+          <p class="control buttons  ">
+            <button class="button is-primary"> <i class="fas fa-search p-1" ></i></button>
+          </p>
+        </div>
+      </div>
+      <p class="level-item has-text-centered">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            Кабинет
+          </a>
+ 
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="рабочийСтол">
+              Рабочий стол
+            </a>      
+            <a class="navbar-item" href="кабинет">
+              Кабинет клиента
+            </a>           
+          </div>
+        </div>
+      </p>
+      <p class="level-item has-text-centered">      
+        <a class="navbar-item ink is-info" href="каталог">
+          Избранное
+        </a>
+      </p>
+       <p class="level-item has-text-centered">      
+        <a class="navbar-item ink is-info" href="каталог">
+          Заказы
+        </a>
+      </p> 
+      <p class="level-item has-text-centered">      
+        <a class="navbar-item ink is-info" href="каталог">
+          Корзина
+        </a>
+      </p>
+      <p class="level-item has-text-centered">
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button" href="/формаРегистрации" onclick="ajax(event)">
+                <strong>Регистрация</strong>
+              </a>
+              <a class="button is-primary" href="/формаАвторизации" onclick="ajax(event)">
+                Вход
+              </a>
+            </div>
+          </div>
+        </div>
+      </p>
+    </nav>
+
+    <!-- <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+          <strong>Пион.рф</strong>
+        </a>
+      </div>
+   
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/">
+            Главная
+          </a>
+   
+          <a class="navbar-item" href="кабинет">
+            Кабинет
+          </a>
+   
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Админка
+            </a>
+   
+            <div class="navbar-dropdown">
+              <a class="navbar-item" href="рабочийСтол">
+                Рабочий стол
+              </a>
+              <a class="navbar-item" href="#">
+                Jobs
+              </a>
+              <a class="navbar-item" href="#">
+                Contact
+              </a>
+              <hr class="navbar-divider">
+              <a class="navbar-item" href="#"> 
+                Report an issue
+              </a>
+            </div>
+          </div>
+        </div>
+   
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button" href="/формаРегистрации" onclick="ajax(event)">
+                <strong>Регистрация</strong>
+              </a>
+              <a class="button is-primary" href="/формаАвторизации" onclick="ajax(event)">
+                Вход
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>   -->
+  </header>
+
+{{end}}
