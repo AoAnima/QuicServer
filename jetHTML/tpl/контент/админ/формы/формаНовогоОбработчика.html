@@ -1,4 +1,4 @@
-{{define "формаНовогоОбработчика"}}
+{{блок формаНовогоОбработчика()}}
 <div class="container">
     <h1 class="title">Добавдение обработчика</h1>
     <form id="newRouteForm" class="columns is-multiline" jsHanlder="Перехват sumbit со всего документа  обрабатывается через ajaxPost()" action="добавитьОбработчик">
@@ -52,7 +52,7 @@
                         <div class="column is-one-third"> </div>
                     </div>
                     <section class="column" id="section-role_access">
-                    {{template "БлокПравДоступа" Мап "имяШаблона" "role_access" "УИД" ИД }}   
+                    {{вставить БлокПравДоступа("имяШаблона", "role_access", "УИД", ИД) }}   
                     </section>               
 
                 </div>
@@ -87,31 +87,31 @@
                         <div class="column is-one-four"> </div>
                     </div>
                     <section class="column" id="section-service_handler">
-                    {{template "БлокОбработчиков" Мап "имяШаблона" "service_handler" "УИД" ИД "очередь" 1}}
+                    {{вставить БлокОбработчиков( map("имяШаблона" ,"service_handler", "УИД", ИД, "очередь", 1)) }}
                     </section>
                 </div>
             </div>
         </div>
     </form>
 </div>
-{{end}}
+{{конец}}
 
 
-{{define "БлокПравДоступа"}}
+{{блок БлокПравДоступа()}}
 {{.}}
-    {{- $УИД := .УИД -}}
-    {{- if $УИД -}} 
-    {{- else -}}
-        {{- $УИД = "${данныеШаблона.УИД}" -}} 
-     {{- end -}}  
-     {{- $имяШаблона := .имяШаблона -}}
-    {{- if  $имяШаблона -}}
-    {{- else -}}
-        {{- $имяШаблона = "${данныеШаблона.имяШаблона}" -}}
-    {{- end -}}
+    {{- УИД := .УИД -}}
+    {{- если isset(УИД) -}} 
+    {{- иначе -}}
+        {{- УИД = "${данныеШаблона.УИД}" -}} 
+     {{- конец -}}  
+     {{- имяШаблона := .имяШаблона -}}
+    {{- если  имяШаблона -}}
+    {{- elиначеse -}}
+        {{- имяШаблона = "${данныеШаблона.имяШаблона}" -}}
+    {{- конец -}}
 
 
-    <fieldset class="field is-horizontal" id="role_access-{{$УИД}}">     
+    <fieldset class="field is-horizontal" id="role_access-{{УИД}}">     
             <div class="field-body">
                 <div class="control field" id="role-1">
                     <!-- <label class="label">Роль</label> -->
@@ -128,27 +128,27 @@
                         <div class="dropdown-content">
                         <div class="dropdown-item">
                             <label class="checkbox ">
-                                <input type="checkbox"  name="роль[{{$УИД}}]" value="1"/>
+                                <input type="checkbox"  name="роль[{{УИД}}]" value="1"/>
                                 Роль 1
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="роль[{{$УИД}}]" value="2"/>
+                                <input type="checkbox"  name="роль[{{УИД}}]" value="2"/>
                                 Роль 2
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="роль[{{$УИД}}]" value="3"/>
+                                <input type="checkbox"  name="роль[{{УИД}}]" value="3"/>
                                 Роль 2
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="роль[{{$УИД}}]" value="4"/>
+                                <input type="checkbox"  name="роль[{{УИД}}]" value="4"/>
                                 Роль 2
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="роль[{{$УИД}}]" value="5"/>
+                                <input type="checkbox"  name="роль[{{УИД}}]" value="5"/>
                                 роль 2
                             </label>
                         </div>
@@ -157,7 +157,7 @@
                     </div>
                 </div> 
 
-                <div class="field control" id="access-{{$УИД}}">
+                <div class="field control" id="access-{{УИД}}">
                     <!-- <label class="label">Права доступа</label> -->
                     <div class="dropdown is-hoverable">
                         <div class="dropdown-trigger">
@@ -172,27 +172,27 @@
                         <div class="dropdown-content">
                         <div class="dropdown-item">
                             <label class="checkbox ">
-                                <input type="checkbox" name="права_доступа[{{$УИД}}]" value="1"/>
+                                <input type="checkbox" name="права_доступа[{{УИД}}]" value="1"/>
                                 права_доступа 1
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="права_доступа[{{$УИД}}]" value="2"/>
+                                <input type="checkbox"  name="права_доступа[{{УИД}}]" value="2"/>
                                 права_доступа 2
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="права_доступа[{{$УИД}}]" value="3"/>
+                                <input type="checkbox"  name="права_доступа[{{УИД}}]" value="3"/>
                                 права_доступа 3
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox"  name="права_доступа[{{$УИД}}]" value="4"/>
+                                <input type="checkbox"  name="права_доступа[{{УИД}}]" value="4"/>
                                 права_доступа 4
                             </label>
                             <hr class="dropdown-divider" />
                             <label class="checkbox">
-                                <input type="checkbox" name="права_доступа[{{$УИД}}]" value="5"/>
+                                <input type="checkbox" name="права_доступа[{{УИД}}]" value="5"/>
                                 права_доступа 5
                             </label>
                         </div>
@@ -200,44 +200,44 @@
                         </div>
                     </div>
                 </div>    
-                {{template "КнопкиДобавленияУдаления"  Мап  "УИД" $УИД "имяШаблона" $имяШаблона }}              
+                {{вставить КнопкиДобавленияУдаления(map("УИД", УИД, "имяШаблона", имяШаблона))}}              
             </div>          
     </fieldset>
-{{end}}
+{{конец}}
 
 
-{{define "БлокОбработчиков"}}
+{{блок БлокОбработчиков()}}
 
-{{- $имяШаблона := .имяШаблона -}}
-{{- if  $имяШаблона -}}
-{{- else -}}
-    {{- $имяШаблона = "${данныеШаблона.имяШаблона}" -}}
-{{- end -}}
+{{- имяШаблона := .имяШаблона -}}
+{{- если isset(имяШаблона) -}}
+{{- иначе -}}
+    {{- имяШаблона = "${данныеШаблона.имяШаблона}" -}}
+{{- конец -}}
 
-{{- $УИД := .УИД -}}
-{{- if  $УИД -}}
-{{- else -}}
-    {{- $УИД = "${данныеШаблона.УИД}" -}}
-{{- end -}}
+{{- УИД := .УИД -}}
+{{- если УИД -}}
+{{- иначе -}}
+    {{- УИД = "${данныеШаблона.УИД}" -}}
+{{- конец -}}
 
-{{- $очередь := .очередь -}}
-{{- if  $очередь -}}
-    {{- $очередь := .очередь -}}
-{{- else -}}
-    {{- $очередь = "${данныеШаблона.очередь+1}" -}}   
-{{- end -}}
+{{- очередь := .очередь -}}
+{{- если  очередь -}}
+    {{- очередь := .очередь -}}
+{{- иначе -}}
+    {{- очередь = "${данныеШаблона.очередь+1}" -}}   
+{{- конец -}}
 
-<fieldset id="service_handler-{{$УИД}}" class="field is-horizontal">
+<fieldset id="service_handler-{{УИД}}" class="field is-horizontal">
     <div class="field-body">
        
             <div class="field control" style="max-width: 80px;">
-                <input class="input" type="number" name="очередь[{{$УИД}}]" value="${данныеШаблона.очередь+1}" id="order-service_handler-{{$УИД}}" min="1">
+                <input class="input" type="number" name="очередь[{{УИД}}]" value="${данныеШаблона.очередь+1}" id="order-service_handler-{{УИД}}" min="1">
             </div>
             <div
                 class="field control">
                 <!-- <input class="input" type="text" placeholder="Имя сервиса" name ="сервис" value=""> -->
                 <div class="select">
-                    <select id="service-1" name="сервис[{{$УИД}}]" class="" onchange="изменитьСписокОбработчиков(event, '{{$УИД}}')">
+                    <select id="service-1" name="сервис[{{УИД}}]" class="" onchange="изменитьСписокОбработчиков(event, '{{УИД}}')">
                         <option disabled="disabled" value="" selected="selected">Выбрать сервис</option>
                         <option value="option1">Сервис 1Сервис 1Сервис 1Сервис 1</option>
                         <option value="option2">Сервис 2</option>
@@ -249,7 +249,7 @@
             <div class="field control">
                 <div class="select">
                     <div class="control">
-                        <select id="handler-1" name="обработчик[{{$УИД}}]">
+                        <select id="handler-1" name="обработчик[{{УИД}}]">
                             <option disabled="disabled" value="" selected="selected">Выбрать обработчик</option>
                             <option value="option2">Обработчик 2</option>
                             <option value="option3">Обработчик 3</option>
@@ -258,42 +258,43 @@
                     </div>
                 </div>
             </div>
-
-            {{template "КнопкиДобавленияУдаления" Мап "очередь" $очередь "УИД" $УИД "имяШаблона" $имяШаблона}}
+            {{данныеШаблона := map("очередь", очередь, "УИД", УИД , "имяШаблона", имяШаблона)}}
+            {{вставить КнопкиДобавленияУдаления(данныеШаблона) }}
     </div>
 
 
 </fieldset>
 
-{{end}} 
+{{конец}} 
 
-{{define "КнопкиДобавленияУдаления"}}
+{{блок КнопкиДобавленияУдаления(данныеШаблона)}}
     <div class="field control has-addons">
         <div class="control ">
 
-            <button onclick='добавитьБлок(event, {{.}} )' class="button  is-primary control"> 
+            <button onclick='добавитьБлок(event, {{данныеШаблона}} )' class="button  is-primary control"> 
                 <i class="fas fa-plus p-1"></i>
             </button>
                     </div>
         <div class="control ">
-            <button onclick='удалитьБлок(event, {{.}} )' class="button  is-danger control">
+            <button onclick='удалитьБлок(event, {{данныеШаблона}} )' class="button  is-danger control">
             <i class="fas fa-minus p-1"></i>
         </button>
         </div>
     </div>
-{{end}}
+{{конец}}
+
+
+
+{{блок ДобавлениеУдалениеБлокаОбработчиков_js()}} 
 
 <script>
-{{define "ДобавлениеУдалениеБлокаОбработчиков.js"}} 
-
-   
     function Шаблон (имяШаблона, данныеШаблона) {   
        
         console.log("Шаблон", имяШаблона, данныеШаблона);
 
         let шаблоны =   {
-            "role_access":  `{{template "БлокПравДоступа"}}`,
-            "service_handler": `{{template "БлокОбработчиков"}}`,
+            "role_access":  `{{вставить БлокПравДоступа()}}`,
+            "service_handler": `{{вставить БлокОбработчиков()}}`,
         }       
         // console.log(шаблоны[имяШаблона]);
         return шаблоны[имяШаблона]
@@ -357,6 +358,5 @@
 
     var количествоОбработчиков = 0 // просто УИД добавленного обработчика, не уменьшается при удалении, потому 
 
-
-{{end}}
 </script>
+{{конец}}

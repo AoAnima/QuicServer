@@ -1,3 +1,3 @@
-{{define "test.js"}}
+{{блок test.js()}}
 console.log
-{{end}}
+{{конец}}

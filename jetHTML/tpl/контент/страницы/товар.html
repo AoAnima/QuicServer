@@ -1,4 +1,4 @@
-{{define "товар"}}
+{{блок товар()}}
 <div class="container">
   <!-- First row: Product image slider and basic info -->
   <div class="columns">
@@ -43,7 +43,7 @@
   </div>
 
   <!-- Third row: Related product cards -->
- {{template "рекомендуемые_товары"}}
+ {{вставить рекомендуемые_товары()}}
 </div>
 
 <script>
@@ -69,4 +69,4 @@
     });
   });
 </script>
-{{end}}
+{{конец}}

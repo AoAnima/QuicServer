@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "net/http/pprof"
+	"path/filepath"
 	"sync"
 
 	. "aoanima.ru/ConnQuic"
@@ -28,11 +29,14 @@ func init() {
 
 	// каталогСтатичныхФайлов = "../../HTML/static/"
 	ЧитатьКонфиг(Конфиг)
-	Шаблоны = jet.NewSet(
+	ПутьКШаблонам, err := filepath.Abs(ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов)
+	if err != nil {
+		Ошибка(" ПутьКШаблонам %+v %+v \n", err.Error(), ПутьКШаблонам)
+	}
+	НаборШаблонов = jet.NewSet(
 		// jet.NewOSFileSystemLoader(ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов),
-		jet.NewOSFileSystemLoader(ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов),
+		jet.NewOSFileSystemLoader(ПутьКШаблонам),
 		jet.InDevelopmentMode(), // remove or set false in production
-		jet.WithTemplateNameExtensions([]string{"", ".html", ".js"}),
 	)
 
 	JetПарсингШаблонов()
@@ -88,7 +92,8 @@ func ОбработчикЗапросовСервера(поток quic.Stream, 
 		// newTmpl := template.New("content")
 		newTmpl = tmpl.AddParseTree("content", specificTemplate.Tree)
 	*/
-	ПарсингШаблонов()
+	// ПарсингШаблонов()
+
 	СтруктурироватьДанныеОтветов(&сообщение)
 	// ПарсингШаблонов()
 	ОтрендеритьОтветКлиенту(&сообщение) // записывает в ответКлиенту отрендеренные html

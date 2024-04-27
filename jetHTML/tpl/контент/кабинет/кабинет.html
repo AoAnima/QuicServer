@@ -1,4 +1,4 @@
-{{define "кабинет"}}
+{{блок кабинет()}}
 <div id="content"  data-updateMethod="replaceWith">
 <div class="container is-fluid">
   <div class="columns">
@@ -23,13 +23,13 @@
 
     <!-- Main content -->
     <div class="column">     
-        {{ template "кабинет_контент" .}}    
+        {{ вставить кабинет_контент()}}    
     </div>
 
   </div>
 </div>
 </div>
-{{end}}
-{{ define "кабинет_контент"}}
-  {{template "профиль" .}}
-{{end}}
+{{конец}}
+{{ блок кабинет_контент()}}
+  {{вставить профиль()}}
+{{конец}}

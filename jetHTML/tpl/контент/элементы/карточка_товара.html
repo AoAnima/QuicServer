@@ -1,5 +1,5 @@
-{{define "карточка_товара"}}
-<div class="column {{.}}">
+{{блок карточка_товара(class)}}
+<div class="column {{ class }}">
     <div class="card" data-href="/товар?item=341324" onclick="ОткрытьСтраницу(event)">
       <div class="card-image">
         <figure class="image is-4by4">
@@ -26,4 +26,4 @@
     </div>
   </div> 
 
-{{end}}
+{{конец}}
