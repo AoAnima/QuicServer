@@ -166,7 +166,7 @@
         "label": "Запуск Оркестратора",
         "type": "shell",
         "windows": {
-          "command": "${workspaceFolder}/Orkestrator/bin/Orkestrator.exe"
+          "command": "cd  ${workspaceFolder}/Orkestrator/bin/ ;  ./Orkestrator.exe"
         },
         "linux": {
           "command": "cd  ${workspaceFolder}/Orkestrator/bin/ && sudo ${workspaceFolder}/Orkestrator/bin/Orkestrator "

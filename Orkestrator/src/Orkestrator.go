@@ -26,6 +26,7 @@ func main() {
 		файлСервисов, ошибка := os.Open("services.txt") // Замените "test.txt" на имя вашего файла
 		if ошибка != nil {
 			Ошибка("  %+v \n", ошибка)
+			return
 		}
 		defer файлСервисов.Close()
 

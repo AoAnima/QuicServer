@@ -6,7 +6,7 @@ replace aoanima.ru/Logger => ../Logger
 
 replace aoanima.ru/ConnQuic => ../ConnQuic
 
-replace gitverse.ru/Ao/jet => /home/exmaao@mfsk.int/Файлы/AoAnima.ru/jet
+replace gitverse.ru/Ao/jet => ../../jet
 
 replace aoanima.ru/QErrors => ../QErrors
 

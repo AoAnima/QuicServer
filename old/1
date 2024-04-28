@@ -19,3 +19,7 @@ Luv King of Glory x Moorea Spanish Teen Luv Harvest Years x Luv Star Trail
    Luv Ferrero Rocher x Moorea Spanish Teen  
 Formosa Mu lticolored Exquisite x Luv Tutankhamen
 Luv Ferrero Rocher x Luv Tutankhamen
+
+
+
+ git config --global core.sshCommand "ssh -i C:\Users\\.ssh\\id_rsa"
