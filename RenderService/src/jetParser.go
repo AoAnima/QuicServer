@@ -1,15 +1,13 @@
 package main
 
 import (
-	"bytes"
+	jet "gitverse.ru/Ao/jet"
 
-	"gitverse.ru/Ao/jet"
-
-	. "aoanima.ru/ConnQuic"
+	// . "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
 )
 
-var Шаблоны *jet.Set
+var НаборШаблонов *jet.Set
 
 // (
 // 	// jet.NewOSFileSystemLoader(ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов),
@@ -23,21 +21,23 @@ var Шаблоны *jet.Set
 // git config --global url."git@gitverse.ru:2222/Ao/jet".insteadOf "https://gitverse.ru/sc/Ao/jet"
 
 func JetПарсингШаблонов() {
-	Инфо("JetПарсингШаблонов %+s \n", ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов)
+
 	// Инфо("JetПарсингШаблонов views1 %+s \n", "./jetHTML")
-	Инфо(" %+v \n", Шаблоны)
+	Инфо(" %+v \n", НаборШаблонов)
+	// НаборШаблонов.ПарсингДиректорииШаблонов()
+	НаборШаблонов.ПарсингШаблона("/контент/админ/формы/формаНовогоОбработчика.html")
+	НаборШаблонов.ПоказатьШаблоныйВКэше()
+	// шаблон, err := Шаблоны.GetTemplate("/index.jet")
+	// if err != nil {
+	// 	Ошибка("Unexpected template err: %+v", err.Error())
+	// }
 
-	шаблон, err := Шаблоны.GetTemplate("/index.jet")
-	if err != nil {
-		Ошибка("Unexpected template err: %+v", err.Error())
-	}
+	// // var w io.Writer
+	// w := new(bytes.Buffer) // создаем буфер и присваиваем его переменной w
 
-	// var w io.Writer
-	w := new(bytes.Buffer) // создаем буфер и присваиваем его переменной w
+	// шаблон.Execute(w, nil, nil)
 
-	шаблон.Execute(w, nil, nil)
-
-	Инфо(" %+v \n  шаблон %+v \n", w.String(), шаблон)
+	// Инфо(" %+v \n  шаблон %+v \n", w.String(), шаблон)
 
 	// ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов
 	// httpfsLoader, err := httpfs.NewLoader(templates.Assets)

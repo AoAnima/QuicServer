@@ -311,7 +311,8 @@ func наблюдатьЗаИзменениямиШаблонов() {
 			if event.Op&fsnotify.Write == fsnotify.Write {
 				Инфо("Изменен файл:", event.Name)
 				hub.broadcast <- []byte("reload")
-				ПарсингШаблонов()
+				// ПарсингШаблонов()
+				JetПарсингШаблонов()
 				// Делайте необходимые действия при изменении файла
 			}
 		case err, ok := <-watcher.Errors:
