@@ -227,7 +227,7 @@
     {{- очередь = "${данныеШаблона.очередь+1}" -}}   
 {{- конец -}}
 
-<fieldset id="service_handler-{{УИД}}" class="field is-horizontal">
+<fieldset 1 id="service_handler-{{УИД}}" class="field is-horizontal">
     <div class="field-body">
        
             <div class="field control" style="max-width: 80px;">
@@ -282,9 +282,6 @@
         </div>
     </div>
 {{конец}}
-
-
-
 {{блок ДобавлениеУдалениеБлокаОбработчиков_js()}} 
 
 <script>

@@ -86,6 +86,7 @@
       },
       {
         "label": "Сбора и запуск",
+        
         "type": "shell",
         "windows": {
           "command": "cd ${fileDirname}/../bin ; .${pathSeparator}${fileBasenameNoExtension}.exe"
