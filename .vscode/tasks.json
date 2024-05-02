@@ -170,7 +170,7 @@
           "command": "cd  ${workspaceFolder}/Orkestrator/bin/ ;  ./Orkestrator.exe"
         },
         "linux": {
-          "command": "cd  ${workspaceFolder}/Orkestrator/bin/ && sudo ${workspaceFolder}/Orkestrator/bin/Orkestrator "
+          "command": "cd  ${workspaceFolder}/Orkestrator/bin/ && sudo ${workspaceFolder}/Orkestrator/bin/Orkestrator"
         },
         "problemMatcher": [
           "$go"

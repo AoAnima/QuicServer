@@ -51,13 +51,14 @@ func Сумма(числа ...interface{}) float64 {
 	}
 	return сумма
 }
-func jetРендерФункции() jet.VarMap {
+func ИД() string {
+	timestamp := time.Now().UnixNano() / int64(time.Millisecond)
+	return strconv.FormatInt(timestamp, 36)
+}
+func jetРендерФункции() jet.КартаФункций {
 	функции := jet.КартаФункций{
 		"Сумма": Сумма,
-		"ИД": func() string {
-			timestamp := time.Now().UnixNano() / int64(time.Millisecond)
-			return strconv.FormatInt(timestamp, 36)
-		},
+		"ИД":    ИД,
 		"Слайс": func(аргументы ...interface{}) []interface{} {
 			return аргументы
 		},
@@ -108,9 +109,9 @@ func jetРендерФункции() jet.VarMap {
 				return nil
 			}
 			r, e := json.Marshal(data)
-			Инфо("вJSON data %+v r %+v", data, r)
+			// Инфо("вJSON data %+v r %+v", data, r)
 			if e != nil {
-				Ошибка("  %+v", e)
+				Ошибка("  %+v %+v %+v", e, data, r)
 			}
 			return string(r)
 			//}
@@ -146,15 +147,17 @@ func jetРендерФункции() jet.VarMap {
 		},
 	}
 
-	jetКартаФункций := make(jet.VarMap)
-	for имяФункции, телоФункции := range функции {
-		значение := reflect.ValueOf(телоФункции)
-		if значение.Kind() != reflect.Func {
-			Ошибка("значение для %+s не является функцией: %+v ", имяФункции, значение.Kind())
-		}
-		jetКартаФункций[имяФункции] = reflect.ValueOf(значение)
-	}
-	return jetКартаФункций
+	// jetКартаФункций := make(jet.VarMap)
+	// for имяФункции, телоФункции := range функции {
+	// 	значение := reflect.ValueOf(телоФункции)
+	// 	if значение.Kind() != reflect.Func {
+	// 		Ошибка("значение для %+s не является функцией: %+v ", имяФункции, значение.Kind())
+	// 	}
+	// 	jetКартаФункций.SetFunc(имяФункции, телоФункции.(jet.Func))
+	// 	// jetКартаФункций[имяФункции] = reflect.ValueOf(значение)
+	// }
+	return функции
+	// return jetКартаФункций
 }
 func РендерФункции() template.FuncMap {
 	return template.FuncMap{

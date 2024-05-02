@@ -20,6 +20,14 @@ func ПарсингШаблонов() {
 
 	СырыеШаблоны = template.New("")
 	// JavaScript = js.New("JS")
+	// views.AddGlobalFunc("base64", func(a jet.Arguments) reflect.Value {
+	// 	a.RequireNumOfArguments("base64", 1, 1)
+
+	// 	buffer := bytes.NewBuffer(nil)
+	// 	fmt.Fprint(buffer, a.Get(0))
+
+	// 	return reflect.ValueOf(base64.URLEncoding.EncodeToString(buffer.Bytes()))
+	// })
 	СырыеШаблоны.Funcs(РендерФункции())
 	// JavaScript.Funcs(РендерФункции())
 
