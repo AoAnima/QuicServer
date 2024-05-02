@@ -13,7 +13,7 @@ import (
 )
 
 var СырыеШаблоны *template.Template
-
+ывв
 // var JavaScript *js.Template
 
 func РендерОтветКлиенту(сообщение *Сообщение) {
