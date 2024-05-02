@@ -1,0 +1,48 @@
+error: wrong number of arguments, should be from 1 to 2
+использование: git config [<опции>]
+
+Размещение файла конфигурации
+    --[no-]global         использовать глобальный файл конфигурации
+    --[no-]system         использовать системный файл конфигурации
+    --[no-]local          использовать файл конфигурации репозитория
+    --[no-]worktree       use per-worktree config file
+    -f, --[no-]file <файл>
+                          использовать указанный файл конфигурации
+    --[no-]blob <идент-двоичн-объекта>
+                          прочитать настройки из указанного двоичного объекта
+
+Действие
+    --[no-]get            get value: name [value-pattern]
+    --[no-]get-all        get all values: key [value-pattern]
+    --[no-]get-regexp     get values for regexp: name-regex [value-pattern]
+    --[no-]get-urlmatch   получить значение, специфичное для URL: раздел[.переменная] URL
+    --[no-]replace-all    replace all matching variables: name value [value-pattern]
+    --[no-]add            добавить новую переменную: имя значение
+    --[no-]unset          remove a variable: name [value-pattern]
+    --[no-]unset-all      remove all matches: name [value-pattern]
+    --[no-]rename-section переименовать раздел: старое-имя новое-имя
+    --[no-]remove-section удалить раздел: имя
+    -l, --[no-]list       показать весь список
+    --[no-]fixed-value    use string equality when comparing values to 'value-pattern'
+    -e, --[no-]edit       открыть в редакторе
+    --[no-]get-color      найти настроенный цвет: раздел [по-умолчанию]
+    --[no-]get-colorbool  проверить, существует ли настроенный цвет: раздел [stdout-есть-tty]
+
+Тип
+    -t, --[no-]type <тип> value is given this type
+    --bool                значение — это «true» (правда) или «false» (ложь)
+    --int                 значение — это десятичное число
+    --bool-or-int         значение — это --bool или --int
+    --bool-or-str         value is --bool or string
+    --path                значение — это путь (к файлу или каталогу)
+    --expiry-date         значение - это дата окончания срока действия
+
+Другое
+    -z, --[no-]null       завершать значения НУЛЕВЫМ байтом
+    --[no-]name-only      показывать только имена переменных
+    --[no-]includes       учитывать директивы include (включения файлов) при запросе
+    --[no-]show-origin    показать источник настройки (файл, стандартный ввод, двоичный объект, командная строка)
+    --[no-]show-scope     show scope of config (worktree, local, global, system, command)
+    --[no-]default <value>
+                          with --get, use default value when missing entry
+
