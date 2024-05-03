@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"time"
 
+	. "aoanima.ru/ConnQuic"
+
 	. "aoanima.ru/Logger"
 	jet "gitverse.ru/Ao/jet"
 )
@@ -57,8 +59,8 @@ func ИД() string {
 }
 func jetРендерФункции() jet.КартаФункций {
 	функции := jet.КартаФункций{
-		"Сумма": Сумма,
-		"ИД":    ИД,
+		"Сумма": Сумма(),
+		"ИД":    ИД(),
 		"Слайс": func(аргументы ...interface{}) []interface{} {
 			return аргументы
 		},
@@ -97,25 +99,33 @@ func jetРендерФункции() jet.КартаФункций {
 		"СтрокуВЧисло": func(data string) (int, error) {
 			число, err := strconv.Atoi(data)
 			if err != nil {
-				Ошибка("  %+v \n", err)
+				Ошибка("  %+v \n", err.Error())
 				return число, err
 			}
 			return число, nil
 		},
-		"вJSON": func(data interface{}) interface{} {
-			//Инфо("  reflect.TypeOf %+v",  reflect.TypeOf(data).Kind())
-			//if reflect.TypeOf(data).Kind().String() == "map" {
-			if data == nil {
-				return nil
+		"вJSON": func(data interface{}) string {
+			байтНабор, ошибка := Json(data)
+			if ошибка != nil {
+				Ошибка("  %+v   %+v \n", data, ошибка.Error())
+				return ""
 			}
-			r, e := json.Marshal(data)
-			// Инфо("вJSON data %+v r %+v", data, r)
-			if e != nil {
-				Ошибка("  %+v %+v %+v", e, data, r)
-			}
-			return string(r)
-			//}
+			return string(байтНабор)
 		},
+		// "вJSON": func(data interface{}) interface{} {
+		// 	//Инфо("  reflect.TypeOf %+v",  reflect.TypeOf(data).Kind())
+		// 	//if reflect.TypeOf(data).Kind().String() == "map" {
+		// 	if data == nil {
+		// 		return nil
+		// 	}
+		// 	r, e := json.Marshal(data)
+		// 	// Инфо("вJSON data %+v r %+v", data, r)
+		// 	if e != nil {
+		// 		Ошибка("  %+v %+v %+v", e.Error(), data, r)
+		// 	}
+		// 	return string(r)
+		// 	//}
+		// },
 		"Пусто": func(data interface{}) interface{} {
 
 			if data == nil {

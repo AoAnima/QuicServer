@@ -535,7 +535,7 @@ func Json(данныеДляКодирования interface{}) ([]byte, error) 
 
 	данные, err := jsoniter.Marshal(&данныеДляКодирования)
 	if err != nil {
-		Ошибка("  %+v \n", err)
+		Ошибка("  %+v  %+v \n", данные, err.Error())
 		return nil, err
 	}
 

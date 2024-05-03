@@ -1,20 +1,15 @@
 package main
 
 import (
+	"os"
+
 	jet "gitverse.ru/Ao/jet"
 
-	// . "aoanima.ru/ConnQuic"
+	. "aoanima.ru/ConnQuic"
 	. "aoanima.ru/Logger"
 )
 
 var НаборШаблонов *jet.Set
-
-// (
-// 	// jet.NewOSFileSystemLoader(ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов),
-// 	jet.NewOSFileSystemLoader(ДирректорияЗапуска+"/"+Конфиг.КаталогШаблонов),
-// 	jet.InDevelopmentMode(), // remove or set false in production
-// 	jet.WithTemplateNameExtensions([]string{"", ".html", ".js"}),
-// )
 
 // git config --global url."git@gitverse.ru:2222/Ao/jet.git".insteadOf "https://gitverse.ru/sc/Ao/jet.git"
 
@@ -24,27 +19,39 @@ func JetПарсингШаблонов() {
 
 	// Инфо("JetПарсингШаблонов views1 %+s \n", "./jetHTML")
 	Инфо("НаборШаблонов %+v \n", НаборШаблонов)
+
 	НаборШаблонов.ПарсингДиректорииШаблонов()
+	СобратьJS(НаборШаблонов)
+
 	// НаборШаблонов.ПарсингШаблона("/контент/админ/формы/формаНовогоОбработчика.html")
 	Инфо("НаборШаблонов  %+v \n", НаборШаблонов)
-	// НаборШаблонов.ПоказатьШаблоныйВКэше()
 
-	// шаблон, err := Шаблоны.GetTemplate("/index.jet")
-	// if err != nil {
-	// 	Ошибка("Unexpected template err: %+v", err.Error())
-	// }
+}
+func СобратьJS(НаборШаблонов *jet.Set) {
 
-	// // var w io.Writer
-	// w := new(bytes.Buffer) // создаем буфер и присваиваем его переменной w
+	путьJSфайл := ДирректорияЗапуска + "/" + Конфиг.КаталогСтатичныхФайлов + "/js/scripts.js"
+	if _, err := os.Stat(путьJSфайл); err == nil {
+		if err := os.Remove(путьJSфайл); err != nil {
+			Ошибка("Error removing file: %+v", err.Error())
+		}
+	}
+	файл, err := os.OpenFile(путьJSфайл, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
 
-	// шаблон.Execute(w, nil, nil)
+	if err != nil {
+		Ошибка(" ошибка открытия файла %+v  %+v \n", err.Error(), файл)
 
-	// Инфо(" %+v \n  шаблон %+v \n", w.String(), шаблон)
+	}
 
-	// ПатернПарсингаШаблонов := ДирректорияЗапуска + "/" + Конфиг.КаталогШаблонов
-	// httpfsLoader, err := httpfs.NewLoader(templates.Assets)
-	// if err != nil {
-	// 	Ошибка()
-	// }
+	JSШаблон := "{{ блок \"JavaScript\"}}"
+
+	НаборШаблонов.JsБлоки.Обойти(func(имяБлока, Блок any) bool {
+
+		Инфо("  %+v %+v \n", имяБлока, Блок.(*jet.BlockNode).String())
+		JSШаблон += "{{вставить " + имяБлока.(string) + "}}"
+
+		return true
+	})
+
+	JSШаблон += "{{конец}}"
 
 }
