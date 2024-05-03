@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"os"
 
 	jet "gitverse.ru/Ao/jet"
@@ -36,22 +37,36 @@ func СобратьJS(НаборШаблонов *jet.Set) {
 		}
 	}
 	файл, err := os.OpenFile(путьJSфайл, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
-
+	defer файл.Close()
 	if err != nil {
 		Ошибка(" ошибка открытия файла %+v  %+v \n", err.Error(), файл)
 
 	}
 
-	JSШаблон := "{{ блок \"JavaScript\"}}"
+	JSШаблон := "{{блок JavaScript}}"
 
 	НаборШаблонов.JsБлоки.Обойти(func(имяБлока, Блок any) bool {
 
 		Инфо("  %+v %+v \n", имяБлока, Блок.(*jet.BlockNode).String())
-		JSШаблон += "{{вставить " + имяБлока.(string) + "}}"
+		JSШаблон += "{{вставить " + имяБлока.(string) + "()}}"
 
 		return true
 	})
 
 	JSШаблон += "{{конец}}"
+	Инфо(" JSШаблон %+v \n", JSШаблон)
+
+	шаблон, ошибка := НаборШаблонов.Парсинг("JavaScript", JSШаблон, false)
+	if ошибка != nil {
+		Ошибка(" ОписаниеОшибки  %+v \n", ошибка.Error())
+	}
+	БуферHtml := new(bytes.Buffer)
+	ошибка = шаблон.Execute(БуферHtml, nil, nil)
+	if ошибка != nil {
+		Ошибка("  %+s \n", ошибка.Error())
+	}
+	if _, err := файл.WriteString(string(БуферHtml.String())); err != nil {
+		Ошибка(" ошибка записи в файл ]%+v \n", err.Error())
+	}
 
 }
