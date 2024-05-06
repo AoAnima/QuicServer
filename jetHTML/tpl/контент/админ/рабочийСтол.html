@@ -1,32 +1,32 @@
 {{блок рабочийСтол()}}
-<div class="container is-fluid">
-    <div class="columns">
+
+    <div class="строка">
     
         <!-- Sidebar menu -->
-        <div class="column is-one-quarter">
-          <aside class="menu">
-            <p class="menu-label">
+        <aside class="элемент три">
+          <div class="столбец">
+            <p class="лейбл-меню">
               Рабочий стол
             </p>
-            <ul class="menu-list">
-              <li><a href="./обработчики" onclick="ajax(event, true)">Обработчики</a></li>
-              <li><a href="./очередиОбработкиМаршрутов" onclick="ajax(event, true)">Очерь обработчиков маршрутов</a></li>
-              <li><a href="./заказы" onclick="ajax(event, true)">Заказы</a></li>
-              <li><a href="./магазины" onclick="ajax(event, true)">Мои магазины</a></li>
-              <li><a href="./сообщения" onclick="ajax(event, true)">Сообщения</a></li>
-              <li><a href="./настройки" onclick="ajax(event, true)">Настройки</a></li>
-              <!-- Add more menu items here -->
-            </ul>
-          </aside>
-        </div>
+            <div class="столбец выровнить-влево">
+              <a class="button текст-влево " href="./обработчики" onclick="ajax(event, true)">Обработчики</a>
+             <a class="button текст-влево "  href="./очередиОбработкиМаршрутов" onclick="ajax(event, true)">Очерь обработчиков маршрутов</a>
+             <a class="button текст-влево "  href="./заказы" onclick="ajax(event, true)">Заказы</a>
+             <a class="button текст-влево "   href="./магазины" onclick="ajax(event, true)">Мои магазины</a>
+             <a class="button текст-влево "  href="./сообщения" onclick="ajax(event, true)">Сообщения</a>
+             <a class="button текст-влево "  href="./настройки" onclick="ajax(event, true)">Настройки</a>
+           
+            </div>
+          </div>
+        </aside>
     
         <!-- Main content -->
-        <div class="column" id="content_block" >     
+        <div class="столбец" id="контент-контейнер" >     
             {{ вставить рабочийСтол_контент()}}    
         </div>
     
     </div>   
-</div>
+
  {{конец}}
 
 {{ блок рабочийСтол_контент()}}

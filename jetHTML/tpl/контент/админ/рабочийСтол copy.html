@@ -1,0 +1,35 @@
+{{блок рабочийСтол_()}}
+<div class="container is-fluid">
+    <div class="columns">
+    
+        <!-- Sidebar menu -->
+        <div class="column is-one-quarter">
+          <aside class="menu">
+            <p class="menu-label">
+              Рабочий стол
+            </p>
+            <ul class="menu-list">
+              <li><a href="./обработчики" onclick="ajax(event, true)">Обработчики</a></li>
+              <li><a href="./очередиОбработкиМаршрутов" onclick="ajax(event, true)">Очерь обработчиков маршрутов</a></li>
+              <li><a href="./заказы" onclick="ajax(event, true)">Заказы</a></li>
+              <li><a href="./магазины" onclick="ajax(event, true)">Мои магазины</a></li>
+              <li><a href="./сообщения" onclick="ajax(event, true)">Сообщения</a></li>
+              <li><a href="./настройки" onclick="ajax(event, true)">Настройки</a></li>
+              <!-- Add more menu items here -->
+            </ul>
+          </aside>
+        </div>
+    
+        <!-- Main content -->
+        <div class="column" id="content_block" >     
+            {{ вставить рабочийСтол_контент()}}    
+        </div>
+    
+    </div>   
+</div>
+ {{конец}}
+
+{{ блок рабочийСтол_контент()}}
+  {{вставить обработчики()}}
+{{конец}}
+

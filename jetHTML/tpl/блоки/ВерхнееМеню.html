@@ -1,135 +1,70 @@
 {{блок ВерхнееМеню() }}
-<header class="container">
+<header class="контейнер">
     <!-- Sub Navigation -->
-    <nav class="navbar row stretch" role="navigation" aria-label="main navigation">
-      <div class="item">
-        <a class="navbar-item link is-info" href="/">
-          Главная
-        </a>
-      </div>
-      <div class="item">      
-        <a class="navbar-item ink is-info" href="каталог">
-          Каталог
-        </a>
-      </div>
-      <div class="item">
-        <figure class="media-left">
-          <div class="image is-64x64">
-            <a href="https://localhost"><img src="/logo.png" /></a>
+    <nav class="меню строка" role="navigation" aria-label="main navigation">
+      <div class="элемент">
+        <figure class="">
+          <div class="">
+            <a href="https://localhost">
+              <img src="/logo.png" />
+            </a>
           </div>
         </figure>     
-      </div>
-      <div class="level-item">
-        <div class="field has-addons">
-          <div class="control">
+      </div>     
+      <div class="элемент ">      
+        <button class="элемент-меню основной с-иконкой" href="каталог">
+          Каталог
+        </button>
+      </div> 
+      <div class="элемент пять">      
+        <div class="строка без-переноса заполнить">
             <input class="input" type="text" placeholder="Искать на ПИОН" />
-          </div>
-          <div class="control buttons  ">
-            <button class="button is-primary"> <i class="fas fa-search p-1" ></i></button>
-          </div>
+            <button class="с-иконкой основной"> 
+              <i class="fas fa-search p-1" ></i>
+            </button> 
         </div>
       </div>
-      <div class="item">
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
-            Кабинет
-          </a>
- 
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="рабочийСтол">
+    <div class="строка">
+
+      <div class="элемент">      
+        <a class="элемент-меню с-иконкой" href="избранное">
+          
+          <i class="иконка fas fa-heart"></i>
+          <span class="текст">Избранное</span>
+        </a>
+      </div>
+       <div class="элемент">      
+        <a class="элемент-меню с-иконкой" href="заказы">
+          <i class="иконка fas fa-box"></i>
+          <span class="текст">Заказы</span>
+        </a>
+      </div> 
+      <div class="элемент">      
+        <a  class="с-иконкой элемент-меню" href="каталог">
+          <i class="иконка fas fa-shopping-cart"></i>
+         <span class="текст"> Корзина</span>
+        </a>
+      </div>
+      <div class="элемент">
+        <div class="выпадающий элемент-меню ">
+          <a class="элемент-меню с-иконкой" href="/формаАвторизации" onclick="ajax(event)">
+            <i class="иконка fas fa-face-smile"></i>
+                <span class="текст">Вход</span>       
+          </a> 
+          <div class="меню-выпадающее">
+            <a class="элемент-меню" href="рабочийСтол">
               Рабочий стол
             </a>      
-            <a class="navbar-item" href="кабинет">
+            <a class="элемент-меню" href="кабинет">
               Кабинет клиента
             </a>           
           </div>
         </div>
       </div>
-      <div class="item">      
-        <a class="navbar-item ink is-info" href="каталог">
-          Избранное
-        </a>
-      </div>
-       <div class="item">      
-        <a class="navbar-item ink is-info" href="каталог">
-          Заказы
-        </a>
-      </div> 
-      <div class="item">      
-        <a class="navbar-item ink is-info" href="каталог">
-          Корзина
-        </a>
-      </div>
-      <div class="item">
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a class="button" href="/формаРегистрации" onclick="ajax(event)">
-                <strong>Регистрация</strong>
-              </a>
-              <a class="button is-primary" href="/формаАвторизации" onclick="ajax(event)">
-                Вход
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
+     
     </nav>
 
-    <!-- <nav class="navbar is-light" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-          <strong>Пион.рф</strong>
-        </a>
-      </div>
-   
-      <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-          <a class="navbar-item" href="/">
-            Главная
-          </a>
-   
-          <a class="navbar-item" href="кабинет">
-            Кабинет
-          </a>
-   
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
-              Админка
-            </a>
-   
-            <div class="navbar-dropdown">
-              <a class="navbar-item" href="рабочийСтол">
-                Рабочий стол
-              </a>
-              <a class="navbar-item" href="#">
-                Jobs
-              </a>
-              <a class="navbar-item" href="#">
-                Contact
-              </a>
-              <hr class="navbar-divider">
-              <a class="navbar-item" href="#"> 
-                Report an issue
-              </a>
-            </div>
-          </div>
-        </div>
-   
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a class="button" href="/формаРегистрации" onclick="ajax(event)">
-                <strong>Регистрация</strong>
-              </a>
-              <a class="button is-primary" href="/формаАвторизации" onclick="ajax(event)">
-                Вход
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>   -->
   </header>
 
 {{конец}}
