@@ -1,0 +1,399 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    /* border: 1px solid #ccc; */
+    flex-direction: row;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+  }
+
+  .item {
+
+    /* padding: 10px; */
+    /* background-color: #f1f1f1; */
+    /* margin: 5px; */
+    /* border: 1px solid #ccc; */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 0;
+    min-width: 0;
+  }
+  .item img,  .item figure {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+.min-width-12 {
+    flex-basis: 12.5em;
+}
+.max-width-12 {
+    max-width: 12.5em;
+    flex-grow: 0;
+    flex-shrink: 1;
+  }
+
+  /* Позиционирование по горизонтали */
+.align-left {
+    justify-content: flex-start;
+  }
+  
+  .align-center {
+    justify-content: center;
+  }
+  
+  .align-right {
+    justify-content: flex-end;
+  }
+  
+  /* Позиционирование по вертикали */
+  .align-top {
+    align-items: flex-start;
+  }
+  
+  .align-middle {
+    align-items: center;
+  }
+  
+  .align-bottom {
+    align-items: flex-end;
+  }
+
+  .min-height-12 {
+    min-height: 12.5em;
+  }
+  .max-height-12 {
+    max-height: 12.5em;
+  }  
+  
+  .max-height-30 {
+    max-height: 30px;
+  }
+
+  .row.stretch .item {
+    flex-grow: 1;
+  }
+
+
+  .row.один .item {
+    flex-basis: calc(100% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.два .item {
+    flex-basis: calc(50% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.три>.item:nth-child(2n+1):nth-last-child(-n+2),
+  .row.two>.item:nth-child(2n+1):nth-last-child(-n+2) ~ .item {
+    flex-grow: 0;
+  }
+  
+  .row.три>.item {
+    flex-basis: calc(33.33% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.три>.item:nth-child(3n+1):nth-last-child(-n+3),
+  .row.три>.item:nth-child(3n+1):nth-last-child(-n+3) ~ .item {
+    flex-grow: 0;
+  }
+  
+  .row.четыре> .item {
+    flex-basis: calc(25% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.четыре> .item:nth-child(4n+1):nth-last-child(-n+4),
+  .row.четыре> .item:nth-child(4n+1):nth-last-child(-n+4) ~ .item {
+    flex-grow: 0;
+  }
+  
+  .row.пять> .item {
+    flex-basis: calc(20% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.пять> .item:nth-child(5n+1):nth-last-child(-n+5),
+  .row.пять> .item:nth-child(5n+1):nth-last-child(-n+5) ~ .item {
+    flex-grow: 0;
+  }
+  
+  .row.шесть> .item {
+    flex-basis: calc(16.66% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.шесть> .item:nth-child(6n+1):nth-last-child(-n+6),
+  .row.шесть> .item:nth-child(6n+1):nth-last-child(-n+6) ~ .item {
+    flex-grow: 0;
+  }
+  
+  .row.семь> .item {
+    flex-basis: calc(14.28% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.семь> .item:nth-child(7n+1):nth-last-child(-n+7),
+  .row.семь> .item:nth-child(7n+1):nth-last-child(-n+7) ~ .item {
+    flex-grow: 0;
+  }
+  
+  .row.восемь> .item {
+    flex-basis: calc(12.5% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.восемь> .item:nth-child(8n+1):nth-last-child(-n+8),
+  .row.восемь> .item:nth-child(8n+1):nth-last-child(-n+8) ~ .item {
+    flex-grow: 0;
+  }
+  
+  .row.девять> .item {
+    flex-basis: calc(11.11% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.девять> .item:nth-child(9n+1):nth-last-child(-n+9),
+  .row.девять >.item:nth-child(9n+1):nth-last-child(-n+9) ~ .item {
+    flex-grow: 0;
+  }
+  
+  .row.десять >.item {
+    flex-basis: calc(10% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.десять> .item:nth-child(10n+1):nth-last-child(-n+10),
+  .row.десять> .item:nth-child(10n+1):nth-last-child(-n+10) ~ .item {
+    flex-grow: 0;
+  }
+
+.row.одинадцать> .item {
+    flex-basis: calc(9.09% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.одинадцать> .item:nth-child(11n+1):nth-last-child(-n+11),
+  .row.одинадцать> .item:nth-child(11n+1):nth-last-child(-n+11) ~ .item {
+    flex-grow: 0;
+  }
+
+  .row.двенадцать> .item {
+    flex-basis: calc(8.33% - 10px);
+    flex-grow: 1;
+  }
+  
+  .row.двенадцать> .item:nth-child(12n+1):nth-last-child(-n+12),
+  .row.двенадцать> .item:nth-child(12n+1):nth-last-child(-n+12) ~ .item {
+    flex-grow: 0;
+  }
+
+
+  
+.navbar-item.has-dropdown.is-hoverable {
+    position: relative; /* делает контейнер dropdown относительным */
+  }
+  
+  .navbar-item.has-dropdown.is-hoverable .navbar-dropdown {
+    display: none; /* скрывает dropdown по умолчанию */
+    position: absolute; /* делает dropdown абсолютным */
+    top: 100%; /* позиционирует dropdown ниже.setParent */
+    left: 0; /* позиционирует dropdown tại левом краю.setParent */
+    background-color: #fff; /* необязательно: добавляет цвет фона к dropdown */
+    border: 1px solid #ddd; /* необязательно: добавляет рамку к dropdown */
+    padding: 10px; /* необязательно: добавляет отступы к dropdown */
+    z-index: 1; /* делает чтобы dropdown был на топе других элементов */
+  }
+  
+  .navbar-item.has-dropdown.is-hoverable:hover .navbar-dropdown {
+    display: block; /* показывает dropdown при наведении */
+  }
+
+  /* card */
+
+  
+.card {
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    color: #4a4a4a;
+    max-width: 100%;
+    position: relative;
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+    margin: 10px;
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 6px rgba(10, 10, 10, 0.2), 0 0 0 1px rgba(10, 10, 10, 0.2);
+  }
+  
+  .card-image {
+    display: block;
+    position: relative;
+  }
+  
+  .card-image .image {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+  
+  .card-image .image img {
+    display: block;
+    height: auto;
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  .card-content {
+    padding: 1.5rem;
+  }
+  
+  .card-content .title {
+    color: #363636;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.125;
+    margin-bottom: 0.75rem;
+  }
+  
+  .card-content .subtitle {
+    color: #4a4a4a;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 1.5rem;
+  }
+  
+  
+  .card-content .button {
+    background-color: #00d1b2;
+    border-color: transparent;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 3px;  
+    text-align: center;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card-content .button:hover {    
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.2), 0 0 0 1px rgba(10, 10, 10, 0.2);
+  }
+  
+  .card-content .button.is-small {
+    font-size: 0.75rem;
+    padding: 0.25em 0.5em;
+  }
+  
+  .card-content .quantity-selector {
+    display: flex;
+    align-items: center;
+  }
+  
+  .card-content .quantity-selector input {
+    width: 50px;
+    text-align: center;
+    margin: 0 0.5rem;
+  }
+  
+  .card-content .quantity-selector.is-hidden {
+    display: none;
+  }
+
+  /*конец card */
+
+  .item.один {
+    flex-basis: calc(1 / 12 * 100%);
+    max-width: calc(1 / 12 * 100%);
+  }
+  
+  .item.два {
+    flex-basis: calc(2 / 12 * 100%);
+    max-width: calc(2 / 12 * 100%);
+  }
+  
+  .item.три {
+    flex-basis: calc(3 / 12 * 100%);
+    max-width: calc(3 / 12 * 100%);
+  }
+  
+  .item.четыре {
+    flex-basis: calc(4 / 12 * 100%);
+    max-width: calc(4 / 12 * 100%);
+  }
+  
+  .item.пять {
+    flex-basis: calc(5 / 12 * 100%);
+    max-width: calc(5 / 12 * 100%);
+  }
+  
+  .item.шесть {
+    flex-basis: calc(6 / 12 * 100%);
+    max-width: calc(6 / 12 * 100%);
+  }
+  
+  .item.семь {
+    flex-basis: calc(7 / 12 * 100%);
+    max-width: calc(7 / 12 * 100%);
+  }
+  
+  .item.восемь {
+    flex-basis: calc(8 / 12 * 100%);
+    max-width: calc(8 / 12 * 100%);
+  }
+  
+  .item.девять {
+    flex-basis: calc(9 / 12 * 100%);
+    max-width: calc(9 / 12 * 100%);
+  }
+  
+  .item.десять {
+    flex-basis: calc(10 / 12 * 100%);
+    max-width: calc(10 / 12 * 100%);
+  }
+  
+  .item.одинадцать {
+    flex-basis: calc(11 / 12 * 100%);
+    max-width: calc(11 / 12 * 100%);
+  }
+  
+  .item.двенадцать {
+    flex-basis: calc(12 / 12 * 100%);
+    max-width: calc(12 / 12 * 100%);
+  }
+
+  .item.заполнить {
+    flex-grow: 1;
+    max-width: 100%;
+  }
+  
+  .item.заполнить ~ .item {
+    flex-basis: 0;
+    max-width: 100%;
+  }

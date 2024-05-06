@@ -8,6 +8,7 @@
 		}
 	],
 	"settings": {
-		"i18n-ally.localesPaths": []
+		"i18n-ally.localesPaths": [],
+		"CodeGPT.apiKey": "Nvidia"
 	}
 }

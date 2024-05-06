@@ -1,26 +1,31 @@
 {{блок карточка_товара(class)}}
-<div class="column {{ class }}">
-    <div class="card" data-href="/товар?item=341324" onclick="ОткрытьСтраницу(event)">
-      <div class="card-image">
+<div class="item {{ class }}">
+    <div class="card">
+      <div class="card-image"  data-href="/товар?item=341324" onclick="ОткрытьСтраницу(event)">
         <figure class="image is-4by4">
           <img src="placeholder.png" alt="Placeholder image">
         </figure>
       </div>
       <div class="card-content">
         <p class="title is-4">Товар Название </p> 
-        <div class="media">
-          <div class="media-content">
-           
-            <p class="subtitle is-6">100 Р.</p>
-          </div> 
-          <div class="media-content">
-            <button class="button is-primary add-to-cart">В корзину</button>
-            <div class="quantity-selector is-hidden">
-              <button class="button is-small qty-minus">-</button>
-              <input type="number" value="1">
-              <button class="button is-small qty-plus">+</button>
-            </div>
-          </div> 
+        <div class="container">
+          <div class="row stretch">
+            <div class="item">           
+              <p class="subtitle is-6">100 Р.</p>
+            </div> 
+            <div class="item девять  ">
+              <div class="row">
+                <button class="button is-primary add-to-cart item">В корзину</button>
+                <div class="quantity-selector item">
+                  <div class="row">
+                    <button class="item button is-small qty-minus">-</button>
+                    <input class="item" type="number" value="1">
+                    <button class="item button is-small qty-plus">+</button>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </div>
         </div>
       </div>
     </div>
