@@ -1,0 +1,354 @@
+:root {
+  --основной: #476fe8; /* создаем переменную --main-color со значением #333 */
+}
+
+
+body {
+  font-family: "Roboto", sans-serif;
+  margin: 0; /* Reset margin to 0 */
+  padding: 0; /* Reset padding to 0 */
+  display: flex; /* Make body a flex container */
+  flex-flow: column;
+  justify-content: center; /* Center the #body container horizontally */
+  align-items: center; /* Center the #body container vertically */
+  min-height: 100vh; /* Make body take full height of the viewport */
+  /* Limit the width of #body to 1440px */
+  width: 100%; /* Make #body take full width of its parent */
+  box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+#контент{
+
+  display: flex; /* Make body a flex container */
+  flex-flow: column;
+  justify-content: center; /* Center the #body container horizontally */
+  align-items: center; /* Center the #body container vertically */
+  min-height: 100vh; /* Make body take full height of the viewport */
+  /* Limit the width of #body to 1440px */
+  width: 100%; /* Make #body take full width of its parent */
+  box-sizing: border-box; 
+}
+#контент>.контейнер{
+  max-width: 1440px;
+}
+
+aside{
+ border-right: 1px solid #ccc;
+}
+
+figure {
+  margin: 0; 
+  padding: 0; 
+}
+
+#контент-контейнер {
+  padding: 10px;
+}
+
+.контейнер {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .строка {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    /* border: 1px solid #ccc; */
+    flex-direction: row;
+  }
+
+  .столбец {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+  }
+  .без-переноса {
+    flex-wrap: nowrap;
+  }
+
+  .элемент {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 0;
+    min-width: 0;
+  }
+  .строка .элемент ,  .строка >.строка{
+    flex: 0 0 auto; /* или flex-basis: auto; */
+    max-width: none;
+    width: auto;
+  }
+
+  .элемент.строка {
+    flex-direction: row;
+  }  
+
+  /* .элемент.строка > .элемент{
+   flex-grow: 1 !;
+  } */
+  /* .строка >.строка {
+    width: auto;
+    flex-grow: 1;
+  } */
+
+
+
+  .элемент img,  .элемент figure {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+
+.мин-ширина-12 {
+    flex-basis: 12.5em;
+}
+.макс-ширина-12 {
+    max-width: 12.5em;
+    flex-grow: 0;
+    flex-shrink: 1;
+  }
+  .мин-высота-12 {
+    min-height: 12.5em;
+  }
+  .макс-высота-12 {
+    max-height: 12.5em;
+  }  
+  
+  .макс-высота-30пкс {
+    max-height: 30px;
+  }
+
+  /* Позиционирование по горизонтали */
+  .выровнить-влево {
+    justify-content: flex-start;
+  }
+  
+  .выровнить-вцентр {
+    justify-content: center;
+  }
+  
+  .выровнить-вправо {
+    justify-content: flex-end;
+  }
+  
+  /* Позиционирование по вертикали */
+  .выровнить-вверх {
+    align-items: flex-start;
+  }
+  
+  .выровнить-вцентр {
+    align-items: center;
+  }
+  
+  .выровнить-вниз {
+    align-items: flex-end;
+  }
+
+  .строка.заполнить>.элемент, .строка.заполнить>*:not(.с-иконкой) {
+    flex-grow: 1;
+  }
+
+  .с-иконкой .fas{
+    margin: 0 4px;
+  }
+  
+
+  .строка.один .элемент {
+    flex-basis: calc(100% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.два .элемент {
+    flex-basis: calc(50% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.два>.элемент:nth-child(2n+1):nth-last-child(-n+2),
+  .строка.two>.элемент:nth-child(2n+1):nth-last-child(-n+2) ~ .элемент {
+    flex-grow: 0;
+  }
+  
+  .строка.три>.элемент {
+    flex-basis: calc(33.33% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.три>.элемент:nth-child(3n+1):nth-last-child(-n+3),
+  .строка.три>.элемент:nth-child(3n+1):nth-last-child(-n+3) ~ .элемент {
+    flex-grow: 0;
+  }
+  
+  .строка.четыре> .элемент {
+    flex-basis: calc(25% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.четыре> .элемент:nth-child(4n+1):nth-last-child(-n+4),
+  .строка.четыре> .элемент:nth-child(4n+1):nth-last-child(-n+4) ~ .элемент {
+    flex-grow: 0;
+  }
+  
+  .строка.пять> .элемент {
+    flex-basis: calc(20% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.пять> .элемент:nth-child(5n+1):nth-last-child(-n+5),
+  .строка.пять> .элемент:nth-child(5n+1):nth-last-child(-n+5) ~ .элемент {
+    flex-grow: 0;
+  }
+  
+  .строка.шесть> .элемент {
+    flex-basis: calc(16.66% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.шесть> .элемент:nth-child(6n+1):nth-last-child(-n+6),
+  .строка.шесть> .элемент:nth-child(6n+1):nth-last-child(-n+6) ~ .элемент {
+    flex-grow: 0;
+  }
+  
+  .строка.семь> .элемент {
+    flex-basis: calc(14.28% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.семь> .элемент:nth-child(7n+1):nth-last-child(-n+7),
+  .строка.семь> .элемент:nth-child(7n+1):nth-last-child(-n+7) ~ .элемент {
+    flex-grow: 0;
+  }
+  
+  .строка.восемь> .элемент {
+    flex-basis: calc(12.5% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.восемь> .элемент:nth-child(8n+1):nth-last-child(-n+8),
+  .строка.восемь> .элемент:nth-child(8n+1):nth-last-child(-n+8) ~ .элемент {
+    flex-grow: 0;
+  }
+  
+  .строка.девять> .элемент {
+    flex-basis: calc(11.11% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.девять> .элемент:nth-child(9n+1):nth-last-child(-n+9),
+  .строка.девять >.элемент:nth-child(9n+1):nth-last-child(-n+9) ~ .элемент {
+    flex-grow: 0;
+  }
+  
+  .строка.десять >.элемент {
+    flex-basis: calc(10% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.десять> .элемент:nth-child(10n+1):nth-last-child(-n+10),
+  .строка.десять> .элемент:nth-child(10n+1):nth-last-child(-n+10) ~ .элемент {
+    flex-grow: 0;
+  }
+
+.строка.одинадцать> .элемент {
+    flex-basis: calc(9.09% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.одинадцать> .элемент:nth-child(11n+1):nth-last-child(-n+11),
+  .строка.одинадцать> .элемент:nth-child(11n+1):nth-last-child(-n+11) ~ .элемент {
+    flex-grow: 0;
+  }
+
+  .строка.двенадцать> .элемент {
+    flex-basis: calc(8.33% - 10px);
+    flex-grow: 1;
+  }
+  
+  .строка.двенадцать> .элемент:nth-child(12n+1):nth-last-child(-n+12),
+  .строка.двенадцать> .элемент:nth-child(12n+1):nth-last-child(-n+12) ~ .элемент {
+    flex-grow: 0;
+  }
+
+
+  /*конец card */
+
+  .элемент.один {
+    flex-basis: calc(1 / 12 * 100%);
+    max-width: calc(1 / 12 * 100%);
+  }
+  
+  .элемент.два {
+    flex-basis: calc(2 / 12 * 100%);
+    max-width: calc(2 / 12 * 100%);
+  }
+  
+  .элемент.три {
+    flex-basis: calc(3 / 12 * 100%);
+    max-width: calc(3 / 12 * 100%);
+  }
+  
+  .элемент.четыре {
+    flex-basis: calc(4 / 12 * 100%);
+    max-width: calc(4 / 12 * 100%);
+  }
+  
+  .элемент.пять {
+    flex-basis: calc(5 / 12 * 100%);
+    max-width: calc(5 / 12 * 100%);
+  }
+  
+  .элемент.шесть {
+    flex-basis: calc(6 / 12 * 100%);
+    max-width: calc(6 / 12 * 100%);
+  }
+  
+  .элемент.семь {
+    flex-basis: calc(7 / 12 * 100%);
+    max-width: calc(7 / 12 * 100%);
+  }
+  
+  .элемент.восемь {
+    flex-basis: calc(8 / 12 * 100%);
+    max-width: calc(8 / 12 * 100%);
+  }
+  
+  .элемент.девять {
+    flex-basis: calc(9 / 12 * 100%);
+    max-width: calc(9 / 12 * 100%);
+  }
+  
+  .элемент.десять {
+    flex-basis: calc(10 / 12 * 100%);
+    max-width: calc(10 / 12 * 100%);
+  }
+  
+  .элемент.одинадцать {
+    flex-basis: calc(11 / 12 * 100%);
+    max-width: calc(11 / 12 * 100%);
+  }
+  
+  .элемент.двенадцать {
+    flex-basis: calc(12 / 12 * 100%);
+    max-width: calc(12 / 12 * 100%);
+  }
+
+  .элемент.заполнить {
+    flex-grow: 1;
+    max-width: 100%;
+  }
+  
+  /* .элемент.заполнить ~ .элемент {
+    flex-basis: 0;
+    flex-grow: 10;
+    max-width: 100%;
+  } */
+ 

@@ -1,0 +1,376 @@
+{{блок формаНовогоОбработчика_()}}
+<div class="контейнер">
+    <h1 class="title">Добавдение обработчика</h1>
+    <form id="newRouteForm" class="столбец is-multiline" jsHanlder="Перехват sumbit со всего документа  обрабатывается через ajaxPost()" action="добавитьОбработчик">
+        <div class="field column  is-narrow">
+            <label class="label">URL 
+                <span class="icon has-text-info has-tooltip-arrow has-tooltip-info" data-tooltip="Не обязатель еслиестновлен обрабочтик, или действие, можно задать только URL и права, чтобы ограничить доступ к URL ">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+            </label>           
+            <div class="control">
+                <input class="input" type="text" placeholder="URL" name="URL" value="">
+            </div>
+        </div> 
+        <div class="field column  is-narrow">
+            <label class="label">Действие 
+                <span class="icon has-text-info has-tooltip-arrow has-tooltip-info" data-tooltip="Не обязатель еслиестновлен обрабочтик, может соответствовать какой либо функции в сервисе, или быть просто обозначением очереди обработчиков. Имеет приоритет над осальными полями">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+            </label>           
+            <div class="control">
+                <input class="input" type="text" placeholder="авторизация" name="действие" value="">
+            </div>
+        </div>
+
+        <div class="field column is-narrow">
+            <label class="label">HTML Шаблон <span class="icon has-text-info has-tooltip-arrow has-tooltip-info" data-tooltip="Шаблон может быть указан в виде пути основнойКонтент/вложенныйКонтент">
+                <i class="fas fa-info-circle" ></i>
+            </span> </label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Шаблон" name="основнойКонтент/вложенныйКонтент" value="имя шаблона">
+            </div>
+        </div>
+
+
+        <div class="field column">
+            <input class="is-checkradio" id="isActive" type="checkbox" name="isActive" checked="checked" name="активно" value="1">
+            <label for="isActive">Активен</label>
+        </div>
+        </div>
+
+        <div id ="accessInputBlocks" class=" p-3 столбец">
+            <div class="panel is-info ">
+                <div class="panel-heading p-4">                   
+                    Права доступа к обработчику
+                </div>
+             
+                <div class="panel-block is-flex-direction-column is-align-items-stretch">
+                    <div class="столбец">
+                        <div class="column is-one-third"><label class="label">Роль</label></div>
+                        <div class="column is-one-third"><label class="label">Права достуна</label></div>
+                        <div class="column is-one-third"> </div>
+                    </div>
+                    <section class="column" id="section-role_access">
+                    {{УИД:=ИД}}
+                    {{вставить БлокПравДоступа(данныеБлокаПравДоступа = map("имяШаблона", "role_access", "УИД",УИД )) }}   
+                    </section>               
+
+                </div>
+            </div>
+        </div>
+  
+
+        <div id="handlersInputBlocks" class="p-3 столбец">
+            <div class="panel is-info ">
+                <div class="panel-heading  p-4">                   
+                  Обработчики
+                 </div>
+                <div class="panel-block is-flex-direction-column is-align-items-stretch">
+                    <div class="столбец">
+                        <div class="column is-one-four">
+                            <label class="label">Очередь </label>
+                        </div><div class="column is-one-four">
+                            <label class="label">Сервис
+                                <span class="icon has-text-info has-tooltip-arrow has-tooltip-info" data-tooltip="Нужно для того чтобы понять в какой сервис отправлять запрос для обработчки маршрута или действия, если обработчик не задан. Если задан обработчик, то скорей всего он зарегистрирован в СинКвике и соответсвует какому то Сервису">
+                                    <i class="fas fa-info-circle" ></i>
+                                </span>
+        
+                            </label>
+                        </div>
+                        <div class="column is-one-four"><label class="label">
+                            <label class="label">Обработчик
+                                <span class="icon has-text-info has-tooltip-arrow has-tooltip-info" data-tooltip="Имя обработчика который существуе в Сервисе, если задан то поле Сервис можно не заполнять">
+                                    <i class="fas fa-info-circle" ></i>
+                                </span>
+                            </label>                      
+                        </div>
+                        <div class="column is-one-four"> </div>
+                    </div>
+                    <section class="column" id="section-service_handler">
+                        {{УИД:=ИД}}
+                   {{вставить БлокОбработчиков(данныеБлокОбработчиков = map("имяШаблона" ,"service_handler", "УИД", УИД, "очередь", 1)) }}
+                    </section>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{{конец}}
+
+
+{{блок БлокПравДоступа(данныеБлокаПравДоступа)}}
+
+{{УИД:=""}}
+{{имяШаблона:=""}}
+
+    {{если данныеБлокаПравДоступа}}
+        {{данныеБлокаПравДоступа}}
+        {{- УИД = данныеБлокаПравДоступа.УИД -}}
+        {{- имяШаблона = данныеБлокаПравДоступа.имяШаблона -}}
+
+    {{иначе}}
+    
+        {{- УИД = "${данныеШаблона.УИД}" -}} 
+        {{- имяШаблона = "${данныеШаблона.имяШаблона}" -}}
+
+    {{- конец -}}
+
+    
+
+    <fieldset class="field is-horizontal" id="role_access-{{УИД}}">     
+            <div class="field-body">
+                <div class="control field" id="role-1">
+                    <!-- <label class="label">Роль</label> -->
+                    <div class="dropdown is-hoverable">
+                        <div class="dropdown-trigger">
+                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span>Выбрать роль</span>
+                            <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                        <div class="dropdown-item">
+                            <label class="checkbox ">
+                                <input type="checkbox"  name="роль[{{УИД}}]" value="1"/>
+                                Роль 1
+                            </label>
+                            <hr class="dropdown-divider" />
+                            <label class="checkbox">
+                                <input type="checkbox"  name="роль[{{УИД}}]" value="2"/>
+                                Роль 2
+                            </label>
+                            <hr class="dropdown-divider" />
+                            <label class="checkbox">
+                                <input type="checkbox"  name="роль[{{УИД}}]" value="3"/>
+                                Роль 2
+                            </label>
+                            <hr class="dropdown-divider" />
+                            <label class="checkbox">
+                                <input type="checkbox"  name="роль[{{УИД}}]" value="4"/>
+                                Роль 2
+                            </label>
+                            <hr class="dropdown-divider" />
+                            <label class="checkbox">
+                                <input type="checkbox"  name="роль[{{УИД}}]" value="5"/>
+                                роль 2
+                            </label>
+                        </div>
+                        </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="field control" id="access-{{УИД}}">
+                    <!-- <label class="label">Права доступа</label> -->
+                    <div class="dropdown is-hoverable">
+                        <div class="dropdown-trigger">
+                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span>Выбрать права доступа</span>
+                            <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                        <div class="dropdown-item">
+                            <label class="checkbox ">
+                                <input type="checkbox" name="права_доступа[{{УИД}}]" value="1"/>
+                                права_доступа 1
+                            </label>
+                            <hr class="dropdown-divider" />
+                            <label class="checkbox">
+                                <input type="checkbox"  name="права_доступа[{{УИД}}]" value="2"/>
+                                права_доступа 2
+                            </label>
+                            <hr class="dropdown-divider" />
+                            <label class="checkbox">
+                                <input type="checkbox"  name="права_доступа[{{УИД}}]" value="3"/>
+                                права_доступа 3
+                            </label>
+                            <hr class="dropdown-divider" />
+                            <label class="checkbox">
+                                <input type="checkbox"  name="права_доступа[{{УИД}}]" value="4"/>
+                                права_доступа 4
+                            </label>
+                            <hr class="dropdown-divider" />
+                            <label class="checkbox">
+                                <input type="checkbox" name="права_доступа[{{УИД}}]" value="5"/>
+                                права_доступа 5
+                            </label>
+                        </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>    
+
+
+                {{вставить КнопкиДобавленияУдаления(данныеКнопок=map("УИД", УИД, "имяШаблона", имяШаблона))}}              
+            </div>          
+    </fieldset>
+{{конец}}
+
+
+
+{{блок БлокОбработчиков(данныеБлокОбработчиков)}}
+
+{{- имяШаблона := "" -}}
+{{- УИД := "" -}}
+{{- очередь := "" -}}
+
+
+{{ если данныеБлокОбработчиков}} 
+    {{- имяШаблона = данныеБлокОбработчиков.имяШаблона -}}
+    {{- УИД = данныеБлокОбработчиков.УИД -}}
+    {{- очередь = данныеБлокОбработчиков.очередь -}}
+
+{{- иначе -}}
+    {{- имяШаблона = "${данныеШаблона.имяШаблона}" -}}
+    {{- УИД = "${данныеШаблона.УИД}" -}}
+    {{- очередь = "${+данныеШаблона.очередь+1}" -}}   
+{{- конец -}}
+
+
+<fieldset 1 id="service_handler-{{УИД}}" class="field is-horizontal">
+    <div class="field-body">
+       
+            <div class="field control" style="max-width: 80px;">
+                <input class="input" type="number" name="очередь[{{УИД}}]" value="{{очередь}}" id="order-service_handler-{{УИД}}" min="1">
+            </div>
+            <div
+                class="field control">
+                <!-- <input class="input" type="text" placeholder="Имя сервиса" name ="сервис" value=""> -->
+                <div class="select">
+                    <select id="service-1" name="сервис[{{УИД}}]" class="" onchange="изменитьСписокОбработчиков(event, '{{УИД}}')">
+                        <option disabled="disabled" value="" selected="selected">Выбрать сервис</option>
+                        <option value="option1">Сервис 1Сервис 1Сервис 1Сервис 1</option>
+                        <option value="option2">Сервис 2</option>
+                        <option value="option3">Сервис 3</option>
+                        <option value="option4">Сервис 4</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field control">
+                <div class="select">
+                    <div class="control">
+                        <select id="handler-1" name="обработчик[{{УИД}}]">
+                            <option disabled="disabled" value="" selected="selected">Выбрать обработчик</option>
+                            <option value="option2">Обработчик 2</option>
+                            <option value="option3">Обработчик 3</option>
+                            <option value="option4">Обработчик 4</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+           
+            {{вставить КнопкиДобавленияУдаления( данныеКнопок=map("очередь", очередь, "УИД", УИД, "имяШаблона", имяШаблона)) }}
+    </div>
+
+
+</fieldset>
+
+{{конец}} 
+
+{{блок КнопкиДобавленияУдаления(данныеКнопок)}}
+
+    <div class="field control has-addons is-multiline ">
+        
+         <div class="control">    {{ вJSON(данныеКнопок) }}</div>
+        <div class="control ">
+        
+            <button onclick='добавитьБлок(event, {{ вJSON(данныеКнопок)}} )' class="button  is-primary control"> 
+                <i class="fas fa-plus p-1"></i>
+            </button>
+                    </div>
+        <div class="control ">
+            <button onclick='удалитьБлок(event, {{ вJSON(данныеКнопок) }} )' class="button  is-danger control">
+            <i class="fas fa-minus p-1"></i>
+        </button>
+        </div>
+    </div>
+
+{{конец}}
+
+
+<script>
+{{блок ДобавлениеУдалениеБлокаОбработчиков_js()}} 
+
+
+    function Шаблон (имяШаблона, данныеШаблона) {          
+        let шаблоны =   {
+            "role_access":  `{{вставить БлокПравДоступа()}}`,
+            "service_handler": `{{вставить БлокОбработчиков()}}`,
+        }       
+        // console.log(шаблоны[имяШаблона]);
+        return шаблоны[имяШаблона]
+    }  
+
+
+
+    function НовыйИд(){
+        return Date.now().toString(36)
+    }
+
+    // function добавитьБлок(event, имяШаблона, УИД) {  
+    function добавитьБлок(event, данные) {  
+        event.preventDefault();
+        event.stopPropagation();
+        console.log(данные);
+        console.log(`[id^="${данные.имяШаблона}"]`);
+
+        let блокКоторыйВызвалСобытие = event.target.closest(`[id^="${данные.имяШаблона}"]`);
+
+
+        let ИдНовогоБлока = НовыйИд();
+        // let новыйИд = `${данные.имяШаблона}-${ИдНовогоБлока}`;
+
+        console.log("данные", данные, ИдНовогоБлока, блокКоторыйВызвалСобытие);
+
+        данные["УИД"] = ИдНовогоБлока;
+        let новыйБлок = Шаблон(данные.имяШаблона,  данные);
+       console.log(новыйБлок);
+        // console.log("блокКоторыйВызвалСобытие",`[id^="${данные.имяШаблона}"]`,  блокКоторыйВызвалСобытие);
+
+        блокКоторыйВызвалСобытие.insertAdjacentHTML('afterend', новыйБлок);
+    }
+
+    // function удалитьБлок(event, имяШаблона, УИД) {
+    function удалитьБлок(event, данные) {
+        event.preventDefault();
+        event.stopPropagation();
+        let родительскаяСекция = event.target.closest(`[id="section-${данные.имяШаблона}"]`);
+        // если был удалён последний элемент в сексии блоков, то добавим новый
+      
+       
+        let блокКоторыйВызвалСобытие = event.target.closest(`[id^="${данные.имяШаблона}"]`);
+            блокКоторыйВызвалСобытие.remove();
+        let блоки = document.querySelectorAll(`[id^="${данные.имяШаблона}"]`);
+
+        console.log(блоки);
+
+        if (блоки.length == 0) {
+            данные["УИД"] = НовыйИд();
+            let новыйБлок = Шаблон(данные.имяШаблона, данные);
+            console.log(родительскаяСекция);
+            // найдём родительскую секцию и вставим внеё новый блок
+            родительскаяСекция.insertAdjacentHTML('afterbegin', новыйБлок);
+            // document.getElementById(имяШаблона+"-section").insertAdjacentHTML('afterbegin', новыйБлок);
+        }
+        
+    }
+
+    // Нужно добавить в рендер функцию, точнее в парсинг функцию обработчик который будет собирать все javascript из шаблонов и помещать их в один файл,  
+    /*
+    может можно сделать так чтобы каждый js блок кода был объявлен как define "обработчикФормыНовогоМаршрута.js"
+    */
+
+    var количествоОбработчиков = 0 // просто УИД добавленного обработчика, не уменьшается при удалении, потому 
+
+
+{{конец}}
+</script>
+

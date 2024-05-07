@@ -8,92 +8,92 @@
 
 
 
-    <fieldset class="field is-horizontal" id="role_access-${данныеШаблона.УИД}">     
-            <div class="field-body">
-                <div class="control field" id="role-1">
+    <fieldset class="" id="role_access-${данныеШаблона.УИД}">     
+            <div class="строка">
+                <div class="элемент отступ-внутр-10 id="role-${данныеШаблона.УИД}">
                     <!-- <label class="label">Роль</label> -->
-                    <div class="dropdown is-hoverable">
+                    <div class="выпадающий по-наведению">
                         <div class="dropdown-trigger">
-                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <button class="кнопка контур" aria-haspopup="true" aria-controls="dropdown-menu">
                             <span>Выбрать роль</span>
-                            <span class="icon is-small">
+                            <span class="иконка is-small">
                             <i class="fas fa-angle-down" aria-hidden="true"></i>
                             </span>
                         </button>
                         </div>
-                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                        <div class="dropdown-content">
-                        <div class="dropdown-item">
-                            <label class="checkbox ">
+                        <div class="выпадающее-меню" id="dropdown-menu" role="menu">
+                        <div class="выпадающий-контент">
+                            <hr class="разделитель" />
+                            <label class="checkbox выпадающий-элемент">
                                 <input type="checkbox"  name="роль[${данныеШаблона.УИД}]" value="1"/>
                                 Роль 1
                             </label>
-                            <hr class="dropdown-divider" />
-                            <label class="checkbox">
+                            <hr class="разделитель" />
+                            <label class="checkbox выпадающий-элемент">
                                 <input type="checkbox"  name="роль[${данныеШаблона.УИД}]" value="2"/>
                                 Роль 2
                             </label>
-                            <hr class="dropdown-divider" />
-                            <label class="checkbox">
+                            <hr class="разделитель" />
+                            <label class="checkbox выпадающий-элемент">
                                 <input type="checkbox"  name="роль[${данныеШаблона.УИД}]" value="3"/>
                                 Роль 2
                             </label>
-                            <hr class="dropdown-divider" />
-                            <label class="checkbox">
+                            <hr class="разделитель" />
+                            <label class="checkbox выпадающий-элемент">
                                 <input type="checkbox"  name="роль[${данныеШаблона.УИД}]" value="4"/>
                                 Роль 2
                             </label>
-                            <hr class="dropdown-divider" />
-                            <label class="checkbox">
+                            <hr class="разделитель" />
+                            <label class="checkbox выпадающий-элемент">
                                 <input type="checkbox"  name="роль[${данныеШаблона.УИД}]" value="5"/>
                                 роль 2
                             </label>
-                        </div>
+                            <hr class="разделитель" />
                         </div>
                         </div>
                     </div>
                 </div> 
 
-                <div class="field control" id="access-${данныеШаблона.УИД}">
+                <div class="элемент отступ-внутр-10" id="access-${данныеШаблона.УИД}">
                     <!-- <label class="label">Права доступа</label> -->
-                    <div class="dropdown is-hoverable">
+                    <div class="выпадающий по-наведению">
                         <div class="dropdown-trigger">
-                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <button class="кнопка контур" aria-haspopup="true" aria-controls="dropdown-menu">
                             <span>Выбрать права доступа</span>
                             <span class="icon is-small">
                             <i class="fas fa-angle-down" aria-hidden="true"></i>
                             </span>
                         </button>
                         </div>
-                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                        <div class="dropdown-content">
-                        <div class="dropdown-item">
-                            <label class="checkbox ">
-                                <input type="checkbox" name="права_доступа[${данныеШаблона.УИД}]" value="1"/>
-                                права_доступа 1
-                            </label>
-                            <hr class="dropdown-divider" />
-                            <label class="checkbox">
-                                <input type="checkbox"  name="права_доступа[${данныеШаблона.УИД}]" value="2"/>
-                                права_доступа 2
-                            </label>
-                            <hr class="dropdown-divider" />
-                            <label class="checkbox">
-                                <input type="checkbox"  name="права_доступа[${данныеШаблона.УИД}]" value="3"/>
-                                права_доступа 3
-                            </label>
-                            <hr class="dropdown-divider" />
-                            <label class="checkbox">
-                                <input type="checkbox"  name="права_доступа[${данныеШаблона.УИД}]" value="4"/>
-                                права_доступа 4
-                            </label>
-                            <hr class="dropdown-divider" />
-                            <label class="checkbox">
-                                <input type="checkbox" name="права_доступа[${данныеШаблона.УИД}]" value="5"/>
-                                права_доступа 5
-                            </label>
-                        </div>
-                        </div>
+                        <div class="выпадающее-меню " id="dropdown-menu" role="menu">
+                            <div class="выпадающий-контент">
+                                    <hr class="разделитель" />
+                                    <label class="checkbox выпадающий-элемент">
+                                        <input type="checkbox" name="права_доступа[${данныеШаблона.УИД}]" value="1"/>
+                                        права_доступа 1
+                                    </label>
+                                    <hr class="разделитель" />
+                                    <label class="checkbox выпадающий-элемент">
+                                        <input type="checkbox"  name="права_доступа[${данныеШаблона.УИД}]" value="2"/>
+                                        права_доступа 2
+                                    </label>
+                                    <hr class="разделитель" />
+                                    <label class="checkbox выпадающий-элемент">
+                                        <input type="checkbox"  name="права_доступа[${данныеШаблона.УИД}]" value="3"/>
+                                        права_доступа 3
+                                    </label>
+                                    <hr class="разделитель " />
+                                    <label class="checkbox выпадающий-элемент">
+                                        <input type="checkbox"  name="права_доступа[${данныеШаблона.УИД}]" value="4"/>
+                                        права_доступа 4
+                                    </label>
+                                    <hr class="разделитель " />
+                                    <label class="checkbox выпадающий-элемент">
+                                        <input type="checkbox" name="права_доступа[${данныеШаблона.УИД}]" value="5"/>
+                                        права_доступа 5
+                                    </label>
+                                    <hr class="разделитель" />
+                            </div>
                         </div>
                     </div>
                 </div>    
@@ -101,20 +101,21 @@
 
                 
 
-    <div class="field control has-addons is-multiline ">
-        
-         <div class="control">    {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;}</div>
-        <div class="control ">
-        
-            <button onclick='добавитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="button  is-primary control"> 
+    <div class="строка"> 
+      
+            <button onclick='добавитьБлок(event, {&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;,&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;} )' class="кнопка основной"> 
                 <i class="fas fa-plus p-1"></i>
-            </button>
-                    </div>
-        <div class="control ">
-            <button onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="button  is-danger control">
+            </button>          
+            <button onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка внимание">
+            <i class="fas fa-minus p-1"></i>
+        </button> <button onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка внимание">
+            <i class="fas fa-minus p-1"></i>
+        </button> <button onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка внимание">
+            <i class="fas fa-minus p-1"></i>
+        </button> <button onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка внимание">
             <i class="fas fa-minus p-1"></i>
         </button>
-        </div>
+       
     </div>
 
               
@@ -155,20 +156,21 @@
            
             
 
-    <div class="field control has-addons is-multiline ">
-        
-         <div class="control">    {&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;,&#34;очередь&#34;:&#34;${+данныеШаблона.очередь+1}&#34;,&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;}</div>
-        <div class="control ">
-        
-            <button onclick='добавитьБлок(event, {&#34;очередь&#34;:&#34;${+данныеШаблона.очередь+1}&#34;,&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="button  is-primary control"> 
+    <div class="строка"> 
+      
+            <button onclick='добавитьБлок(event, {&#34;очередь&#34;:&#34;${+данныеШаблона.очередь+1}&#34;,&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка основной"> 
                 <i class="fas fa-plus p-1"></i>
-            </button>
-                    </div>
-        <div class="control ">
-            <button onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;,&#34;очередь&#34;:&#34;${+данныеШаблона.очередь+1}&#34;} )' class="button  is-danger control">
+            </button>          
+            <button onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;,&#34;очередь&#34;:&#34;${+данныеШаблона.очередь+1}&#34;} )' class="кнопка внимание">
+            <i class="fas fa-minus p-1"></i>
+        </button> <button onclick='удалитьБлок(event, {&#34;очередь&#34;:&#34;${+данныеШаблона.очередь+1}&#34;,&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка внимание">
+            <i class="fas fa-minus p-1"></i>
+        </button> <button onclick='удалитьБлок(event, {&#34;очередь&#34;:&#34;${+данныеШаблона.очередь+1}&#34;,&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка внимание">
+            <i class="fas fa-minus p-1"></i>
+        </button> <button onclick='удалитьБлок(event, {&#34;очередь&#34;:&#34;${+данныеШаблона.очередь+1}&#34;,&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка внимание">
             <i class="fas fa-minus p-1"></i>
         </button>
-        </div>
+       
     </div>
 
 
