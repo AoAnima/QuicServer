@@ -46,18 +46,22 @@
         </a>
       </div>
       <div class="элемент">
-        <div class="выпадающий элемент-меню ">
-          <a class="элемент-меню с-иконкой" href="/формаАвторизации" onclick="ajax(event)">
+        <div class="выпадающий по-наведению влево">
+          <a class="с-иконкой элемент-меню" aria-haspopup="true" aria-controls="dropdown-menu"  href="/формаАвторизации" onclick="ajax(event)">
             <i class="иконка fas fa-face-smile"></i>
-                <span class="текст">Вход</span>       
-          </a> 
-          <div class="меню-выпадающее">
-            <a class="элемент-меню" href="рабочийСтол">
-              Рабочий стол
-            </a>      
-            <a class="элемент-меню" href="кабинет">
-              Кабинет клиента
-            </a>           
+            <span class="текст">Вход</span>       
+          </a>     
+          <div class="выпадающее-меню" id="dropdown-menu" role="menu">
+            <div class="выпадающий-контент">
+                <hr class="разделитель" />                   
+                  <a id="link-1" class="выпадающий-элемент элемент-меню" href="рабочийСтол">
+                    Рабочий стол
+                  </a>     
+              <hr class="разделитель" />                          
+                  <a id="link-2" class="выпадающий-элемент элемент-меню" href="кабинет">
+                    Кабинет клиента
+                  </a>               
+            </div>
           </div>
         </div>
       </div>
