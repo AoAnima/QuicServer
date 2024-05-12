@@ -1,17 +1,29 @@
  
+
     function очиститьФорму(event) {
         event.preventDefault();
         event.stopPropagation();
         console.log(event.target.form);
-        let секцииБлоков = document.querySelectorAll('[id$="-section"]');
+        let секцииБлоков = document.querySelectorAll('[id^="section-"]');
+        
         секцииБлоков.forEach(function(секция) {
-            let префиксИдБлока = секция.id.split("-")[0];
-            let блоки = секция.querySelectorAll(`[id^="${префиксИдБлока}-"]`);
-            блоки.forEach(function(блок, index) {
-                if (index > 0) {
-                    блок.remove();
-                }
-            });
+            секция.innerHTML = "";
+            let префиксИдБлока = секция.id.split("-")[1];
+            let данные={
+                УИД : НовыйИд(),
+                имяШаблона: префиксИдБлока
+            }
+           
+            
+            let новыйБлок = Шаблон(данные.имяШаблона,  данные);
+            секция.insertAdjacentHTML('beforeend', новыйБлок);
+
+            // let блоки = секция.querySelectorAll(`[id^="${префиксИдБлока}-"]`);
+            // блоки.forEach(function(блок, index) {
+            //     if (index > 0) {
+            //         блок.remove();
+            //     }
+            // });
         });
         event.target.form.reset()
     }
@@ -28,7 +40,7 @@
                 
                     <div class="выпадающий по-наведению">                      
                         
-                            <button class="кнопка контур" aria-haspopup="true"  >
+                            <button type="button" class="кнопка контур" aria-haspopup="true"  >
                                 <span>Выбрать роль</span>
                                 <span class="иконка is-small">
                                 <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -71,7 +83,7 @@
                     <!-- <label class="label">Права доступа</label> -->
                     <div class="выпадающий по-наведению">
                         <div class="dropdown-trigger">
-                        <button class="кнопка контур" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <button type="button" class="кнопка контур" aria-haspopup="true" aria-controls="dropdown-menu">
                             <span>Выбрать права доступа</span>
                             <span class="icon is-small">
                             <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -114,11 +126,12 @@
 
                 
     <div class="строка">       
-            <button onclick='добавитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка с-иконкой основной"> 
+            <button type="button" onclick='добавитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка с-иконкой основной"> 
                 <i class="fas fa-plus p-1"></i>
             </button>          
-            <button onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка с-иконкой внимание">
+            <button type="button" onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка с-иконкой внимание">
             <i class="fas fa-minus p-1"></i>     
+        </button>      
     </div>
               
             </div>          
@@ -127,7 +140,7 @@
             "service_handler": `<fieldset id="service_handler-${данныеШаблона.УИД}" class="" oninit="пересчитатьОчередь">
     <div class="строка">       
             <div class="элемент отступ-внутр-10">
-                <input style="max-width: 80px;" class="кнопка контур" type="number" name="очередь[${данныеШаблона.УИД}]" value="${+данныеШаблона.очередь+1}" id="order-service_handler-${данныеШаблона.УИД}" min="1"  max="1" onchange="переместитьБлок(event)">
+                <input style="max-width: 80px;" class="кнопка контур" type="number" name="очередь[${данныеШаблона.УИД}]" value="1" id="order-service_handler-${данныеШаблона.УИД}" min="1"  max="1" onchange="переместитьБлок(event)">
             </div>
             <div  class="элемент строка отступ-внутр-10">
                 <span class="icon подсказка отступ-внутр-10" data-tooltip="Нужно для того чтобы понять в какой сервис отправлять запрос для обработчки маршрута или действия, если обработчик не задан. Если задан обработчик, то скорей всего он зарегистрирован в СинКвике и соответсвует какому то Сервису">
@@ -157,11 +170,12 @@
                 </div>            
             </div>
     <div class="строка">       
-            <button onclick='добавитьБлок(event, {&#34;функции&#34;:[&#34;пересчитатьОчередь&#34;],&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка с-иконкой основной"> 
+            <button type="button" onclick='добавитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;,&#34;функции&#34;:[&#34;пересчитатьОчередь&#34;]} )' class="кнопка с-иконкой основной"> 
                 <i class="fas fa-plus p-1"></i>
             </button>          
-            <button onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;,&#34;функции&#34;:[&#34;пересчитатьОчередь&#34;]} )' class="кнопка с-иконкой внимание">
+            <button type="button" onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;,&#34;функции&#34;:[&#34;пересчитатьОчередь&#34;]} )' class="кнопка с-иконкой внимание">
             <i class="fas fa-minus p-1"></i>     
+        </button>      
     </div>
 </div>
 </fieldset>
@@ -177,15 +191,18 @@
 
 
 
-    function НовыйИд(){
-        return Date.now().toString(36)
-    }
+function НовыйИд() {
+    const timestamp = Date.now().toString(36); // Текущее время в формате строки с основанием 36
+    const randomString = Math.random().toString(36).substring(2, 7); // Случайная строка из 5 символов
+    return timestamp + randomString; // Комбинация текущего времени и случайной строки
+}
     
     let Функции = {
         "ПолучитьЗначениеИнпута": ПолучитьЗначениеИнпута,
         "пересчитатьОчередь": пересчитатьОчередь,
         "НовыйИд": НовыйИд,
         "переместитьБлок": переместитьБлок,
+        "собратьДанныеФормы": собратьДанныеФормы,
     }
     function переместитьБлок(event) {
         event.preventDefault();
@@ -195,7 +212,7 @@
         let новаяОчередь = parseInt(полеОчереди.value);
         let блок = полеОчереди.closest('[id^="service_handler-"]');
         let префиксИдБлока = блок.id.split("-")[0];
-        let родительскаяСекция = document.getElementById(`${префиксИдБлока}-section`);
+        let родительскаяСекция = document.getElementById(`section-${префиксИдБлока}`);
         let блоки = родительскаяСекция.querySelectorAll(`[id^="${префиксИдБлока}-"]`);
 
         if (новаяОчередь < 1 || новаяОчередь > блоки.length) {
@@ -219,7 +236,7 @@
     function пересчитатьОчередь(префиксИдБлока) {
         // let префиксИдБлока = текущийЭлемент.id.split("-")[0];
 
-        let родительскаяСекция = document.getElementById(`${префиксИдБлока}-section`);
+        let родительскаяСекция = document.getElementById(`section-${префиксИдБлока}`);
         let блоки = родительскаяСекция.querySelectorAll(`[id^="${префиксИдБлока}-"]`);
         let максимальнаяОчередь = блоки.length;
         блоки.forEach(function(блок, index) {
@@ -237,7 +254,7 @@
         let блокКоторыйВызвалСобытие = event.target.closest(`[id^="${данные.имяШаблона}"]`);
         let префиксИдБлока = блокКоторыйВызвалСобытие.id.split("-")[0];
 
-        let родительскийБлок = блокКоторыйВызвалСобытие.closest(`[id^="${префиксИдБлока}-section"]`);
+        let родительскийБлок = блокКоторыйВызвалСобытие.closest(`[id^="section-${префиксИдБлока}n"]`);
         
         let ИдНовогоБлока = НовыйИд();
 
@@ -258,7 +275,7 @@
     function удалитьБлок(event, данные) {
         event.preventDefault();
         event.stopPropagation();
-        let родительскаяСекция = event.target.closest(`[id="${данные.имяШаблона}-section"]`);
+        let родительскаяСекция = event.target.closest(`[id="section-${данные.имяШаблона}"]`);
         // если был удалён последний элемент в сексии блоков, то добавим новый
       
        
@@ -276,21 +293,61 @@
             родительскаяСекция.insertAdjacentHTML('afterbegin', новыйБлок);
             // document.getElementById(имяШаблона+"-section").insertAdjacentHTML('afterbegin', новыйБлок);
         }
+
         if (данные.hasOwnProperty("функции")) {
             функцииПостОбраотки  = данные["функции"];
             функцииПостОбраотки.forEach(function(функция) {
                 Функции[функция](данные.имяШаблона);
             })
-        }      
-       
+        }            
         
     }
 
-    // Нужно добавить в рендер функцию, точнее в парсинг функцию обработчик который будет собирать все javascript из шаблонов и помещать их в один файл,  
-    /*
-    может можно сделать так чтобы каждый js блок кода был объявлен как define "обработчикФормыНовогоМаршрута.js"
-    */
+function собратьДанныеФормы(event , форма ) {
+  event.preventDefault();
+  event.stopPropagation();
+console.log(event, форма);
+//   const форма = event.target;
+  const данные = {
+    URL: форма.elements['URL'].value,
+    действие: форма.elements['действие'].value,
+    'основнойКонтент/вложенныйКонтент': форма.elements['основнойКонтент/вложенныйКонтент'].value,
+    активно: форма.elements['isActive'].checked,
+    права_доступа: [],
+    обработчики: []
+  };
 
-    var количествоОбработчиков = 0 // просто УИД добавленного обработчика, не уменьшается при удалении, потому 
+  const блокиПравДоступа = document.querySelectorAll('[id^="role_access-"]');
+  блокиПравДоступа.forEach(блок => {
+    const УИД = блок.id.split('-')[1];
+    const ролиЭлементы = блок.querySelectorAll('input[name^="роль"]:checked');
+    const праваЭлементы = блок.querySelectorAll('input[name^="права_доступа"]:checked');
+    
+    const роли = Array.from(ролиЭлементы).map(элемент => элемент.value);
+    const права = Array.from(праваЭлементы).map(элемент => элемент.value);
+    
+    данные.права_доступа.push({
+      УИД: УИД,
+      роли: роли,
+      права: права
+    });
+  });
 
+  const блокиОбработчиков = document.querySelectorAll('[id^="service_handler-"]');
+  блокиОбработчиков.forEach(блок => {
+    const УИД = блок.id.split('-')[1];
+    const очередь = блок.querySelector('input[name^="очередь"]').value;
+    const сервис = блок.querySelector('select[name^="сервис"]').value;
+    const обработчик = блок.querySelector('select[name^="обработчик"]').value;
+    
+    данные.обработчики.push({
+      УИД: УИД,
+      очередь: очередь,
+      сервис: сервис,
+      обработчик: обработчик
+    });
+  });
+
+  return данные;
+}
 

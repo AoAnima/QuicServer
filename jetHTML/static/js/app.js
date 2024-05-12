@@ -49,14 +49,30 @@ function ajax(event, изменитьАдреснуюСтроку = false) {
 function ajaxPost(event){
   event.preventDefault();
   event.stopPropagation();  
-  let target = event.target;   
+  let форма = event.target;   
   console.log("event", event);
-  let действие = target.getAttribute('action');
-  let formData = new FormData(target); // создаем объект FormData и автоматически парсим форму
-  formData.append("действие", действие)
+  let действие = форма.getAttribute('action');
+  let данныеФорм;
+  if (форма.hasAttribute('beforeSubmit')) {
+    обработчикПередОбтправкой = форма.getAttribute('beforeSubmit');
+    данныеФормы = new FormData()
+    данныеФормы.append("действие", действие)
+    console.log(обработчикПередОбтправкой, Функции[обработчикПередОбтправкой]);
+    let структурированныеДанные = Функции[обработчикПередОбтправкой](event, форма)
+    console.log(структурированныеДанные);
+    данныеФормы.append("данные", JSON.stringify(структурированныеДанные))
+
+  } else {
+    данныеФормы = new FormData(форма); // создаем объект FormData и автоматически парсим форму
+    данныеФормы.append("действие", действие)
+  }
+
+
+console.log(данныеФормы);
+
   fetch(действие, {
         method: 'AJAXPost',
-        body: formData,
+        body: данныеФормы,
         headers: {
           'Method': 'AJAXPost'
         }

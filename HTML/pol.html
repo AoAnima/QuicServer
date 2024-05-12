@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script>
+    let room = {
+      width: 500,
+      height: 400
+    };
+
+    let collector = {
+      x: 50,
+      y: 50
+    };
+
+    let spacing = 20;
+    let layoutType = "serpentine"; // "serpentine", "spiral", "double-serpentine"
+
+    function setup() {
+      createCanvas(room.width, room.height);
+      background(255);
+      drawRoom();
+      drawCollector();
+      drawLayout();
+    }
+
+    function drawRoom() {
+      stroke(0);
+      strokeWeight(2);
+      noFill();
+      rect(0, 0, room.width, room.height);
+    }
+
+    function drawCollector() {
+      fill(255, 0, 0);
+      noStroke();
+      circle(collector.x, collector.y, 10);
+    }
+
+    function drawLayout() {
+      stroke(0, 0, 255);
+      strokeWeight(1);
+
+      if (layoutType === "serpentine") {
+        drawSerpentineLayout();
+      } else if (layoutType === "spiral") {
+        drawSpiralLayout();
+      } else if (layoutType === "double-serpentine") {
+        drawDoubleSerpentineLayout();
+      }
+    }
+
+    function drawSerpentineLayout() {
+      let x = collector.x;
+      let y = collector.y;
+
+      while (y < room.height) {
+        line(x, y, room.width - spacing, y);
+        y += spacing;
+        line(room.width - spacing, y - spacing, room.width - spacing, y);
+        line(room.width - spacing, y, spacing, y);
+        y += spacing;
+        line(spacing, y - spacing, spacing, y);
+      }
+    }
+
+    function drawSpiralLayout() {
+      let x = collector.x;
+      let y = collector.y;
+      let direction = 1;
+      let distance = spacing;
+
+      while (x > 0 && x < room.width && y > 0 && y < room.height) {
+        for (let i = 0; i < 2; i++) {
+          let newX = x + distance * direction;
+          line(x, y, newX, y);
+          x = newX;
+          let newY = y + distance * direction;
+          line(x, y, x, newY);
+          y = newY;
+          direction *= -1;
+        }
+        distance += spacing;
+      }
+    }
+
+    function drawDoubleSerpentineLayout() {
+      let x1 = collector.x;
+      let y1 = collector.y;
+      let x2 = collector.x;
+      let y2 = collector.y + spacing;
+
+      while (y1 < room.height && y2 < room.height) {
+        line(x1, y1, room.width - spacing, y1);
+        line(x2, y2, spacing, y2);
+        y1 += spacing * 2;
+        y2 += spacing * 2;
+        line(room.width - spacing, y1 - spacing * 2, room.width - spacing, y1);
+        line(spacing, y2 - spacing * 2, spacing, y2);
+      }
+    }
+  </script>
+</head>
+<body>
+</body>
+</html>

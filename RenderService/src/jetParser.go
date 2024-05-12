@@ -36,11 +36,14 @@ func СобратьJS(НаборШаблонов *jet.Set) {
 			Ошибка("Error removing file: %+v", err.Error())
 		}
 	}
-	файл, err := os.OpenFile(путьJSфайл, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
+	файл, err := os.OpenFile(путьJSфайл, os.O_CREATE|os.O_WRONLY, 0777)
 	defer файл.Close()
 	if err != nil {
 		Ошибка(" ошибка открытия файла %+v  %+v \n", err.Error(), файл)
 
+	}
+	if err := файл.Truncate(0); err != nil {
+		Ошибка("Error truncating file: %+v", err.Error())
 	}
 
 	JSШаблон := "{{блок JavaScript()}}"
