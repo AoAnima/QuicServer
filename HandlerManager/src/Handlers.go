@@ -146,8 +146,8 @@ func ДобавитьОбработчик(поток quic.Stream, сообщен
 	}
 	// @filter(eq(<маршрут>, $path) OR eq(<действие>, $action))
 	данные := ДанныеЗапроса{
-		Запрос: `query <СохранитьОбработчик>($hanlder : string, $path : string, $action : string) {
-							handlers as var(func: type(<Обработчик>))  @filter(eq(<обработчик>, $hanlder) AND eq(<маршрут>, $path) AND eq(<действие>, $action)) {				
+		Запрос: `query <СохранитьОбработчик>($handler : string, $path : string, $action : string) {
+							handlers as var(func: type(<Обработчик>))  @filter(eq(<обработчик>, $handler) AND eq(<маршрут>, $path) AND eq(<действие>, $action)) {				
 								uid
 							}
 			 			} `,
@@ -158,7 +158,7 @@ func ДобавитьОбработчик(поток quic.Stream, сообщен
 			},
 		},
 		Данные: map[string]string{
-			"$hanlder": новыйОбработчик.Обработчик,
+			"$handler": новыйОбработчик.Обработчик,
 			"$path":    новыйОбработчик.Маршрут,
 			"$action":  новыйОбработчик.Действие,
 		},
@@ -178,7 +178,7 @@ func ДобавитьОбработчик(поток quic.Stream, сообщен
 
 	/******Получим данные нового узла, с UID для вставки в html */
 	данные = ДанныеЗапроса{
-		Запрос: `query <Обработчики>($hanlder : string, $path : string, $action : string) {					
+		Запрос: `query <Обработчики>($handler : string, $path : string, $action : string) {					
 							<Обработчик>(func: has(<обработчик>)){	
 								uid			
 								<маршрут>
@@ -205,7 +205,7 @@ func ДобавитьОбработчик(поток quic.Stream, сообщен
 			 			} `,
 
 		Данные: map[string]string{
-			"$hanlder": "создатьОбработчик",
+			"$handler": "создатьОбработчик",
 			"$path":    "/редакторОбработчиков",
 			"$action":  "создатьОбработчик",
 		},
