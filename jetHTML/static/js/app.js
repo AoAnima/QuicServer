@@ -14,6 +14,7 @@ function ajax(event, изменитьАдреснуюСтроку = false) {
   // let данныеФормы = new FormData(target); // создаем объект FormData и автоматически парсим форму
   // данныеФормы.append("действие", "добавитьОбработчик")
   if (изменитьАдреснуюСтроку) {
+    console.log("действие", действие);
     history.pushState({}, '', действие);
 
   }
@@ -53,26 +54,26 @@ function ajaxPost(event){
   console.log("event", event);
   let действие = форма.getAttribute('action');
   let данныеФорм;
-  if (форма.hasAttribute('beforeSubmit')) {
-    обработчикПередОбтправкой = форма.getAttribute('beforeSubmit');
-    данныеФормы = new FormData()
-    данныеФормы.append("действие", действие)
-    console.log(обработчикПередОбтправкой, Функции[обработчикПередОбтправкой]);
-    let структурированныеДанные = Функции[обработчикПередОбтправкой](event, форма)
-    console.log(структурированныеДанные);
-    данныеФормы.append("данные", JSON.stringify(структурированныеДанные))
+  // if (форма.hasAttribute('beforeSubmit')) {
+  //   обработчикПередОбтправкой = форма.getAttribute('beforeSubmit');
+  //   данныеФормы = new FormData()
+  //   данныеФормы.append("действие", действие)
+  //   console.log(обработчикПередОбтправкой, Функции[обработчикПередОбтправкой]);
+  //   let структурированныеДанные = Функции[обработчикПередОбтправкой](event, форма)
+  //   console.log(структурированныеДанные);
+  //   данныеФормы.append("данные", JSON.stringify(структурированныеДанные))
 
-  } else {
-    данныеФормы = new FormData(форма); // создаем объект FormData и автоматически парсим форму
-    данныеФормы.append("действие", действие)
-  }
+  // } else {
+    данныеФорм = new FormData(форма); // создаем объект FormData и автоматически парсим форму
+    данныеФорм.append("действие", действие)
+  // }
 
 
-console.log(данныеФормы);
+console.log(данныеФорм);
 
   fetch(действие, {
         method: 'AJAXPost',
-        body: данныеФормы,
+        body: данныеФорм,
         headers: {
           'Method': 'AJAXPost'
         }
@@ -111,6 +112,9 @@ function ОткрытьСтраницу(event) {
   let href = текущийЭлемент.dataset.href;    
   window.open(href, "_blank");  
 }
+
+
+
 function connectToWebSocketServer() {
 
   // Прямое соединение с RenderServerom для разработки, при изменении css, js, html обновляем страницу

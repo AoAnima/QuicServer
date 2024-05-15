@@ -50,7 +50,7 @@ func СобратьJS(НаборШаблонов *jet.Set) {
 
 	НаборШаблонов.JsБлоки.Обойти(func(имяБлока, Блок any) bool {
 
-		Инфо("  %+v %+v \n", имяБлока, Блок.(*jet.BlockNode).String())
+		// Инфо("  %+v %+v \n", имяБлока, Блок.(*jet.BlockNode).String())
 		JSШаблон += "{{вставить " + имяБлока.(string) + "()}}"
 
 		return true
@@ -68,7 +68,7 @@ func СобратьJS(НаборШаблонов *jet.Set) {
 	if ошибка != nil {
 		Ошибка("  %+s \n", ошибка.Error())
 	}
-	Инфо(" %+v \n", БуферHtml.String())
+	// Инфо(" %+v \n", БуферHtml.String())
 	if _, err := файл.WriteString(string(БуферHtml.String())); err != nil {
 		Ошибка(" ошибка записи в файл ]%+v \n", err.Error())
 	}

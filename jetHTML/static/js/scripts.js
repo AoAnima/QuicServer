@@ -1,4 +1,12 @@
  
+    let Функции = {
+        "ПолучитьЗначениеИнпута": ПолучитьЗначениеИнпута,
+        "пересчитатьОчередь": пересчитатьОчередь,
+        "НовыйИд": НовыйИд,
+        "переместитьБлок": переместитьБлок,
+        // "собратьДанныеФормы": собратьДанныеФормы,
+    }
+
 
     function очиститьФорму(event) {
         event.preventDefault();
@@ -197,13 +205,7 @@ function НовыйИд() {
     return timestamp + randomString; // Комбинация текущего времени и случайной строки
 }
     
-    let Функции = {
-        "ПолучитьЗначениеИнпута": ПолучитьЗначениеИнпута,
-        "пересчитатьОчередь": пересчитатьОчередь,
-        "НовыйИд": НовыйИд,
-        "переместитьБлок": переместитьБлок,
-        "собратьДанныеФормы": собратьДанныеФормы,
-    }
+    
     function переместитьБлок(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -303,51 +305,51 @@ function НовыйИд() {
         
     }
 
-function собратьДанныеФормы(event , форма ) {
-  event.preventDefault();
-  event.stopPropagation();
-console.log(event, форма);
-//   const форма = event.target;
-  const данные = {
-    URL: форма.elements['URL'].value,
-    действие: форма.elements['действие'].value,
-    'основнойКонтент/вложенныйКонтент': форма.elements['основнойКонтент/вложенныйКонтент'].value,
-    активно: форма.elements['isActive'].checked,
-    права_доступа: [],
-    обработчики: []
-  };
+// function собратьДанныеФормы(event , форма ) {
+//   event.preventDefault();
+//   event.stopPropagation();
+// console.log(event, форма);
+// //   const форма = event.target;
+//   const данные = {
+//     URL: форма.elements['URL'].value,
+//     действие: форма.elements['действие'].value,
+//     'основнойКонтент/вложенныйКонтент': форма.elements['основнойКонтент/вложенныйКонтент'].value,
+//     активно: форма.elements['isActive'].checked,
+//     права_доступа: [],
+//     обработчики: []
+//   };
 
-  const блокиПравДоступа = document.querySelectorAll('[id^="role_access-"]');
-  блокиПравДоступа.forEach(блок => {
-    const УИД = блок.id.split('-')[1];
-    const ролиЭлементы = блок.querySelectorAll('input[name^="роль"]:checked');
-    const праваЭлементы = блок.querySelectorAll('input[name^="права_доступа"]:checked');
+//   const блокиПравДоступа = document.querySelectorAll('[id^="role_access-"]');
+//   блокиПравДоступа.forEach(блок => {
+//     const УИД = блок.id.split('-')[1];
+//     const ролиЭлементы = блок.querySelectorAll('input[name^="роль"]:checked');
+//     const праваЭлементы = блок.querySelectorAll('input[name^="права_доступа"]:checked');
     
-    const роли = Array.from(ролиЭлементы).map(элемент => элемент.value);
-    const права = Array.from(праваЭлементы).map(элемент => элемент.value);
+//     const роли = Array.from(ролиЭлементы).map(элемент => элемент.value);
+//     const права = Array.from(праваЭлементы).map(элемент => элемент.value);
     
-    данные.права_доступа.push({
-      УИД: УИД,
-      роли: роли,
-      права: права
-    });
-  });
+//     данные.права_доступа.push({
+//       УИД: УИД,
+//       роли: роли,
+//       права: права
+//     });
+//   });
 
-  const блокиОбработчиков = document.querySelectorAll('[id^="service_handler-"]');
-  блокиОбработчиков.forEach(блок => {
-    const УИД = блок.id.split('-')[1];
-    const очередь = блок.querySelector('input[name^="очередь"]').value;
-    const сервис = блок.querySelector('select[name^="сервис"]').value;
-    const обработчик = блок.querySelector('select[name^="обработчик"]').value;
+//   const блокиОбработчиков = document.querySelectorAll('[id^="service_handler-"]');
+//   блокиОбработчиков.forEach(блок => {
+//     const УИД = блок.id.split('-')[1];
+//     const очередь = блок.querySelector('input[name^="очередь"]').value;
+//     const сервис = блок.querySelector('select[name^="сервис"]').value;
+//     const обработчик = блок.querySelector('select[name^="обработчик"]').value;
     
-    данные.обработчики.push({
-      УИД: УИД,
-      очередь: очередь,
-      сервис: сервис,
-      обработчик: обработчик
-    });
-  });
+//     данные.обработчики.push({
+//       УИД: УИД,
+//       очередь: очередь,
+//       сервис: сервис,
+//       обработчик: обработчик
+//     });
+//   });
 
-  return данные;
-}
+//   return данные;
+// }
 

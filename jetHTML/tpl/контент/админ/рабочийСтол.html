@@ -1,4 +1,4 @@
-{{блок рабочийСтол()}}
+{{блок рабочийСтол() }}
 
     <div class="строка без-переноса">
     
@@ -9,19 +9,18 @@
               Рабочий стол
             </p>
             <div class="столбец влево заполнить">
-              <a class="button текст-влево " href="./обработчики" onclick="ajax(event, true)">Обработчики</a>
-             <a class="button текст-влево "  href="./очередиОбработкиМаршрутов" onclick="ajax(event, true)">Очерь обработчиков маршрутов</a>
-             <a class="button текст-влево "  href="./заказы" onclick="ajax(event, true)">Заказы</a>
-             <a class="button текст-влево "   href="./магазины" onclick="ajax(event, true)">Мои магазины</a>
-             <a class="button текст-влево "  href="./сообщения" onclick="ajax(event, true)">Сообщения</a>
-             <a class="button текст-влево "  href="./настройки" onclick="ajax(event, true)">Настройки</a>
-           
+              <a class="button текст-влево " href="/рабочийСтол/обработчики" onclick="ajax(event, true)">Обработчики</a>
+             <a class="button текст-влево "  href="/рабочийСтол/очередиОбработкиМаршрутов" onclick="ajax(event, true)">Очерь обработчиков маршрутов</a>
+             <a class="button текст-влево "  href="/рабочийСтол/настройкиАдминистратор" onclick="ajax(event, true)">Настройки</a>
+             <a class="button текст-влево "  href="/рабочийСтол/заказы" onclick="ajax(event, true)">Заказы</a>
+             <a class="button текст-влево "  href="/рабочийСтол/магазины" onclick="ajax(event, true)">Мои магазины</a>
+             <a class="button текст-влево "  href="/рабочийСтол/сообщения" onclick="ajax(event, true)">Сообщения</a>           
             </div>
           </div>
         </aside>
     
         <!-- Main content -->
-        <div class="столбец" id="контент-контейнер" >     
+        <div class="столбец" id="контент-контейнер" data-updateMethod="replaceWith">     
             {{ вставить рабочийСтол_контент()}}    
         </div>
     
