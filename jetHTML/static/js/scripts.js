@@ -1,5 +1,5 @@
  
-    let Функции = {
+let Функции = {
         "ПолучитьЗначениеИнпута": ПолучитьЗначениеИнпута,
         "пересчитатьОчередь": пересчитатьОчередь,
         "НовыйИд": НовыйИд,
@@ -7,7 +7,7 @@
         // "собратьДанныеФормы": собратьДанныеФормы,
     }
 
-
+    
     function очиститьФорму(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -182,6 +182,52 @@
                 <i class="fas fa-plus p-1"></i>
             </button>          
             <button type="button" onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;,&#34;функции&#34;:[&#34;пересчитатьОчередь&#34;]} )' class="кнопка с-иконкой внимание">
+            <i class="fas fa-minus p-1"></i>     
+        </button>      
+    </div>
+</div>
+</fieldset>
+`,
+            "async_service_handler": `<fieldset id="async_service_handler-${данныеШаблона.УИД}" class="" >
+    <div class="строка">      
+          
+            <div  class="элемент строка отступ-внутр-10">
+                <span class="icon подсказка отступ-внутр-10" data-tooltip="Нужно для того чтобы понять в какой сервис отправлять запрос для обработчки маршрута или действия, если обработчик не задан. Если задан обработчик, то скорей всего он зарегистрирован в СинКвике и соответсвует какому то Сервису">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+                <div class="select">
+                    <select class="кнопка контур" id="service-1" name="сервис[${данныеШаблона.УИД}]" class="" onchange="изменитьСписокОбработчиков(event, '${данныеШаблона.УИД}')">
+                        <option disabled="disabled" value="" selected="selected">Выбрать сервис</option>
+                        <option value="option1">Сервис 1Сервис 1Сервис 1Сервис 1</option>
+                        <option value="option2">Сервис 2</option>
+                        <option value="option3">Сервис 3</option>
+                        <option value="option4">Сервис 4</option>
+                    </select>
+                </div>
+            </div>
+            <div class="элемент строка отступ-внутр-10">
+                <span class="icon подсказка отступ-внутр-10" data-tooltip="Имя обработчика который существуе в Сервисе, если задан то поле Сервис можно не заполнять">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+                <div class="select"> 
+                     <select id="handler-1" class="кнопка контур" name="обработчик[${данныеШаблона.УИД}]">
+                            <option disabled="disabled" value="" selected="selected">Выбрать обработчик</option>
+                            <option value="option2">Обработчик 2</option>
+                            <option value="option3">Обработчик 3</option>
+                            <option value="option4">Обработчик 4</option>
+                        </select>                 
+                </div>            
+            </div>   
+            <div class="элемент отступ-внутр-10 скрыто">
+                <label for="isActive">Ассинхронно</label>
+                <input class="is-checkradio" id="async[${данныеШаблона.УИД}]" type="checkbox" name="ассинхронно[${данныеШаблона.УИД}]" checked="checked" value="1" readonly onclick="this.checked=!this.checked;">
+              
+            </div>
+    <div class="строка">       
+            <button type="button" onclick='добавитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка с-иконкой основной"> 
+                <i class="fas fa-plus p-1"></i>
+            </button>          
+            <button type="button" onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка с-иконкой внимание">
             <i class="fas fa-minus p-1"></i>     
         </button>      
     </div>

@@ -327,19 +327,39 @@ type КонфигурацияОбработчика struct {
 	Ассинхронно  bool           `json:"ассинхронно,omitempty"`
 	Тип          string         `json:"dgraph.type,omitempty"`
 }
+type ОбработчикМаршрута struct {
+	UID                             string             `json:"uid,omitempty"`
+	Маршрут                         string             `json:"маршрут,omitempty"`
+	Комманда                        string             `json:"комманда,omitempty"`
+	ОчередьОбработчиков             map[int]Обработчик `json:"очередь_обработчиков,omitempty"`
+	АссинхроннаяОчередьОбработчиков map[int]Обработчик `json:"ассинхронная_очередь_обоработчиков,omitempty"`
+	ПраваДоступа                    []ПраваДоступа     `json:"доступ"`
+	Описание                        string             `json:"описание,omitempty"`
+	Шаблон                          Шаблон             `json:"шаблон,omitempty"`
+	Тип                             string             `json:"dgraph.type,omitempty"`
+}
+
+type Роль string
+type Права []string
+
+type Обработчик struct {
+	UID            string `json:"uid,omitempty"`
+	ИмяСервиса     string `json:"сервис,omitempty"`
+	ИмяОбработчика string `json:"имя_обработчика,omitempty"`
+}
 
 type Шаблон struct {
-	UID          string         `json:"uid,omitempty"`
-	Тип          string         `json:"dgraph.type,omitempty"`
-	Код          int            `json:"код,omitempty"` // статус ответа сервиса QErrors
-	Шаблон       string         `json:"имя_шаблона,omitempty"`
-	ПраваДоступа []ПраваДоступа `json:"доступ,omitempty"`
+	UID        string `json:"uid,omitempty"`
+	Тип        string `json:"dgraph.type,omitempty"`
+	Код        *int   `json:"код,omitempty"`         // статус ответа сервиса QErrors
+	ИмяШаблона string `json:"имя_шаблона,omitempty"` // полный путь к шаблону после каталога с именем роли , тоесть естли в этом поле написано рабочийСтол/настройки , то фактический путь будет контент/имяРоли/рабочийСтол/настройки
+	// ПраваДоступа []ПраваДоступа `json:"доступ,omitempty"`
 }
 type ПраваДоступа struct {
 	UID   string   `json:"uid,omitempty"`
 	Тип   string   `json:"dgraph.type,omitempty"`
 	Логин []string `json:"пользователи"`
-	Роль  []string `json:"роль"`
+	Роль  string   `json:"роль"`
 	Права []string `json:"права"`
 }
 

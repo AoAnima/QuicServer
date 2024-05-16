@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -53,14 +55,30 @@ func Сумма(числа ...interface{}) float64 {
 	}
 	return сумма
 }
+func ГенерироватьСлучайнуюСтроку(длина int) string {
+	ключ := make([]byte, длина)
+	_, err := rand.Read(ключ)
+	if err != nil {
+		panic(err)
+	}
+
+	// Кодируем байты в base64 строку
+	строка := base64.URLEncoding.EncodeToString(ключ)
+	// Инфо("ключ %+s  строка %+v \n", ключ, строка)
+	return строка[:длина]
+}
+
 func ИД() string {
-	timestamp := time.Now().UnixNano() / int64(time.Millisecond)
-	return strconv.FormatInt(timestamp, 36)
+	// timestamp := time.Now().UnixNano() / int64(time.Millisecond)
+	timestamp := time.Now().UnixNano()
+	// Инфо(" time.Now().UnixNano()  %+v  timestamp %+v  ИД  %+v \n", time.Now().UnixNano(), timestamp, strconv.FormatInt(timestamp, 36))
+
+	return strconv.FormatInt(timestamp, 36) + ГенерироватьСлучайнуюСтроку(5)
 }
 func jetРендерФункции() jet.КартаФункций {
 	функции := jet.КартаФункций{
 		"Сумма": Сумма(),
-		"ИД":    ИД(),
+		"ИД":    ИД,
 		"Слайс": func(аргументы ...interface{}) []interface{} {
 			return аргументы
 		},

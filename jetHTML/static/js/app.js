@@ -53,6 +53,7 @@ function ajaxPost(event){
   let форма = event.target;   
   console.log("event", event);
   let действие = форма.getAttribute('action');
+  console.log("действие формы", действие);
   let данныеФорм;
   // if (форма.hasAttribute('beforeSubmit')) {
   //   обработчикПередОбтправкой = форма.getAttribute('beforeSubmit');
@@ -66,6 +67,11 @@ function ajaxPost(event){
   // } else {
     данныеФорм = new FormData(форма); // создаем объект FormData и автоматически парсим форму
     данныеФорм.append("действие", действие)
+    console.groupCollapsed(`FormData ${new Date().toLocaleTimeString()}`);
+    for (var pair of данныеФорм.entries()) {
+        console.log(`${pair[0]} : ${pair[1]}`);
+    }
+    console.groupEnd();
   // }
 
 

@@ -117,7 +117,7 @@
           "command": "${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}.exe"
         },
         "linux": {
-          "command": "sudo ${fileDirname}/../bin/${pathSeparator}${fileBasenameNoExtension}"
+          "command": "cd ${fileDirname}/../bin ;sudo .${pathSeparator}${fileBasenameNoExtension}"
         },
         "problemMatcher": [
           "$go"

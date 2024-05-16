@@ -15,18 +15,18 @@
                 </span>
             </label>           
             <div class="control">
-                <input class="input" type="text" placeholder="URL" name="URL" value="">
+                <input class="input" type="text" placeholder="URL" name="маршрут" value="">
             </div>
         
         </div> 
         <div class="элемент влево отступ-внутр-10">
-            <label class="label">Действие 
-                <span class="icon подсказка" data-tooltip="Не обязатель еслиестновлен обрабочтик, может соответствовать какой либо функции в сервисе, или быть просто обозначением очереди обработчиков. Имеет приоритет над осальными полями">
+            <label class="label">Имя комманды 
+                <span class="icon подсказка" data-tooltip="Имя комманды - если задано это поле то ванчале идет поиск и попытка выполнить кооманду имя окторой написано в этом поле, используется вместо url для api - например авторизация, регситрация... ">
                     <i class="fas fa-info-circle" ></i>
                 </span>
             </label>           
             <div class="control">
-                <input class="input" type="text" placeholder="авторизация" name="действие" value="">
+                <input class="input" type="text" placeholder="авторизация" name="имяКомманды" value="">
             </div>
         </div>
 
@@ -35,7 +35,7 @@
                 <i class="fas fa-info-circle" ></i>
             </span> </label>
             <div class="control">
-                <input class="input" type="text" placeholder="Шаблон" name="основнойКонтент/вложенныйКонтент" value="имя шаблона">
+                <input class="input" type="text" placeholder="Шаблон" name="шаблон" value="имя шаблона">
             </div>
         </div>
 
@@ -58,7 +58,7 @@
              
                 <div class="контент-панели отступ-внутр-10" >                 
                     <section class="строка влево" id="section-role_access">
-                    {{УИД:=ИД}}
+                    {{УИД:=ИД()}}    
                     {{вставить БлокПравДоступа(данныеБлокаПравДоступа = map("имяШаблона", "role_access", "УИД",УИД )) }}   
                     </section>               
 
@@ -70,16 +70,35 @@
         <div id="handlersInputBlocks" class=" столбец">
             <div class="панель ">
                 <div class="заголовок-панели">                   
-                  Обработчики
+                  Очередь обработчиков
                  </div>
                 <div class="контент-панели отступ-внутр-10">                  
                     <section class="столбец влево" id="section-service_handler">
-                        {{УИД:=ИД}}
-                   {{вставить БлокОбработчиков(данныеБлокОбработчиков = map("имяШаблона" ,"service_handler", "УИД", УИД, "очередь", 1)) }}
+                    {{УИДобрабочтиков:=ИД()}}
+                    {{УИДобрабочтиков}}
+                 
+                   {{вставить БлокОбработчиков(данныеБлокОбработчиков = map("имяШаблона" ,"service_handler", "УИД", УИДобрабочтиков, "очередь", 1)) }}
                     </section>
                 </div>
             </div>
         </div>
+        <div id="handlersInputBlocks" class=" столбец">
+            <div class="панель ">
+                <div class="заголовок-панели">                   
+                  Ассинхронные обработчики
+                 </div>
+                <div class="контент-панели отступ-внутр-10">                  
+                    <section class="столбец влево" id="section-async_service_handler">
+                        {{УИДассинхронныхОбработчиков:=ИД()}}
+                        {{УИДассинхронныхОбработчиков}}
+                   {{вставить БлокАссинхронныхОбработчиков(данныеБлокАссинхронныхОбработчиков = map("имяШаблона" ,"async_service_handler", "УИД", УИДассинхронныхОбработчиков)) }}
+                    </section>
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="строка вцентр">
 
             <button class="кнопка основной" type="submit" >Сохранить</button>
@@ -200,6 +219,63 @@
 {{конец}}
 
 
+{{блок БлокАссинхронныхОбработчиков(данныеБлокАссинхронныхОбработчиков)}}
+
+{{- имяШаблона := "" -}}
+{{- УИД := "" -}}
+
+
+{{ если данныеБлокАссинхронныхОбработчиков}} 
+    {{- имяШаблона = данныеБлокАссинхронныхОбработчиков.имяШаблона -}}
+    {{- УИД = данныеБлокАссинхронныхОбработчиков.УИД -}}
+{{- иначе -}}
+    {{- имяШаблона = "${данныеШаблона.имяШаблона}" -}}
+    {{- УИД = "${данныеШаблона.УИД}" -}}
+    
+{{- конец -}}
+
+
+<fieldset id="async_service_handler-{{УИД}}" class="" >
+    <div class="строка">      
+          
+            <div  class="элемент строка отступ-внутр-10">
+                <span class="icon подсказка отступ-внутр-10" data-tooltip="Нужно для того чтобы понять в какой сервис отправлять запрос для обработчки маршрута или действия, если обработчик не задан. Если задан обработчик, то скорей всего он зарегистрирован в СинКвике и соответсвует какому то Сервису">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+                <div class="select">
+                    <select class="кнопка контур" id="service-1" name="сервис[{{УИД}}]" class="" onchange="изменитьСписокОбработчиков(event, '{{УИД}}')">
+                        <option disabled="disabled" value="" selected="selected">Выбрать сервис</option>
+                        <option value="option1">Сервис 1Сервис 1Сервис 1Сервис 1</option>
+                        <option value="option2">Сервис 2</option>
+                        <option value="option3">Сервис 3</option>
+                        <option value="option4">Сервис 4</option>
+                    </select>
+                </div>
+            </div>
+            <div class="элемент строка отступ-внутр-10">
+                <span class="icon подсказка отступ-внутр-10" data-tooltip="Имя обработчика который существуе в Сервисе, если задан то поле Сервис можно не заполнять">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+                <div class="select"> 
+                     <select id="handler-1" class="кнопка контур" name="обработчик[{{УИД}}]">
+                            <option disabled="disabled" value="" selected="selected">Выбрать обработчик</option>
+                            <option value="option2">Обработчик 2</option>
+                            <option value="option3">Обработчик 3</option>
+                            <option value="option4">Обработчик 4</option>
+                        </select>                 
+                </div>            
+            </div>   
+            <div class="элемент отступ-внутр-10 скрыто">
+                <label for="isActive">Ассинхронно</label>
+                <input class="is-checkradio" id="async[{{УИД}}]" type="checkbox" name="ассинхронно[{{УИД}}]" checked="checked" value="1" readonly onclick="this.checked=!this.checked;">
+              
+            </div>
+              
+            {{- вставить КнопкиДобавленияУдаления( данныеКнопок=map("УИД", УИД, "имяШаблона", имяШаблона) ) -}}
+    </div>
+</fieldset>
+{{конец}} 
+
 
 {{блок БлокОбработчиков(данныеБлокОбработчиков)}}
 
@@ -251,7 +327,8 @@
                             <option value="option4">Обработчик 4</option>
                         </select>                 
                 </div>            
-            </div>         
+            </div>   
+        
               
             {{- вставить КнопкиДобавленияУдаления( данныеКнопок=map("УИД", УИД, "имяШаблона", имяШаблона, "функции",slice("пересчитатьОчередь")) ) -}}
     </div>
@@ -272,7 +349,7 @@
 
 <script>
 {{блок ДобавлениеУдалениеБлокаОбработчиков_js()}} 
-    let Функции = {
+let Функции = {
         "ПолучитьЗначениеИнпута": ПолучитьЗначениеИнпута,
         "пересчитатьОчередь": пересчитатьОчередь,
         "НовыйИд": НовыйИд,
@@ -280,7 +357,7 @@
         // "собратьДанныеФормы": собратьДанныеФормы,
     }
 
-
+    
     function очиститьФорму(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -313,6 +390,7 @@
         let шаблоны =   {
             "role_access":  `{{вставить БлокПравДоступа()}}`,
             "service_handler": `{{вставить БлокОбработчиков()}}`,
+            "async_service_handler": `{{вставить БлокАссинхронныхОбработчиков()}}`,
         }       
         return шаблоны[имяШаблона]
     }  
