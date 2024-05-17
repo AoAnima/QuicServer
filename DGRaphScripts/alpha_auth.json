@@ -1,8 +1,8 @@
 {
-    "telemetry": "sentry=false",
+    "telemetry": "sentry=false", 
+    "postings": "./db/alpha/p",
     "limit": "mutations=strict",
     "mutations":"strict",
-    "postings": "./db/alpha/p",
     "wal":"./db/alpha/w"   , 
     "badger": { "compression": "zstd:1" },  
     "security": { "whitelist": "10.0.0.0/8,172.0.0.0/8,192.168.0.0/16" }

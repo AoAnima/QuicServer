@@ -328,22 +328,33 @@ type КонфигурацияОбработчика struct {
 	Тип          string         `json:"dgraph.type,omitempty"`
 }
 type ОбработчикМаршрута struct {
-	UID                             string             `json:"uid,omitempty"`
-	Маршрут                         string             `json:"маршрут,omitempty"`
-	Комманда                        string             `json:"комманда,omitempty"`
-	ОчередьОбработчиков             map[int]Обработчик `json:"очередь_обработчиков,omitempty"`
-	АссинхроннаяОчередьОбработчиков map[int]Обработчик `json:"ассинхронная_очередь_обоработчиков,omitempty"`
-	ПраваДоступа                    []ПраваДоступа     `json:"доступ"`
-	Описание                        string             `json:"описание,omitempty"`
-	Шаблон                          Шаблон             `json:"шаблон,omitempty"`
-	Тип                             string             `json:"dgraph.type,omitempty"`
+	UID                             string         `json:"uid,omitempty"`
+	Маршрут                         string         `json:"маршрут,omitempty"`
+	Комманда                        string         `json:"комманда,omitempty"`
+	ОчередьОбработчиков             []Обработчик   `json:"очередь_обработчиков,omitempty"`
+	АссинхроннаяОчередьОбработчиков []Обработчик   `json:"ассинхронная_очередь_обоработчиков,omitempty"`
+	ПраваДоступа                    []ПраваДоступа `json:"доступ"`
+	Роль                            Роль           `json:"роль,omitempty"`
+	Описание                        string         `json:"описание,omitempty"`
+	Шаблон                          Шаблон         `json:"шаблон,omitempty"`
+	ИмяШаблона                      string         `json:"имя_шаблона,omitempty"`
+	Тип                             string         `json:"dgraph.type,omitempty"`
 }
 
-type Роль string
-type Права []string
-
+type Роль struct {
+	Тип     string `json:"dgraph.type,omitempty"`
+	Код     int    `json:"код.роли,omitempty"`
+	ИмяРоли string `json:"имя.роли,omitempty"`
+}
+type Права struct {
+	Тип     string `json:"dgraph.type,omitempty"`
+	Код     int    `json:"код.прав,omitempty"`
+	ИмяПрав string `json:"имя.прав,omitempty"`
+}
 type Обработчик struct {
+	Тип            string `json:"dgraph.type,omitempty"`
 	UID            string `json:"uid,omitempty"`
+	Очередь        *int   `json:"очередь,omitempty"`
 	ИмяСервиса     string `json:"сервис,omitempty"`
 	ИмяОбработчика string `json:"имя_обработчика,omitempty"`
 }
@@ -359,8 +370,8 @@ type ПраваДоступа struct {
 	UID   string   `json:"uid,omitempty"`
 	Тип   string   `json:"dgraph.type,omitempty"`
 	Логин []string `json:"пользователи"`
-	Роль  string   `json:"роль"`
-	Права []string `json:"права"`
+	Роль  Роль     `json:"роль"`
+	Права []Права  `json:"права"`
 }
 
 func ОпределитьДирректориюЗапуска() {
