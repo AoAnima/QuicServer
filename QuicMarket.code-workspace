@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../DGO"
+		},
+		{
+			"path": "../Dgraph"
 		}
 	],
 	"settings": {

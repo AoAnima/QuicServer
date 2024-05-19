@@ -334,11 +334,11 @@ type ОбработчикМаршрута struct {
 	ОчередьОбработчиков             []Обработчик   `json:"очередь_обработчиков,omitempty"`
 	АссинхроннаяОчередьОбработчиков []Обработчик   `json:"ассинхронная_очередь_обоработчиков,omitempty"`
 	ПраваДоступа                    []ПраваДоступа `json:"доступ"`
-	Роль                            Роль           `json:"роль,omitempty"`
-	Описание                        string         `json:"описание,omitempty"`
-	Шаблон                          Шаблон         `json:"шаблон,omitempty"`
-	ИмяШаблона                      string         `json:"имя_шаблона,omitempty"`
-	Тип                             string         `json:"dgraph.type,omitempty"`
+	// Роль                            Роль           `json:"роль,omitempty"`
+	Описание   string `json:"описание,omitempty"`
+	Шаблон     Шаблон `json:"шаблон,omitempty"`
+	ИмяШаблона string `json:"имя_шаблона,omitempty"`
+	Тип        string `json:"dgraph.type,omitempty"`
 }
 
 type Роль struct {
