@@ -1,1 +1,1 @@
-SynQuic;HTTPServerQuic;Auth;RenderService
+SynQuic;HTTPServerQuic;Auth;HandlerManager

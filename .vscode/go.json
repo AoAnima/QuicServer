@@ -58,6 +58,27 @@
 			"<div class=\"${1}\">$0\n</div>"
 			
 		]
+	},
+	"агтс-func":{
+		"prefix":"агтс",
+		"body":[			
+			"func ${1:ИмяФункции} () ${2} {\n $0 \n}"
+			
+		]
+	},
+	"struct":{
+		"prefix":"struct",
+		"body":[			
+			"type ${1:ИмяТипа} struct {\n $0 \n}"
+			
+		]
+	},
+	"type":{
+		"prefix":"type",
+		"body":[			
+			"type ${1:ИмяТипа} ${2:Тип} "
+			
+		]
 	}
 	
 }

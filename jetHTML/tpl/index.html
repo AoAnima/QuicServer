@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html data-theme="light">
-    {{шаблон  "layout/head.html" }}
+    {{шаблон  "/layout/head.html" }}
     <body id="body">      
     
         {{вставить ВерхнееМеню()}}
-        {{ вставить body()}}
-        {{ вставить footer()}}
+        {{шаблон  "/layout/body.html" }}       
+        {{шаблон  "/layout/footer.html" }}      
+      
        
     </body>
 </html>

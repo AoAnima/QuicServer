@@ -276,27 +276,28 @@ var (
 var ДирректорияЗапуска string
 
 type ДанныеКлиента struct {
-	Аутентифицирован            bool      `json:"аутентифицирован,omitempty"`
-	КоличествоОшибокАвторизации bool      `json:"количество_неудачных_попыток_входа,omitempty"`
-	Имя                         string    `json:"имя,omitempty"`
-	Фамилия                     string    `json:"фамилия,omitempty"`
-	Отчество                    string    `json:"отчество,omitempty"`
-	ИдКлиента                   uuid.UUID `json:"ид_клиента"`
-	Роль                        []string  `json:"роль,omitempty"`
-	Права                       []string  `json:"права_доступа,omitempty"`
-	Статус                      string    `json:"статус,omitempty"`
-	Аватар                      string    `json:"аватар,omitempty"`
-	Email                       string    `json:"email,omitempty"`
-	Логин                       string    `json:"логин,omitempty"`
-	Пароль                      string    `json:"пароль,omitempty"`
-	JWT                         string    `json:"jwt,omitempty"`
-	Телефон                     string    `json:"телефон,omitempty"`
-	Адрес                       Адрес     `json:"адрес,omitempty"`
-	Создан                      time.Time `json:"создан,omitempty"`
-	Обновлен                    time.Time `json:"обновлен,omitempty"`
-	ОСебе                       string    `json:"о_себе,omitempty"`
-	СоцСети                     []string  `json:"социальные_ссылки,omitempty"`
-	Профиль                     map[string]interface{}
+	Аутентифицирован            bool           `json:"аутентифицирован,omitempty"`
+	КоличествоОшибокАвторизации bool           `json:"количество_неудачных_попыток_входа,omitempty"`
+	Имя                         string         `json:"имя,omitempty"`
+	Фамилия                     string         `json:"фамилия,omitempty"`
+	Отчество                    string         `json:"отчество,omitempty"`
+	ИдКлиента                   uuid.UUID      `json:"ид_клиента"`
+	ПраваДоступа                []ПраваДоступа `json:"права_доступа,omitempty"` // При получении прав пользователя их нужно доавбялть по мере уменьшения кода, код с наименьшим числом имеет наивысший приоритет. 1. Админ.... 10.Гость . О.Создатель имеет абсолютные права
+	// Роль                        []Роль    `json:"роль,omitempty"`
+	// Права                       []Права   `json:"права,omitempty"`
+	Статус   string    `json:"статус,omitempty"`
+	Аватар   string    `json:"аватар,omitempty"`
+	Email    string    `json:"email,omitempty"`
+	Логин    string    `json:"логин,omitempty"`
+	Пароль   string    `json:"пароль,omitempty"`
+	JWT      string    `json:"jwt,omitempty"`
+	Телефон  string    `json:"телефон,omitempty"`
+	Адрес    Адрес     `json:"адрес,omitempty"`
+	Создан   time.Time `json:"создан,omitempty"`
+	Обновлен time.Time `json:"обновлен,omitempty"`
+	ОСебе    string    `json:"о_себе,omitempty"`
+	СоцСети  []string  `json:"социальные_ссылки,omitempty"`
+	Профиль  map[string]interface{}
 	// Секрет                      Секрет `json:"СекретКлиента,omitempty"`
 }
 
@@ -369,7 +370,7 @@ type Шаблон struct {
 type ПраваДоступа struct {
 	UID   string   `json:"uid,omitempty"`
 	Тип   string   `json:"dgraph.type,omitempty"`
-	Логин []string `json:"пользователи"`
+	Логин []string `json:"пользователи,omitempty"`
 	Роль  Роль     `json:"роль"`
 	Права []Права  `json:"права"`
 }
