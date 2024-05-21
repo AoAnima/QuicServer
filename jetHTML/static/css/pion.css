@@ -1040,9 +1040,10 @@ caption {
   padding: 10px; */
 }
 th {
-  background-color: #67ffdb2b;
+  color:#0087ff;
+  /* background-color: #67ffdb2b; */
   padding: 10px;
-  font-weight: 100;
+  /* font-weight: 100; */
   text-align: center;
   text-transform: uppercase;
   border-bottom: 1px solid #ddd;
