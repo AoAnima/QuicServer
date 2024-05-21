@@ -592,7 +592,7 @@ figure {
     border-radius: 4px;;
   }
 
-  button.контур, .button.контур, .кнопка.контур {
+  input, button.контур, .button.контур,  .контур {
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   }
 
@@ -634,30 +634,30 @@ figure {
 
 
 
-  button:first-child:not(:only-child) {
+  button:first-child:not(:only-child), input:first-child:not(:only-child) {
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
-    border: 1px solid #ffffff5e;
+    /* border: 1px solid #ffffff5e; */
     margin-inline-end:-1px;
   }
   
-  button:last-child:not(:only-child) {
+  button:last-child:not(:only-child) ,input:last-child:not(:only-child) {
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
-    border: 1px solid #ffffff5e;
+    /* border: 1px solid #ffffff5e; */
   }
   
-  button:not(:first-child):not(:last-child) {
-    border: 1px solid #ffffff5e;
+  button:not(:first-child):not(:last-child), input:not(:first-child):not(:last-child) {
+    /* border: 1px solid #ffffff5e; */
     /* border-bottom: 1px solid #ccc; */
     margin-inline-end:-1px;
   }
   
-  button:not(:last-child) {
+  button:not(:last-child), input:not(:last-child) {
     border-right: none;
   }
   
-  button:only-child {
+  button:only-child, input:only-child {
     border-radius: 4px;
   }
 
@@ -736,9 +736,10 @@ input {
     /* width: 200px; */
     box-sizing: border-box;
     /* height: 40px; */
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 8px 10px;
+    border: 0;
+    /* border: 1px solid #ccc; */
+    /* border-radius: 4px; */
     background-color: #fff;
   }
   input:has(+button.с-иконкой) {
@@ -909,7 +910,7 @@ a.выпадающий-элемент.is-active,
   margin-bottom: 1.5rem;
 }
 
-.заголовок-панели {
+.заголовок-панели, caption {
   background-color: var(--основной);
   border-radius: 6px 6px 0 0;
   color: #ffffff;
@@ -1021,3 +1022,45 @@ label.блок-панели:hover {
  .внимание {  
   background-color: var(--внимание);
 }
+
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+caption {
+  font-size: 1em;
+  font-weight: 100;
+  text-align: center;
+  /* text-transform: uppercase; */
+  /* border: 1px solid #ddd;
+  border-bottom: none;
+  padding: 10px; */
+}
+th {
+  background-color: #67ffdb2b;
+  padding: 10px;
+  font-weight: 100;
+  text-align: center;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ddd;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+th, td {
+  border: 1px solid #ddd;
+}
+/* 
+th:last-child, td:last-child {
+  border-right: none;
+} */

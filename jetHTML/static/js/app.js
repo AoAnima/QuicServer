@@ -28,7 +28,7 @@ function ajax(event, изменитьАдреснуюСтроку = false) {
           console.log(data);
           for ( имяБлока in data) {
 
-            // Обработчик вставка ньд нужно вынести в отдельную функцию
+            // Обработчик вставка, нужно вынести в отдельную функцию
             console.log(data[имяБлока]);
             let данныеБлока = data[имяБлока]
             if (!!данныеБлока.HTML && данныеБлока.HTML !== "") {            
@@ -38,9 +38,12 @@ function ajax(event, изменитьАдреснуюСтроку = false) {
               if (!!первыйЭлемент.dataset){
                 let методВставки  = первыйЭлемент.dataset.updatemethod                  
                 let id = первыйЭлемент.id  
+
+                console.log("первыйЭлемент", первыйЭлемент, "методВставки", методВставки, "id", id);
+                
                 document.getElementById(id)[методВставки](template.content)
               }
-            }
+            } 
           }
       }).catch(error => {
           console.log(error);
@@ -124,7 +127,7 @@ function ОткрытьСтраницу(event) {
 function connectToWebSocketServer() {
 
   // Прямое соединение с RenderServerom для разработки, при изменении css, js, html обновляем страницу
-    const socket = new WebSocket('wss://localhost:444');
+    const socket = new WebSocket('ws://localhost:444');
   
  
     socket.onopen = function() {

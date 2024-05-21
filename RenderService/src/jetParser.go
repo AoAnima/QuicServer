@@ -16,7 +16,7 @@ var НаборШаблонов *jet.Set
 
 // git config --global url."git@gitverse.ru:2222/Ao/jet".insteadOf "https://gitverse.ru/sc/Ao/jet"
 
-func JetПарсингШаблонов() {
+func ПарсингШаблонов() {
 
 	// Инфо("JetПарсингШаблонов views1 %+s \n", "./jetHTML")
 	Инфо("НаборШаблонов %+v \n", НаборШаблонов)

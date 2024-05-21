@@ -11,7 +11,7 @@ import (
 	. "aoanima.ru/Logger"
 )
 
-func ПарсингШаблонов() {
+func ПарсингШаблонов_в1() {
 	// "pattern": "../www/tpl/*/*.html",
 	// var errParseGlob error
 	Инфо(" ПарсингШаблонов ДирректорияЗапуска %+v \n", ДирректорияЗапуска)
