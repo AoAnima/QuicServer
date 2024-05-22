@@ -1,0 +1,79 @@
+{{блок формаДобавленияПрав()}}
+   <div class="панель"> 
+    <div class="заголовок-панели">
+    Добавление ролей пользователей
+   </div> 
+   <div class="контент-панели отступ-внутр-10" >
+    <section class="строка влево" id="section-role_access">
+     <div class="строка">
+        <div class="элемент влево отступ-внутр-10">           
+            <label class="label">Код 
+                <span class="icon подсказка" data-tooltip="">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+            </label>           
+         
+            <input class="input"  style="max-width: 80px;" type="number" placeholder="" name="код.роли" value="0">
+                
+        </div>  
+        <div class="элемент влево отступ-внутр-10">           
+            <label class="label">Название "Роли" 
+                <span class="icon подсказка" data-tooltip="">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+            </label>           
+         
+            <input class="input" type="text" placeholder="Гость; Продавец" name="имя.роли" value="">
+                
+        </div> 
+        <div class="элемент вниз отступ-внутр-10">
+        <button type="submit" class="кнопка с-иконкой основной"> 
+            <i class="fas fa-plus p-1"></i>
+        </button>  
+        </div>
+     </div>
+    </section> 
+   </div>
+   </div>
+    
+{{конец}}
+
+{{блок формаРедактированияРолей()}}
+<div class="панель"> 
+    <div class="заголовок-панели">
+    Добавление прав доступа
+   </div> 
+   <div class="контент-панели отступ-внутр-10" >
+    <section class="строка влево" id="section-role_access">
+     <div class="строка">
+        <div class="элемент влево отступ-внутр-10">           
+            <label class="label">Код 
+                <span class="icon подсказка" data-tooltip="">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+            </label>           
+         
+            <input class="input"  style="max-width: 80px;" type="number" placeholder="" name="код.прав" value="0">
+                
+        </div>  
+        <div class="элемент влево отступ-внутр-10">           
+            <label class="label">Название "Прав доступа" 
+                <span class="icon подсказка" data-tooltip="">
+                    <i class="fas fa-info-circle" ></i>
+                </span>
+            </label>           
+         
+            <input class="input" type="text" placeholder="Гость; Продавец" name="имя.прав" value="">
+                
+        </div> 
+        <div class="элемент вниз отступ-внутр-10">
+        <button type="submit" class="кнопка с-иконкой основной"> 
+            <i class="fas fa-plus p-1"></i>
+        </button>  
+        </div>
+     </div>
+    </section> 
+   </div>
+   </div>
+
+{{конец}}

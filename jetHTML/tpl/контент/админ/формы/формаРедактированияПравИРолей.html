@@ -1,141 +1,165 @@
-{{блок редакторПравИРолей()}}
-        <div class="столбец">
-
-            {{вставить формаДобавленияПрав()}}
-
-            {{вставить формаРедактированияПрав()}}
-
-        </div>
-{{конец}}
-
-
-{{блок формаДобавленияПрав()}}
-   <div class="панель"> 
-    <div class="заголовок-панели">
-    Добавление ролей пользователей
-   </div> 
-   <div class="контент-панели отступ-внутр-10" >
-    <section class="строка влево" id="section-role_access">
-     <div class="строка">
-        <div class="элемент влево отступ-внутр-10">           
-            <label class="label">Код 
-                <span class="icon подсказка" data-tooltip="">
-                    <i class="fas fa-info-circle" ></i>
-                </span>
-            </label>           
-         
-            <input class="input"  style="max-width: 80px;" type="number" placeholder="" name="код.роли" value="0">
-                
-        </div>  
-        <div class="элемент влево отступ-внутр-10">           
-            <label class="label">Название "Роли" 
-                <span class="icon подсказка" data-tooltip="">
-                    <i class="fas fa-info-circle" ></i>
-                </span>
-            </label>           
-         
-            <input class="input" type="text" placeholder="Гость; Продавец" name="имя.роли" value="">
-                
-        </div> 
-        <div class="элемент вниз отступ-внутр-10">
-        <button type="submit" class="кнопка с-иконкой основной"> 
-            <i class="fas fa-plus p-1"></i>
-        </button>  
-        </div>
-     </div>
-    </section> 
-   </div>
-   </div>
-    
-{{конец}}
-
-{{блок формаРедактированияРолей()}}
-<div class="панель"> 
-    <div class="заголовок-панели">
-    Добавление прав доступа
-   </div> 
-   <div class="контент-панели отступ-внутр-10" >
-    <section class="строка влево" id="section-role_access">
-     <div class="строка">
-        <div class="элемент влево отступ-внутр-10">           
-            <label class="label">Код 
-                <span class="icon подсказка" data-tooltip="">
-                    <i class="fas fa-info-circle" ></i>
-                </span>
-            </label>           
-         
-            <input class="input"  style="max-width: 80px;" type="number" placeholder="" name="код.прав" value="0">
-                
-        </div>  
-        <div class="элемент влево отступ-внутр-10">           
-            <label class="label">Название "Прав доступа" 
-                <span class="icon подсказка" data-tooltip="">
-                    <i class="fas fa-info-circle" ></i>
-                </span>
-            </label>           
-         
-            <input class="input" type="text" placeholder="Гость; Продавец" name="имя.прав" value="">
-                
-        </div> 
-        <div class="элемент вниз отступ-внутр-10">
-        <button type="submit" class="кнопка с-иконкой основной"> 
-            <i class="fas fa-plus p-1"></i>
-        </button>  
-        </div>
-     </div>
-    </section> 
-   </div>
-   </div>
-
-{{конец}}
-
-
-
-
 {{блок списокПрав()}}
- <table id="список_прав">
+
+<table id="список_прав">
     <caption>Список прав</caption>
     <thead>
         <tr>
             <th>Код</th>
             <th>Название</th>
+            <th>Действие</th>
         </tr>
     </thead>
     <tbody>
-      {{вставить  строкаДанных()}}
+       <tr > 
+            <td>
+                 <input style="max-width: 80px;" form="добавление_прав" type="number" name="код.прав" value="0">
+            </td>
+            <td>
+                <input form="добавление_прав" placeholder="чтение" type="text" name="имя.прав" value="">
+            </td>
+            <td>
+                <form action="добавитьПрава" id="добавление_прав">                
+                    <div class="строка вцентр">
+                        <button type="submit" class="кнопка с-иконкой основной"> 
+                            <i class="fas fa-plus p-1"></i>
+                        </button>                                 
+                    </div>
+                </form>            
+            </td>
+        </tr>
+        {{вставить строкаДанных(данные:=map("код",0 ,"имя", "админ", "ключДанных","код.права", "селекторКонтейнера", "table#список_прав>tbody", "идентификаторФормы", "изменить_права", "действие", "изменитьПрава"))}}
+
     </tbody>
  </table>
+
 {{конец}}
 
 
 {{блок списокРолей()}}
-<table id="список_ролей">
+
+ <table id="список_ролей">
     <caption>Список ролей</caption>
     <thead>
         <tr>
             <th>Код</th>
             <th>Название</th>
+            <th>Действие</th>
         </tr>
     </thead>
+    <tfoot>
+        <tr>
+            <td colspan="3">
+               При изменнии кода, отправляется сообщение на сервер,  на сервер нужно 1 проверять код.роли[N] - получаем N код старой роли, а значеие новый код роли. Поэтому из базы получаем роль по новому коду, если её нет, то меняем код роли в старой роли. Если в базе есть роль с кодом который мы присваиваем , то меняем коды в документах местами.</td>
+        </tr>
+    </tfoot>
     <tbody>
-        {{вставить  строкаДанных()}}
+       <tr> 
+            <td>
+            <input style="max-width: 80px;" form="добавление_роли" type="number" name="код.роли" value="0">
+            </td>
+            <td>
+                <input form="добавление_роли" type="text"  placeholder="Админ"  name="имя.роли" value="">
+            </td>
+            <td >
+                <form action="добавитьРоль" id="добавление_роли"> 
+                    <div class="строка вцентр">
+                        <button type="submit" class="кнопка с-иконкой основной"> 
+                            <i class="fas fa-plus p-1"></i>
+                        </button>          
+                       
+                    </div>
+                </form>  
+            </td>
+        </tr>
+        {{вставить строкаДанных(данные:=map("код",0 ,"имя", "админ", "ключДанных","код.роли", "селекторКонтейнера", "table#список_ролей>tbody", "идентификаторФормы", "изменить_роль", "действие", "изменитьРоль"))}}
+        {{вставить строкаДанных(данные:=map("код",1 ,"имя", "админ", "ключДанных","код.роли", "селекторКонтейнера", "table#список_ролей>tbody", "идентификаторФормы", "изменить_роль", "действие", "изменитьРоль"))}}
+        {{вставить строкаДанных(данные:=map("код",2 ,"имя", "админ", "ключДанных","код.роли", "селекторКонтейнера", "table#список_ролей>tbody", "идентификаторФормы", "изменить_роль", "действие", "изменитьРоль"))}}
+        {{вставить строкаДанных(данные:=map("код",3 ,"имя", "админ", "ключДанных","код.роли", "селекторКонтейнера", "table#список_ролей>tbody", "идентификаторФормы", "изменить_роль", "действие", "изменитьРоль"))}}
     </tbody>
  </table>
+
+
 {{конец}}
 
 
 {{блок строкаДанных(данные)}}
-{{если данные}}
-<tr>
-    <td>{{данные.код}}</td>
-    <td>{{данные.имя}}</td>
-</tr>
-{{иначе}}
-<tr>
-    <td colspan="2">данных нет</td>
-</tr>
+    {{если данные}}
+    <tr data-parent_selector="{{данные.селекторКонтейнера}}">
+        <td>
+            <input style="max-width: 80px;" class="без_стиля" form="{{данные.идентификаторФормы}}_{{данные.код}}" type="number" name="{{данные.ключДанных}}[{{данные.код}}]" value="{{данные.код}}" onchange="ajaxPost(event)">
+        </td>
+        <td>
+            <input form="{{данные.идентификаторФормы}}_{{данные.код}}" type="text" class="без_стиля" placeholder="Админ"  name="имя.роли[{{данные.код}}]" value="{{данные.имя}}">
+        </td>
+        <td> 
+            <form action="{{данные.действие}}" id="{{данные.идентификаторФормы}}_{{данные.код}}">                
+            <!-- <input readonly class="скрыт" type="hidden" name="{{данные.ключДанных}}[{{данные.код}}]" value="{{данные.код}}"> -->
+            <div class="строка вцентр">                      
+                <!-- <input type="checkbox"  class="кнопка с-иконкой внимание fas fa-minus p-1" name="удалить" value="{{данные.код}}"> -->
+                <label class="checkbox-container ">
+                    <input type="checkbox" class="скрыт" form="{{данные.идентификаторФормы}}_{{данные.код}}" name="удалить" value="{{данные.код}}" onchange="ajaxPost(event)">
+                    <span class="с-иконкой"> <i class="fas fa-trash"></i> </span>
+                  </label>
+            </div>
+            </form>
+        </td>
+    </tr>
+    {{иначе}}
+    <tr>
+        <td colspan="3">данных нет</td>
+    </tr>
+    {{конец}}
 {{конец}}
 
 
+<script>
+{{блок ДобавлениеДанныВТаблицу_js()}}
+
+
+  function добавитьДанныеВТаблицу(){
+    const addButton = document.querySelector("#добавление_роли button:first-child");
+    const deleteButton = document.querySelector("#добавление_роли button:last-child");
+
+    const tableBody = document.querySelector("#список_ролей tbody");
+    const codeInput = document.querySelector("input[name='код.роли']");
+    const nameInput = document.querySelector("input[name='имя.роли']");
+
+    addButton.addEventListener("click", function(event) {
+        event.preventDefault();
+        const code = codeInput.value;
+        const name = nameInput.value;
+
+        if (code && name) {
+            // Создаем новую строку в таблице
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${code}</td>
+                <td>${name}</td>
+            `;
+            tableBody.appendChild(newRow);
+
+            // Очищаем инпуты
+            codeInput.value = "";
+            nameInput.value = "";
+
+            // Отправляем AJAX-запрос на сервер
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/add-role", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(`code=${code}&name=${name}`);
+        }
+    });
+
+    deleteButton.addEventListener("click", function(event) {
+        event.preventDefault();
+        // TODO: реализовать логику удаления строки из таблицы
+    });
+}
+
+
+
+
 
 {{конец}}
+</script>
+

@@ -1,6 +1,7 @@
 :root {
   --внимание: hsl(320, 78%, 59%);  
   --основной: #476fe8; 
+  --важно: #ff6600; 
 }
 
 
@@ -48,6 +49,13 @@ aside{
 figure {
   margin: 0; 
   padding: 0; 
+}
+
+.скрыт{
+  height: 0;
+  width: 0;
+  opacity: 0;
+  visibility: 0;
 }
 
 #контент-контейнер {
@@ -591,10 +599,32 @@ figure {
   select{
     border-radius: 4px;;
   }
-
-  input, button.контур, .button.контур,  .контур {
+  input,  input.без_стиля:focus {
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border: 0;
+    background-color: #fff;
+  }
+  input,  input.без_стиля:focus, button.контур, .button.контур,  .контур {
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   }
+
+  input.без_стиля{
+    box-shadow: none;
+    background-color: transparent;
+  }
+
+
+input.без_стиля::-webkit-outer-spin-button,
+input.без_стиля::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input.без_стиля[type=number] {
+    -moz-appearance: textfield;
+}
 
   button.основной , .button.основной , .кнопка.основной,  button.внимание , .button.внимание , .кнопка.внимание{ 
     color: #fff;
@@ -634,30 +664,30 @@ figure {
 
 
 
-  button:first-child:not(:only-child), input:first-child:not(:only-child) {
+  button:first-child:not(:only-child), input:first-child:not(:only-child) , .кнопка:first-child:not(:only-child){
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
     /* border: 1px solid #ffffff5e; */
     margin-inline-end:-1px;
   }
   
-  button:last-child:not(:only-child) ,input:last-child:not(:only-child) {
+  button:last-child:not(:only-child) ,input:last-child:not(:only-child), .кнопка:last-child:not(:only-child) {
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
     /* border: 1px solid #ffffff5e; */
   }
   
-  button:not(:first-child):not(:last-child), input:not(:first-child):not(:last-child) {
+  button:not(:first-child):not(:last-child), input:not(:first-child):not(:last-child), .кнопка:not(:first-child):not(:last-child) {
     /* border: 1px solid #ffffff5e; */
     /* border-bottom: 1px solid #ccc; */
     margin-inline-end:-1px;
   }
   
-  button:not(:last-child), input:not(:last-child) {
+  button:not(:last-child), input:not(:last-child), .кнопка:not(:last-child) {
     border-right: none;
   }
   
-  button:only-child, input:only-child {
+  button:only-child, input:only-child , .кнопка:only-child, .скрыт + .кнопка.с-иконкой.внимание{
     border-radius: 4px;
   }
 
@@ -732,16 +762,7 @@ figure {
   font-weight: 300;
 }
   
-input {
-    /* width: 200px; */
-    box-sizing: border-box;
-    /* height: 40px; */
-    padding: 8px 10px;
-    border: 0;
-    /* border: 1px solid #ccc; */
-    /* border-radius: 4px; */
-    background-color: #fff;
-  }
+
   input:has(+button.с-иконкой) {
     border-radius: 4px 0 0  4px; /* remove rounded corners on the right side */
   }
@@ -1029,6 +1050,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   font-family: Arial, sans-serif;
+  /* table-layout: fixed; */
 }
 caption {
   font-size: 1em;
@@ -1041,17 +1063,24 @@ caption {
 }
 th {
   color:#0087ff;
-  /* background-color: #67ffdb2b; */
   padding: 10px;
-  /* font-weight: 100; */
   text-align: center;
   text-transform: uppercase;
   border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+  /* word-break: break-all; */
+  /* white-space: nowrap; */
+  overflow-wrap: break-word;
 }
 
 td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+  /* word-break: break-all; */
+  /* white-space: nowrap; */
+
+  overflow-wrap: break-word;
 }
 
 tr:nth-child(even) {
@@ -1065,3 +1094,166 @@ th, td {
 th:last-child, td:last-child {
   border-right: none;
 } */
+
+
+#сообщения {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  transition:  0.05s min-height 0.4s cubic-bezier(.84,-1.24,1,5) ,
+  0.05s min-height 0.4s cubic-bezier(.84,-1.24,1,5) ,
+  0.05s padding 0.4s cubic-bezier(.84,-1.24,1,5), 
+  0.05s margin 0.4s cubic-bezier(.84,-1.24,1,5);
+  transform-origin: top center;
+  transform-box: fill-box;
+}
+
+.сообщение {
+  position: relative;
+  padding: 10px;
+  background-color: #fff;
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  min-height: 30px;
+  min-width: 100px;
+  text-align: center;
+  /* animation: bubble-up 0.3s ease-out forwards; */
+  transform-origin: bottom;
+  /* animation: bubble-up 0.3s ease-out forwards, падение-вниз 0.3s ease-in-out forwards;
+  transform-origin: bottom; */
+  transition:  0.05s min-height 0.4s cubic-bezier(.84,-1.24,1,5) ,
+   0.05s min-height 0.4s cubic-bezier(.84,-1.24,1,5) ,
+   0.05s padding 0.4s cubic-bezier(.84,-1.24,1,5), 
+   0.05s margin 0.4s cubic-bezier(.84,-1.24,1,5);
+  transform-origin: top center;
+  transform-box: fill-box;
+
+}
+
+.спрятать {
+  animation: дрожь 0.2s ease-in-out, сдвиг-вправо 0.2s ease-in-out forwards;
+  animation-delay: 0s, 0.2s; 
+  height: 0;
+  min-height: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+  margin-bottom: 0;
+
+}
+.сообщение.новое{
+  animation: bubble-up 0.3s ease-out forwards;
+}
+
+.сдвиг_вниз > .сообщение {
+  animation: сдвиг-вниз 0.3s ease-out forwards;
+  /* transition: 0.2s height 0.2s ease-in-out,
+  0.1s min-height 0.4s cubic-bezier(.84,-1.24,.01,1.41) ,
+  0.1s padding 0.4s cubic-bezier(.84,-1.24,.01,1.41), 
+  0.1s margin 0.4s cubic-bezier(.84,-1.24,.01,1.41); */
+}
+
+
+
+.внимание{
+  /* background-color: #ff0083; */
+  background-color:var(--внимание);
+  color: #fff;
+}
+.инфо{
+  background-color:var(--основной);
+  color: #fff;
+}
+.важно{
+  background-color:var(--важно);
+
+}
+.важно > .иконка{
+color:#ff0101;
+}
+
+.сообщение > .иконка{
+  position: absolute;
+  top:10px;
+  right: 10px;
+}
+
+
+@keyframes дрожь {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(-5px);
+  }
+}
+
+@keyframes сдвиг-вправо {
+  0% {
+    transform: translateX(0);    
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+
+
+@keyframes bubble-up {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+
+
+.checkbox-container {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Скрываем стандартный checkbox */
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+
+
+/* Стили для активного состояния checkbox */
+.checkbox-container input:checked + .кнопка {
+  background-color: #2196F3;
+  color: white;
+}
+
+.fa-trash{
+  color: var(--внимание);
+}

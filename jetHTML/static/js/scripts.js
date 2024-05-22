@@ -179,10 +179,10 @@ let Функции = {
                 </div>            
             </div>
     <div class="строка">       
-            <button type="button" onclick='добавитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;,&#34;функции&#34;:[&#34;пересчитатьОчередь&#34;]} )' class="кнопка с-иконкой основной"> 
+            <button type="button" onclick='добавитьБлок(event, {&#34;функции&#34;:[&#34;пересчитатьОчередь&#34;],&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка с-иконкой основной"> 
                 <i class="fas fa-plus p-1"></i>
             </button>          
-            <button type="button" onclick='удалитьБлок(event, {&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;,&#34;функции&#34;:[&#34;пересчитатьОчередь&#34;]} )' class="кнопка с-иконкой внимание">
+            <button type="button" onclick='удалитьБлок(event, {&#34;функции&#34;:[&#34;пересчитатьОчередь&#34;],&#34;УИД&#34;:&#34;${данныеШаблона.УИД}&#34;,&#34;имяШаблона&#34;:&#34;${данныеШаблона.имяШаблона}&#34;} )' class="кнопка с-иконкой внимание">
             <i class="fas fa-minus p-1"></i>     
         </button>      
     </div>
@@ -399,4 +399,51 @@ function НовыйИд() {
 
 //   return данные;
 // }
+
+
+
+
+  function добавитьДанныеВТаблицу(){
+    const addButton = document.querySelector("#добавление_роли button:first-child");
+    const deleteButton = document.querySelector("#добавление_роли button:last-child");
+
+    const tableBody = document.querySelector("#список_ролей tbody");
+    const codeInput = document.querySelector("input[name='код.роли']");
+    const nameInput = document.querySelector("input[name='имя.роли']");
+
+    addButton.addEventListener("click", function(event) {
+        event.preventDefault();
+        const code = codeInput.value;
+        const name = nameInput.value;
+
+        if (code && name) {
+            // Создаем новую строку в таблице
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${code}</td>
+                <td>${name}</td>
+            `;
+            tableBody.appendChild(newRow);
+
+            // Очищаем инпуты
+            codeInput.value = "";
+            nameInput.value = "";
+
+            // Отправляем AJAX-запрос на сервер
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/add-role", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(`code=${code}&name=${name}`);
+        }
+    });
+
+    deleteButton.addEventListener("click", function(event) {
+        event.preventDefault();
+        // TODO: реализовать логику удаления строки из таблицы
+    });
+}
+
+
+
+
 
