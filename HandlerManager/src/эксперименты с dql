@@ -1,3 +1,75 @@
+ не знаю, сколько места занимает один узел. Но если мы предположим (просто предположение), что для этого требуется 1 байт (принимая во внимание количество байт, необходимое для шестнадцатеричной системы счисления - но это, вероятно, преувеличение), мы могли бы сказать, что 1 миллиард пустых узлов потенциально может составлять 1 гигабайт. Но нужно это проверить.
+
+Однако вы можете просто использовать транзакцию Upsert 9 навсегда и везде.
+например:
+
+1 - Удалите узел и отправьте его на переработку
+
+upsert {
+  query {
+    v as var(func: eq(email, "user@company1.io"))
+  }
+
+  mutation {
+  # Clean the node
+    delete {
+      uid(v) * * .
+    }
+  # Set to Recycle
+    set {
+       uid(v) <Recycle> "true" .
+    }
+
+  }
+}
+2 - При создании нового объекта переработайте узел.
+
+Внимание: Множественные мутации в Upsert на данный момент не работают. Скоро добавят поддержку нескольких мутаций в запросе upsert · Проблема # 3817 · dgraph-io / dgraph · GitHub 6
+
+upsert {
+  query {
+    v as var(func: eq(email, "user@company1.io"))
+    RecycledUID as var(func: has(Recycle), first:1)
+  }
+
+# If the user exists with this email, we update
+  mutation @if(eq(len(v), 1)) {
+    set {
+      uid(v) <name> "Lucas" .
+      uid(v) <email> "user@company1.io".
+      uid(v) <age> "31" .
+    }
+  }
+
+# Else we capture the node to be Recycled and mutate.
+  mutation @if(eq(len(v), 0) AND  eq(len(RecycledUID), 1)) {
+    set {
+      uid(RecycledUID) <name> "Lucas" .
+      uid(RecycledUID) <email> "user@company1.io".
+      uid(RecycledUID) <age> "31" .
+    }
+    delete {
+       uid(RecycledUID) <Recycle> * .
+    }
+  }
+
+# And else if the The user doesn't exists and also theres none
+# UIDs marked to be recycled left. We create a new one.
+  mutation @if(eq(len(v), 0) AND  eq(len(RecycledUID), 0)) {
+    set {
+      _:New <name> "Lucas" .
+      _:New <email> "user@company1.io".
+      _:New <age> "31" .
+    }
+  }
+
+}
+
+
+
+
+
+
 
 	// данные := ДанныеЗапроса{
 	// 	Запрос: `query <СохранитьОбработчик>( $path : string) {
