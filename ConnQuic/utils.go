@@ -167,7 +167,7 @@ type Сообщение struct {
 	// Маршруты     map[Маршрут]*СтруктураМаршрута
 	Маршруты      []Маршрут
 	Запрос        Запрос
-	ЗапросВСервис map[ИмяСервиса]ОчередьОбработчикиЗапроса
+	ЗапросВСервис map[ИмяСервиса]ОчередьОбработчиковЗапроса
 	Ответ         Ответ
 	ОтветКлиенту  ОтветКлиенту
 	ИдКлиента     uuid.UUID
@@ -183,7 +183,7 @@ type Сообщение struct {
 
 }
 */
-type ОчередьОбработчикиЗапроса struct {
+type ОчередьОбработчиковЗапроса struct {
 	ПраваДоступа                   ПраваДоступа
 	ОчередьОбработчиков            []string
 	ПаралельнаяОчередьОбработчиков []string
@@ -284,11 +284,6 @@ type СистемноеСообщение struct {
 	УИДСообщения Уид
 }
 
-type ОчередьОбработчиков struct {
-	Очередь            []string
-	ПаралельнаяОчередь []string
-}
-
 var (
 	ПортДляОтправкиСообщений  = "81"
 	ПортДляПолученияСообщений = "82"
@@ -348,7 +343,7 @@ type КонфигурацияОбработчика struct {
 	Ассинхронно  bool           `json:"ассинхронно,omitempty"`
 	Тип          string         `json:"dgraph.type,omitempty"`
 }
-type ОбработчикМаршрута struct {
+type ОбработчикМаршрута_в1 struct {
 	UID                             string         `json:"uid,omitempty"`
 	Маршрут                         string         `json:"маршрут,omitempty"`
 	Комманда                        string         `json:"комманда,omitempty"`
@@ -361,6 +356,38 @@ type ОбработчикМаршрута struct {
 	ИмяШаблона string `json:"имя_шаблона,omitempty"`
 	Тип        string `json:"dgraph.type,omitempty"`
 }
+type ОбработчикМаршрута struct {
+	UID         string        `json:"uid,omitempty"`
+	Маршрут     string        `json:"маршрут,omitempty"`
+	Комманда    string        `json:"комманда,omitempty"`
+	Обработчики []Обработчики `json:"обработчики,omitempty"`
+	Описание    string        `json:"описание,omitempty"`
+	Тип         string        `json:"dgraph.type,omitempty"`
+}
+type Обработчики struct {
+	ОчередьОбработчиков             []Обработчик `json:"очередь_обработчиков,omitempty"`
+	АссинхроннаяОчередьОбработчиков []Обработчик `json:"ассинхронная_очередь_обоработчиков,omitempty"`
+	Логин                           []string     `json:"пользователи,omitempty"`
+	Роль                            int          `json:"код.роли"`
+	Права                           []Права      `json:"права"`
+	ИмяШаблона                      string       `json:"имя_шаблона,omitempty"`
+	Тип                             string       `json:"dgraph.type,omitempty"`
+}
+
+// type <ОбработчикМаршрута> {
+// 	<маршрут>
+// 	<комманда>
+// 	<обработчики> [
+//         {
+//             <роль>
+//             <права>
+//             <очередь_обработчиков>
+//             <ассинхронная_очередь_обоработчиков>
+//             <имя_шаблона>
+//         }
+
+//	   ]
+//	}
 
 type Роль struct {
 	UID     string `json:"uid,omitempty"`
@@ -604,6 +631,7 @@ func ИзJson(пакет []byte, объект interface{}) error {
 		*v = string(пакет)
 		объект = v
 		return nil
+
 	default:
 		err := jsoniter.Unmarshal([]byte(пакет), &объект)
 		if err != nil {

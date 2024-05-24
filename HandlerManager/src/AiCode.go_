@@ -1,0 +1,366 @@
+/*
+"Форма": {
+    "очередь[lwkeh6ihaywkm]": [
+      "2"
+    ],
+    "сервис[lwkehcj5e1ow5]": [
+      "option4"
+    ],
+    "ассинхронно[d1hpz3gzclglLC9ha]": [
+      "1"
+    ],
+    "маршрут": [
+      "рабочий/настройки"
+    ],
+    "обработчик[d1hpz3gzclglLC9ha]": [
+      "option2"
+    ],
+    "очередь[d1hpz3gzamokyU4iD]": [
+      "1"
+    ],
+    "шаблон": [
+      "имя шаблона"
+    ],
+    "сервис[lwkeh6ihaywkm]": [
+      "option2"
+    ],
+    "действие": [
+      "добавитьОбработчик"
+    ],
+    "права_доступа[d1hpz3gz56muO8Lkm]": [
+      "1",
+      "2",
+      "3"
+    ],
+    "имяКомманды": [
+      ""
+    ],
+    "роль[d1hpz3gz56muO8Lkm]": [
+      "1"
+    ],
+    "ассинхронно[lwkehcj5e1ow5]": [
+      "1"
+    ],
+    "сервис[d1hpz3gzamokyU4iD]": [
+      "option3"
+    ],
+    "обработчик[lwkeh6ihaywkm]": [
+      "option3"
+    ],
+    "сервис[d1hpz3gzclglLC9ha]": [
+      "option2"
+    ],
+    "обработчик[d1hpz3gzamokyU4iD]": [
+      "option2"
+    ],
+    "обработчик[lwkehcj5e1ow5]": [
+      "option4"
+    ],
+    "isActive": [
+      "1"
+    ]
+  },
+
+
+  ОбработчикМаршрута{
+		Тип:      "ОбработчикМаршрута",
+		Маршрут:  маршрут,
+		Комманда: комманда,
+		Обработчики: []Обработчики{
+			{
+				ОчередьОбработчиков:             []Обработчик{
+                                                            Очередь:       int,
+                                                            ИмяСервиса:     имяСервиса,
+                                                            ИмяОбработчика: имяОбработчика,
+                                                        }, // обработчики у которых есть поле очередь, определяющее индекс обработчика в массиве
+				АссинхроннаяОчередьОбработчиков:  []Обработчик{
+                                                            ИмяСервиса:     имяСервиса,
+                                                            ИмяОбработчика: имяОбработчика,
+                                                        }, // обработчики у которых есть поле ассинхронно
+				ИмяШаблона:                      шаблон,
+				Роль: кодРоли,
+                Права: []права_доступа
+			},
+		},
+	}
+
+Мне приходят данные формы, нужно сгрупировать эти данные по идентификаторам в квадратных скобка, а затем поместить всё в структуру ОбработчикМаршрута
+
+
+
+*/
+
+type Обработчик struct {
+	Очередь        *int   `json:"очередь"`
+	ИмяСервиса     string `json:"сервис"`
+	ИмяОбработчика string `json:"обработчик"`
+	Ассинхронно    *int   `json:"ассинхронно"`
+	Роль           *int   `json:"роль"`
+	Права          []int  `json:"права_доступа"`
+}
+
+type ОбработчикиМаршрута struct {
+	ОчередьОбработчиков             []Обработчик `json:"очередь"`
+	АссинхроннаяОчередьОбработчиков []Обработчик `json:"ассинхронно"`
+	ИмяШаблона                      string       `json:"шаблон"`
+}
+
+type ОбработчикМаршрута struct {
+	Тип         string                `json:"Тип"`
+	Маршрут     string                `json:"Маршрут"`
+	Комманда    string                `json:"Комманда"`
+	Обработчики []ОбработчикиМаршрута `json:"Обработчики"`
+}
+
+func main() {
+	input := `{
+		"форма": {
+			"очередь[lwkeh6ihaywkm]": [
+				"2"
+			],
+			"сервис[lwkehcj5e1ow5]": [
+				"option4"
+			],
+			"ассинхронно[d1hpz3gzclglLC9ha]": [
+				"1"
+			],
+			"маршрут": [
+				"рабочий/настройки"
+			],
+			"обработчик[d1hpz3gzclglLC9ha]": [
+				"option2"
+			],
+			"очередь[d1hpz3gzamokyU4iD]": [
+				"1"
+			],
+			"шаблон": [
+				"имя шаблона"
+			],
+			"сервис[lwkeh6ihaywkm]": [
+				"option2"
+			],
+			"действие": [
+				"добавитьОбработчик"
+			],
+			"права_доступа[d1hpz3gz56muO8Lkm]": [
+				"1",
+				"2",
+				"3"
+			],
+			"имяКомманды": [
+				""
+			],
+			"роль[d1hpz3gz56muO8Lkm]": [
+				"1"
+			],
+			"ассинхронно[lwkehcj5e1ow5]": [
+				"1"
+			],
+			"сервис[d1hpz3gzamokyU4iD]": [
+				"option3"
+			],
+			"обработчик[lwkeh6ihaywkm]": [
+				"option3"
+			],
+			"сервис[d1hpz3gzclglLC9ha]": [
+				"option2"
+			],
+			"обработчик[d1hpz3gzamokyU4iD]": [
+				"option2"
+			],
+			"обработчик[lwkehcj5e1ow5]": [
+				"option4"
+			],
+			"isActive": [
+				"1"
+			]
+		},
+		"ОбработчикМаршрута": {
+			"Тип": "ОбработчикМаршрута",
+			"Маршрут": "маршрут",
+			"Комманда": "комманда",
+			"Обработчики": []
+		}
+	}`
+
+	var data map[string]interface{}
+	err := json.Unmarshal([]byte(input), &data)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	formData := data["форма"].(map[string]interface{})
+	obrabotchikMarshrutaData := data["ОбработчикМаршрута"].(map[string]interface{})
+
+	var obrabotchikMarshrutaStruct ОбработчикМаршрута
+	obrabotchikMarshrutaStruct.Тип = obrabotchikMarshrutaData["Тип"].(string)
+	obrabotchikMarshrutaStruct.Маршрут = obrabotchikMarshrutaData["Маршрут"].(string)
+	obrabotchikMarshrutaStruct.Комманда = obrabotchikMarshrutaData["Комманда"].(string)
+
+	for key, value := range formData {
+		switch key {
+		case "маршрут":
+			obrabotchikMarshrutaStruct.Маршрут = value.([]interface{})[0].(string)
+		case "шаблон":
+			obrabotchikMarshrutaStruct.Обработчики = append(obrabotchikMarshrutaStruct.Обработчики, ОбработчикиМаршрута{
+				ИмяШаблона: value.([]interface{})[0].(string),
+			})
+		case "действие":
+			// Пропускаем это поле
+		default:
+			if len(value.([]interface{})) > 0 {
+				identifier := key[strings.Index(key, "[")+1 : strings.Index(key, "]")]
+				switch {
+				case strings.HasPrefix(key, "очередь["):
+					obrabotchikMarshrutaStruct.Обработчики = append(obrabotchikMarshrutaStruct.Обработчики, ОбработчикиМаршрута{
+						ОчередьОбработчиков: []Обработчик{{
+							Очередь:        intPtr(toInt(value.([]interface{})[0])),
+							ИмяСервиса:     key[8:strings.Index(key, "]")],
+							ИмяОбработчика: value.([]interface{})[0].(string),
+						}},
+					})
+				case strings.HasPrefix(key, "ассинхронно["):
+					obrabotchikMarshrutaStruct.Обработчики = append(obrabotchikMarshrutaStruct.Обработчики, ОбработчикиМаршрута{
+						АссинхроннаяОчередьОбработчиков: []Обработчик{{
+							Ассинхронно:    intPtr(toInt(value.([]interface{})[0])),
+							ИмяСервиса:     key[12:strings.Index(key, "]")],
+							ИмяОбработчика: value.([]interface{})[0].(string),
+						}},
+					})
+				case strings.HasPrefix(key, "сервис["):
+					obrabotchikMarshrutaStruct.Обработчики = append(obrabotchikMarshrutaStruct.Обработчики, ОбработчикиМаршрута{
+						ОчередьОбработчиков: []Обработчик{{
+							ИмяСервиса:     key[7:strings.Index(key, "]")],
+							ИмяОбработчика: value.([]interface{})[0].(string),
+						}},
+					})
+				case strings.HasPrefix(key, "обработчик["):
+					obrabotchikMarshrutaStruct.Обработчики = append(obrabotchikMarshrutaStruct.Обработчики, ОбработчикиМаршрута{
+						ОчередьОбработчиков: []Обработчик{{
+							ИмяСервиса:     key[11:strings.Index(key, "]")],
+							ИмяОбработчика: value.([]interface{})[0].(string),
+						}},
+					})
+				case strings.HasPrefix(key, "роль["):
+					obrabotchikMarshrutaStruct.Обработчики = append(obrabotchikMarshrutaStruct.Обработчики, ОбработчикиМаршрута{
+						ОчередьОбработчиков: []Обработчик{{
+							Роль: intPtr(toInt(value.([]interface{})[0])),
+						}},
+					})
+				case strings.HasPrefix(key, "права_доступа["):
+					obrabotchikMarshrutaStruct.Обработчики = append(obrabotchikMarshrutaStruct.Обработчики, ОбработчикиМаршрута{
+						ОчередьОбработчиков: []Обработчик{{
+							Права: toIntSlice(value.([]interface{})),
+						}},
+					})
+				}
+			}
+		}
+	}
+
+	fmt.Println(obrabotchikMarshrutaStruct)
+}
+
+func intPtr(i int) *int {
+	return &i
+}
+
+func toInt(v interface{}) int {
+	switch v := v.(type) {
+	case string:
+		i, _ := strconv.Atoi(v)
+		return i
+	case float64:
+		return int(v)
+	default:
+		return 0
+	}
+}
+
+func toIntSlice(values []interface{}) []int {
+	var result []int
+	for _, v := range values {
+		result = append(result, toInt(v))
+	}
+	return result
+}
+
+/*второй вариант */
+
+func CreateHanlder() (handler *ОбработчикМаршрута) {
+
+	groupedData := make(map[string]map[string][]string)
+	for key, values := range formData {
+		id := extractID(key)
+		if _, ok := groupedData[id]; !ok {
+			groupedData[id] = make(map[string][]string)
+		}
+		groupedData[id][key] = values
+	}
+
+	// Populate ОбработчикМаршрута structure
+	handler := ОбработчикМаршрута{
+		Тип:         "ОбработчикМаршрута",
+		Маршрут:     groupedData[""]["маршрут"][0],
+		Комманда:    "",
+		Обработчики: make([]Обработчики, 0),
+	}
+
+	for id, data := range groupedData {
+		if id == "" {
+			continue
+		}
+		handler.Обработчики = append(handler.Обработчики, Обработчики{
+			ОчередьОбработчиков:             extractHandlers(data, "очередь", "сервис", "обработчик"),
+			АссинхроннаяОчередьОбработчиков: extractHandlers(data, "ассинхронно", "сервис", "обработчик"),
+			ИмяШаблона:                      data["шаблон"][0],
+			Роль:                            parseInt(data["роль"][0]),
+			Права:                           parseIntSlice(data["права_доступа"]),
+		})
+	}
+
+}
+
+func extractID(key string) string {
+	return key[strings.Index(key, "[")+1 : strings.Index(key, "]")]
+}
+
+func extractHandlers(data map[string][]string, queueKey, serviceKey, handlerKey string) []Обработчик {
+	handlers := make([]Обработчик, 0)
+	for _, queueValue := range data[queueKey] {
+		handlerValue := data[handlerKey][0]
+		serviceValue := data[serviceKey][0]
+		asyncValue, ok := data["ассинхронно"]
+		async := 0
+		if ok {
+			async = parseInt(asyncValue[0])
+		}
+		handlers = append(handlers, Обработчик{
+			Очередь:        parseIntPtr(queueValue),
+			ИмяСервиса:     serviceValue,
+			ИмяОбработчика: handlerValue,
+			Ассинхронно:    parseIntPtr(asyncValue[0]),
+		})
+	}
+	return handlers
+}
+
+func parseInt(s string) int {
+	i, _ := strconv.Atoi(s)
+	return i
+}
+
+func parseIntPtr(s string) *int {
+	i := parseInt(s)
+	return &i
+}
+
+func parseIntSlice(values []string) []int {
+	result := make([]int, len(values))
+	for i, value := range values {
+		result[i] = parseInt(value)
+	}
+	return result
+}
+	
