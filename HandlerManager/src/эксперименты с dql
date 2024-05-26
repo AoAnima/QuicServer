@@ -1,3 +1,28 @@
+Ссылки про usert 
+ 
+ https://discuss.dgraph.io/t/using-cascade-in-an-upsert-query-can-result-in-all-nodes-being-updated-despite-first/15671/9
+https://discuss.dgraph.io/t/upsert-resulting-duplicate-node/16710/9
+https://github.com/dgraph-io/dgraph/issues/5281
+
+
+ПРИМЕР МУТАЦИИ ИЗ ФОРУМА
+
+upsert {
+  query {
+    state as var(func: eq(State.name,"Hawaii"))
+    address as var(func: eq(Addr.tempState,"Hawaii"))
+  }
+  mutation {
+    set {
+      uid(address) <Addr.state> uid(state) .
+    }
+  }
+}
+ 
+ 
+ 
+ 
+ 
  не знаю, сколько места занимает один узел. Но если мы предположим (просто предположение), что для этого требуется 1 байт (принимая во внимание количество байт, необходимое для шестнадцатеричной системы счисления - но это, вероятно, преувеличение), мы могли бы сказать, что 1 миллиард пустых узлов потенциально может составлять 1 гигабайт. Но нужно это проверить.
 
 Однако вы можете просто использовать транзакцию Upsert 9 навсегда и везде.

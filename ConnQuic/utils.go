@@ -332,30 +332,31 @@ type Секрет struct {
 	Обновлен  time.Time `json:"обновлен,omitempty"`
 }
 
-type КонфигурацияОбработчика struct {
-	UID          string         `json:"uid,omitempty"`
-	Маршрут      string         `json:"маршрут,omitempty"`
-	Действие     string         `json:"действие,omitempty"`
-	Обработчик   string         `json:"обработчик,omitempty"`
-	ПраваДоступа []ПраваДоступа `json:"доступ"`
-	Описание     string         `json:"описание,omitempty"`
-	Шаблонизатор []Шаблон       `json:"шаблонизатор,omitempty"`
-	Ассинхронно  bool           `json:"ассинхронно,omitempty"`
-	Тип          string         `json:"dgraph.type,omitempty"`
-}
-type ОбработчикМаршрута_в1 struct {
-	UID                             string         `json:"uid,omitempty"`
-	Маршрут                         string         `json:"маршрут,omitempty"`
-	Комманда                        string         `json:"комманда,omitempty"`
-	ОчередьОбработчиков             []Обработчик   `json:"очередь_обработчиков,omitempty"`
-	АссинхроннаяОчередьОбработчиков []Обработчик   `json:"ассинхронная_очередь_обоработчиков,omitempty"`
-	ПраваДоступа                    []ПраваДоступа `json:"доступ"`
-	// Роль                            Роль           `json:"роль,omitempty"`
-	Описание   string `json:"описание,omitempty"`
-	Шаблон     Шаблон `json:"шаблон,omitempty"`
-	ИмяШаблона string `json:"имя_шаблона,omitempty"`
-	Тип        string `json:"dgraph.type,omitempty"`
-}
+// type КонфигурацияОбработчика struct {
+// 	UID          string         `json:"uid,omitempty"`
+// 	Маршрут      string         `json:"маршрут,omitempty"`
+// 	Действие     string         `json:"действие,omitempty"`
+// 	Обработчик   string         `json:"обработчик,omitempty"`
+// 	ПраваДоступа []ПраваДоступа `json:"доступ"`
+// 	Описание     string         `json:"описание,omitempty"`
+// 	Шаблонизатор []Шаблон       `json:"шаблонизатор,omitempty"`
+// 	Ассинхронно  bool           `json:"ассинхронно,omitempty"`
+// 	Тип          string         `json:"dgraph.type,omitempty"`
+// } // Скроей всего нужно удалить
+// type ОбработчикМаршрута_в1 struct {
+// 	UID                             string         `json:"uid,omitempty"`
+// 	Маршрут                         string         `json:"маршрут,omitempty"`
+// 	Комманда                        string         `json:"комманда,omitempty"`
+// 	ОчередьОбработчиков             []Обработчик   `json:"очередь_обработчиков,omitempty"`
+// 	АссинхроннаяОчередьОбработчиков []Обработчик   `json:"ассинхронная_очередь_обоработчиков,omitempty"`
+// 	ПраваДоступа                    []ПраваДоступа `json:"доступ"`
+// 	// Роль                            Роль           `json:"роль,omitempty"`
+// 	Описание   string `json:"описание,omitempty"`
+// 	Шаблон     Шаблон `json:"шаблон,omitempty"`
+// 	ИмяШаблона string `json:"имя_шаблона,omitempty"`
+// 	Тип        string `json:"dgraph.type,omitempty"`
+// } // Скроей всего нужно удалить
+
 type ОбработчикМаршрута struct {
 	UID         string        `json:"uid,omitempty"`
 	Маршрут     string        `json:"маршрут,omitempty"`
@@ -374,21 +375,6 @@ type Обработчики struct {
 	Тип                             string       `json:"dgraph.type,omitempty"`
 }
 
-// type <ОбработчикМаршрута> {
-// 	<маршрут>
-// 	<комманда>
-// 	<обработчики> [
-//         {
-//             <роль>
-//             <права>
-//             <очередь_обработчиков>
-//             <ассинхронная_очередь_обоработчиков>
-//             <имя_шаблона>
-//         }
-
-//	   ]
-//	}
-
 type Роль struct {
 	UID     string `json:"uid,omitempty"`
 	Тип     string `json:"dgraph.type,omitempty"`
@@ -404,7 +390,7 @@ type Права struct {
 type Обработчик struct {
 	Тип            string `json:"dgraph.type,omitempty"`
 	UID            string `json:"uid,omitempty"`
-	Очередь        *int   `json:"очередь,omitempty"`
+	Очередь        *int   `json:"очередь,omitempty"` // наверное лишее
 	ИмяСервиса     string `json:"сервис,omitempty"`
 	ИмяОбработчика string `json:"имя_обработчика,omitempty"`
 }
@@ -423,6 +409,105 @@ type ПраваДоступа struct {
 	Роль  Роль     `json:"роль"`
 	Права []Права  `json:"права"`
 }
+
+/* ⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫⇫ В Эти структуры будут разворачиваться данные из базы ⇑⇑⇑⇑⇑⇑⇑⇑⇑⇑⇑⇑⇑*/
+/* ⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩ Эти структуру нужны для записи данныз в базу ⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩⇩ */
+
+// Эта структура описывает какие обработчики нужно выполнить для указанного маршрута, причём  ПланОбработки содержит данные для поиска обработчиков для конкретной роли или пользователя,
+// Поэтому в БД заись будет выглядеть примерно так
+/*
+{
+маршрут : рабочийСтол/настройик,
+Комманда : получитьДанныеНастроек
+Обработчики: [
+	{
+		Роль: 1 // точнее тут буде uid роли с кодом 1
+		права: [uid, uid1, uid2] // uid записей соответсвующих ныжным правам, чтение, запись и т.д...
+		логин: uid // uid пользователя в бд которому разрешён доступ к этому документу если его роль отличаеся от указанной
+		ИмяШаблона: ну скорей всего путь к шаблону... либ можно тоже хранить список шаблнов либо получать его из рендер сервиса хз
+		ОчередьОбработчиков: [
+			{
+				uid: получитьСписокРолей // uid на запись в БД которая соответствует указаному роли
+				очередь: 1 // номер в очереди
+			}...
+		]
+		АссинхроннаяОчередьОбработчиков: [
+			uid: получитьСписокРолей // uid на запись в БД которая соответствует указаному роли
+		]
+	}
+]
+
+}
+
+ПРИМЕР МУТАЦИИ ИЗ ФОРУМА
+
+upsert {
+  query {
+    state as var(func: eq(State.name,"Hawaii"))
+    address as var(func: eq(Addr.tempState,"Hawaii"))
+  }
+  mutation {
+    set {
+      uid(address) <Addr.state> uid(state) .
+    }
+  }
+}
+ тоесть нужно длеать как то так
+{
+ role_1 as var(func: type(<Роль>)) @filter(eq(<код.роли>, 1))
+ role_2 as var(func: type(<Роль>)) @filter(eq(<код.роли>, 2))
+
+  d(func: uid(role_1)){
+    ui: uid
+
+  }
+
+  d1(func: uid(role_2)){
+    uid
+		<код.роли>
+  }
+}
+
+
+*/
+type НовыйПланОбработкиМаршрута struct {
+	Тип         string          `json:"dgraph.type,omitempty"`
+	UID         string          `json:"uid,omitempty"`
+	Маршрут     string          `json:"маршрут,omitempty"`
+	Комманда    string          `json:"комманда,omitempty"`
+	Обработчики []ПланОбработки `json:"обработчики,omitempty"`
+	Описание    string          `json:"описание,omitempty"`
+}
+
+type ПланОбработки struct {
+	Тип                             string              `json:"dgraph.type,omitempty"`
+	ОчередьОбработчиков             []НаборОбработчиков `json:"очередь_обработчиков,omitempty"`
+	АссинхроннаяОчередьОбработчиков []НаборОбработчиков `json:"ассинхронная_очередь_обоработчиков,omitempty"`
+	Логин                           []string            `json:"пользователи,omitempty"`
+	Роль                            int                 `json:"код.роли"`
+	Права                           []Права             `json:"права"`
+	ИмяШаблона                      string              `json:"имя_шаблона,omitempty"`
+}
+
+type НаборОбработчиков struct {
+	UID     string `json:"uid,omitempty"`
+	Очередь *int   `json:"очередь,omitempty"`
+}
+
+// type <ОбработчикМаршрута> {
+// 	<маршрут>
+// 	<комманда>
+// 	<обработчики> [
+//         {
+//             <роль>
+//             <права>
+//             <очередь_обработчиков>
+//             <ассинхронная_очередь_обоработчиков>
+//             <имя_шаблона>
+//         }
+
+//	   ]
+//	}
 
 func ОпределитьДирректориюЗапуска() {
 	if ДирректорияЗапуска != "" {
