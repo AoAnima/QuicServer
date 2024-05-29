@@ -92,11 +92,7 @@
             <input form="{{данные.идентификаторФормы}}_{{данные.код}}" type="text" class="без_стиля" placeholder="Админ"  name="имя.роли" value="{{данные.имя}}">
         </td>
         <td> 
-            <form action="{{данные.действие}}" id="{{данные.идентификаторФормы}}_{{данные.код}}">                
-            <!-- <input readonly class="скрыт" type="hidden" name="{{данные.ключДанных}}[{{данные.код}}]" value="{{данные.код}}"> -->
-            <div class="строка вцентр">                      
-                <!-- <input type="checkbox"  class="кнопка с-иконкой внимание fas fa-minus p-1" name="удалить" value="{{данные.код}}"> -->
-                <label class="checkbox-container ">
+            <form action="{{данные.действие}}" id="{{данные.идентификаторФормы}}_{{данные.код}}">   <div class="строка вцентр">   <label class="checkbox-container ">
                     <input type="checkbox" class="скрыт" form="{{данные.идентификаторФормы}}_{{данные.код}}" name="удалить" value="{{данные.код}}" onchange="ajaxPost(event)">
                     <span class="с-иконкой"> <i class="fas fa-trash"></i> </span>
                   </label>
@@ -113,7 +109,7 @@
 
 
 <script>
-{{блок ДобавлениеДанныВТаблицу_js()}}
+{{блок ДобавлениеДанныхВТаблицу_js()}}
 
 
   function добавитьДанныеВТаблицу(){

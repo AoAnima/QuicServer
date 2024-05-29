@@ -171,3 +171,113 @@ What do you think? Would you like to investigate any of these proposals further?
 Это только несколько идей, но я уверен, что есть много других интересных направлений для исследования.
 
 Что вы думаете? Хотели бы вы исследовать какие-либо из этих предложений дальше?
+
+
+
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+// Synapse - struct representing a synapse
+type Synapse struct {
+	Threshold float64 // порог возбуждения
+	Strength   float64 // сила сигнала
+	Distance   float64 // расстояние от сомы
+}
+
+// Dendrite - struct representing a dendrite
+type Dendrite struct {
+	Synapses []Synapse // список синапсов
+	Soma      float64 // сила сигнала в соме
+}
+
+// Soma - struct representing the soma
+type Soma struct {
+	Dendrites []Dendrite // список дендритов
+	Output    float64 // вывод сомы
+}
+
+// Excite - функция возбуждения синапса
+func (s *Synapse) Excite(signal float64) {
+	if signal >= s.Threshold {
+		s.Strength = signal
+	}
+}
+
+// Propagate - функция распространения сигнала по дендриту
+func (d *Dendrite) Propagate() {
+	signalSum := 0.0
+	for _, synapse := range d.Synapses {
+		if synapse.Strength > 0 {
+			signal := synapse.Strength * math.Exp(-synapse.Distance) // затухание сигнала
+			signalSum += signal
+		}
+	}
+	d.Soma = signalSum
+}
+
+// Activate - функция активации сомы с помощью логистической карты
+func (s *Soma) Activate(r float64) {
+	x := 0.5 // initial value for the logistic map
+	for _, dendrite := range s.Dendrites {
+		x = r*x*(1-x) + dendrite.Soma
+	}
+	s.Output = x
+}
+
+func main() {
+	// create a soma with 3 dendrites
+	soma := Soma{
+		Dendrites: []Dendrite{
+			{
+				Synapses: []Synapse{
+					{Threshold: 0.5, Strength: 0, Distance: 1},
+					{Threshold: 0.7, Strength: 0, Distance: 2},
+					{Threshold: 0.3, Strength: 0, Distance: 3},
+				},
+				Soma: 0,
+			},
+			{
+				Synapses: []Synapse{
+					{Threshold: 0.4, Strength: 0, Distance: 1},
+					{Threshold: 0.6, Strength: 0, Distance: 2},
+					{Threshold: 0.2, Strength: 0, Distance: 3},
+				},
+				Soma: 0,
+			},
+			{
+				Synapses: []Synapse{
+					{Threshold: 0.3, Strength: 0, Distance: 1},
+					{Threshold: 0.5, Strength: 0, Distance: 2},
+					{Threshold: 0.4, Strength: 0, Distance: 3},
+				},
+				Soma: 0,
+			},
+		},
+		Output: 0,
+	}
+
+	// excite synapses
+	soma.Dendrites[0].Synapses[0].Excite(0.6)
+	soma.Dendrites[0].Synapses[1].Excite(1.0)
+	soma.Dendrites[0].Synapses[2].Excite(0.8)
+	soma.Dendrites[1].Synapses[0].Excite(0.7)
+	soma.Dendrites[1].Synapses[1].Excite(0.9)
+	soma.Dendrites[1].Synapses[2].Excite(0.4)
+	soma.Dendrites[2].Synapses[0].Excite(0.5)
+	soma.Dendrites[2].Synapses[1].Excite(0.6)
+	soma.Dendrites[2].Synapses[2].Excite(0.3)
+
+	// propagate signals
+	for _, dendrite := range soma.Dendrites {
+		dendrite.Propagate()
+	}
+
+	// activate soma with logistic map
+	soma.Activate(3.5)
+
+	fmt.Println("Soma output:", soma.Output)
+}
